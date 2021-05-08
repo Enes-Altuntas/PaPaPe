@@ -1,36 +1,40 @@
 class FirestoreMarkers {
-  final String markerEnd;
-  final String markerLatitude;
-  final String markerLongtitude;
-  final String markerStart;
+  final bool hasCampaign;
+  final String storeCategory;
+  final double markerLatitude;
+  final double markerLongtitude;
   final String markerTitle;
+  final String markerId;
   final String storeId;
 
   FirestoreMarkers({
-    this.markerEnd,
+    this.storeCategory,
+    this.hasCampaign,
+    this.markerId,
     this.markerLatitude,
     this.markerLongtitude,
-    this.markerStart,
     this.markerTitle,
     this.storeId,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'markerEnd': markerEnd,
+      'storeCategory': storeCategory,
+      'hasCampaign': hasCampaign,
       'markerLatitude': markerLatitude,
       'markerLongtitude': markerLongtitude,
-      'markerStart': markerStart,
       'markerTitle': markerTitle,
+      'markerId': markerId,
       'storeId': storeId,
     };
   }
 
   FirestoreMarkers.fromFirestore(Map<String, dynamic> firestore)
-      : markerEnd = firestore['markerEnd'],
+      : storeCategory = firestore['storeCategory'],
+        hasCampaign = firestore['hasCampaign'],
+        markerId = firestore['markerId'],
         markerLatitude = firestore['markerLatitude'],
         markerLongtitude = firestore['markerLongtitude'],
-        markerStart = firestore['markerStart'],
         markerTitle = firestore['markerTitle'],
         storeId = firestore['storeId'];
 }

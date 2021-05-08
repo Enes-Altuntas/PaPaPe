@@ -1,34 +1,26 @@
-import 'package:bulovva/Map/providers/markers_provider.dart';
-import 'package:bulovva/Dashboard/screens/Dashboard.dart';
-import 'package:bulovva/services/geolocator_service.dart';
+import 'package:bulovva/Map/Map.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:bulovva/services/firestore_service.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await SharedPreferences.getInstance();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final locatorService = GeoLocatorService();
-  final firestoreService = FirestoreService();
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      child: MaterialApp(
-          title: 'Bulovva',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.purple,
-          ),
-          home: Dashboard()),
-      providers: [
-        FutureProvider(create: (context) => locatorService.getLocation()),
-        ChangeNotifierProvider(create: (context) => StoreProvider()),
-      ],
-    );
+    return MaterialApp(
+        title: 'Bulovva',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: Colors.red[700],
+          primaryColorDark: Colors.black,
+          accentColor: Colors.red,
+        ),
+        home: Map());
   }
 }
