@@ -4,11 +4,13 @@ import 'package:bulovva/Models/markers_model.dart';
 class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Stream<List<FirestoreMarkers>> getMapData(bool active) {
+  Stream<List<FirestoreMarkers>> getMapData(
+      bool active, String altCat, String cat) {
     if (active == true) {
       return _db
           .collection('markers')
-          .where('storeCategory', isEqualTo: 'Yeme İçme')
+          .where('storeCategory', isEqualTo: cat)
+          .where('storeAltCategory', isEqualTo: altCat)
           .where('hasCampaign', isEqualTo: active)
           .snapshots()
           .map((snapshot) => snapshot.docs
@@ -17,7 +19,8 @@ class FirestoreService {
     } else {
       return _db
           .collection('markers')
-          .where('storeCategory', isEqualTo: 'Yeme İçme')
+          .where('storeCategory', isEqualTo: cat)
+          .where('storeAltCategory', isEqualTo: altCat)
           .snapshots()
           .map((snapshot) => snapshot.docs
               .map((doc) => FirestoreMarkers.fromFirestore(doc.data()))
@@ -27,6 +30,18 @@ class FirestoreService {
 
   Future<DocumentSnapshot> getStore(String markerId) async {
     return await _db.collection('stores').doc(markerId).get();
+  }
+
+  Future getStoreCat() async {
+    return await _db.collection('categories').get();
+  }
+
+  Future getStoreAltCat(String catId) async {
+    return await _db
+        .collection('categories')
+        .doc(catId)
+        .collection('alt_categories')
+        .get();
   }
 
   Future<QuerySnapshot> getCampaign(String storeId) async {

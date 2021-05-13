@@ -1,5 +1,7 @@
+import 'package:bulovva/Filter/filter.dart';
 import 'package:bulovva/Models/markers_model.dart';
 import 'package:bulovva/Models/stores_model.dart';
+import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/Services/firestore_service.dart';
 import 'package:bulovva/Store/store.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Map extends StatefulWidget {
@@ -19,19 +22,16 @@ class Map extends StatefulWidget {
 class _Map extends State<Map> {
   final firestoreService = FirestoreService();
   final List<Marker> markers = [];
-  GoogleMapController _controller;
-  bool liveSwitch = true;
-  bool darkSwitch = false;
-  bool isLoading = false;
   SharedPreferences preferences;
   Future getLocation;
+  GoogleMapController _controller;
+  FilterProvider _filterProvider;
+  bool firstTime = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    getLocalData().then((value) {
-      setLocalData();
-    });
   }
 
   Future getLocalData() async {
@@ -43,19 +43,37 @@ class _Map extends State<Map> {
 
   setLocalData() {
     if (preferences.getBool('live') != null) {
-      setState(() {
-        liveSwitch = preferences.getBool('live');
-      });
+      _filterProvider.changeLive(preferences.getBool('live'));
+    } else {
+      _filterProvider.changeLive(false);
     }
+
     if (preferences.getBool('dark') != null) {
-      setState(() {
-        darkSwitch = preferences.getBool('dark');
-      });
+      _filterProvider.changeMode(preferences.getBool('dark'));
+    } else {
+      _filterProvider.changeMode(false);
+    }
+
+    if (preferences.getString('category') != null) {
+      _filterProvider.changeCat(preferences.getString('category'));
+    } else {
+      _filterProvider.changeCat('Yeme İçme');
+    }
+
+    if (preferences.getString('alt_category') != null) {
+      _filterProvider.changeAltCat(preferences.getString('alt_category'));
+    } else {
+      _filterProvider.changeAltCat(null);
     }
   }
 
+  changeLive(bool value) {
+    preferences.setBool('live', value);
+    _filterProvider.changeLive(value);
+  }
+
   changeMapMode() {
-    if (darkSwitch == true) {
+    if (_filterProvider.getMode == true) {
       getJsonFile("assets/night.json").then((value) => setMapStyle(value));
     } else {
       getJsonFile("assets/standart.json").then((value) => setMapStyle(value));
@@ -72,7 +90,16 @@ class _Map extends State<Map> {
 
   @override
   Future<void> didChangeDependencies() async {
-    getLocation = _getLocation();
+    if (firstTime) {
+      _filterProvider = Provider.of<FilterProvider>(context);
+      getLocation = _getLocation();
+      getLocalData().then((value) {
+        setLocalData();
+      });
+      setState(() {
+        firstTime = false;
+      });
+    }
     super.didChangeDependencies();
   }
 
@@ -97,7 +124,8 @@ class _Map extends State<Map> {
               backgroundColor: Colors.white,
               leading: GestureDetector(
                   onTap: () {
-                    // changeMapMode();
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => Filter()));
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
@@ -118,7 +146,8 @@ class _Map extends State<Map> {
               centerTitle: true,
             ),
             body: StreamBuilder<List<FirestoreMarkers>>(
-                stream: firestoreService.getMapData(liveSwitch),
+                stream: firestoreService.getMapData(_filterProvider.getLive,
+                    _filterProvider.getAltCat, _filterProvider.getCat),
                 builder: (context, snapshot) {
                   if (snapshot.hasData == true) {
                     markers.clear();
@@ -178,10 +207,10 @@ class _Map extends State<Map> {
                                                 markers: Set.from(markers),
                                               ),
                                               Positioned(
-                                                  bottom: MediaQuery.of(context)
+                                                  top: MediaQuery.of(context)
                                                           .size
                                                           .width /
-                                                      12,
+                                                      30,
                                                   left: MediaQuery.of(context)
                                                           .size
                                                           .width /
@@ -191,69 +220,13 @@ class _Map extends State<Map> {
                                                         CrossAxisAlignment
                                                             .start,
                                                     children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                bottom: 8.0),
-                                                        child: Container(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 12),
-                                                          decoration: BoxDecoration(
-                                                              color: (darkSwitch ==
-                                                                      true)
-                                                                  ? Colors.green[
-                                                                      800]
-                                                                  : Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          20))),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                'Gece Modu',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white),
-                                                              ),
-                                                              Switch(
-                                                                value:
-                                                                    darkSwitch,
-                                                                activeColor:
-                                                                    Colors
-                                                                        .green,
-                                                                inactiveThumbColor:
-                                                                    Colors.red,
-                                                                inactiveTrackColor:
-                                                                    Colors.red[
-                                                                        300],
-                                                                onChanged: (bool
-                                                                    value) {
-                                                                  setState(() {
-                                                                    darkSwitch =
-                                                                        value;
-                                                                  });
-                                                                  preferences
-                                                                      .setBool(
-                                                                          'dark',
-                                                                          value);
-                                                                  changeMapMode();
-                                                                },
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
                                                       Container(
                                                         padding:
                                                             EdgeInsets.only(
                                                                 left: 12),
                                                         decoration: BoxDecoration(
-                                                            color: (liveSwitch ==
+                                                            color: (_filterProvider
+                                                                        .getLive ==
                                                                     true)
                                                                 ? Colors
                                                                     .green[800]
@@ -274,7 +247,9 @@ class _Map extends State<Map> {
                                                                       .white),
                                                             ),
                                                             Switch(
-                                                              value: liveSwitch,
+                                                              value:
+                                                                  _filterProvider
+                                                                      .getLive,
                                                               activeColor:
                                                                   Colors.green,
                                                               inactiveThumbColor:
@@ -284,14 +259,8 @@ class _Map extends State<Map> {
                                                                       .red[300],
                                                               onChanged:
                                                                   (bool value) {
-                                                                setState(() {
-                                                                  liveSwitch =
-                                                                      value;
-                                                                });
-                                                                preferences
-                                                                    .setBool(
-                                                                        'live',
-                                                                        value);
+                                                                changeLive(
+                                                                    value);
                                                               },
                                                             ),
                                                           ],
