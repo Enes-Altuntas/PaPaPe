@@ -87,10 +87,15 @@ class _FilterState extends State<Filter> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).primaryColor,
+          iconTheme: IconThemeData(
+            color: Theme.of(context).primaryColor, //change your color here
+          ),
+          backgroundColor: Colors.white,
           title: Text('Bulovva',
               style: TextStyle(
-                  fontSize: 25.0, fontFamily: 'Bebas', color: Colors.white)),
+                  fontSize: 25.0,
+                  fontFamily: 'Bebas',
+                  color: Theme.of(context).primaryColor)),
           centerTitle: true,
         ),
         body: FutureBuilder(

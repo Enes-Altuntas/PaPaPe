@@ -1,3 +1,6 @@
+import 'package:bulovva/Models/campaing_model.dart';
+import 'package:bulovva/Models/product.dart';
+import 'package:bulovva/Models/product_category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bulovva/Models/markers_model.dart';
 
@@ -28,6 +31,43 @@ class FirestoreService {
     }
   }
 
+  Stream<List<Campaign>> getStoreCampaigns(docId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('campaigns')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Campaign.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<Product>> getProducts(String docId, String categoryId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('products')
+        .doc(categoryId)
+        .collection('alt_products')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Product.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<ProductCategory>> getProductCategories(String docId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('products')
+        .orderBy('categoryRow', descending: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => ProductCategory.fromFirestore(doc.data()))
+            .toList());
+  }
+
   Future<DocumentSnapshot> getStore(String markerId) async {
     return await _db.collection('stores').doc(markerId).get();
   }
@@ -41,24 +81,6 @@ class FirestoreService {
         .collection('categories')
         .doc(catId)
         .collection('alt_categories')
-        .get();
-  }
-
-  Future<QuerySnapshot> getCampaign(String storeId) async {
-    String docId;
-    await _db
-        .collection('stores')
-        .where('storeId', isEqualTo: storeId)
-        .get()
-        .then((value) {
-      docId = value.docs[0].id;
-    });
-
-    return await _db
-        .collection('stores')
-        .doc(docId)
-        .collection('campaigns')
-        .where('campaignActive', isEqualTo: true)
         .get();
   }
 }

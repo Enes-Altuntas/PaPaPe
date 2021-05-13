@@ -166,8 +166,10 @@ class _Map extends State<Map> {
                                   StoreModel _store =
                                       StoreModel.fromFirestore(value.data());
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          Store(storeData: _store)));
+                                      builder: (context) => Store(
+                                            storeData: _store,
+                                            docId: value.id,
+                                          )));
                                 });
                               }),
                           position: LatLng(element.markerLatitude,
