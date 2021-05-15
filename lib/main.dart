@@ -21,8 +21,10 @@ class MyApp extends StatelessWidget {
           title: 'Bulovva',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white,
+            backgroundColor: Colors.white,
             primaryColor: Colors.red[700],
-            primaryColorDark: Colors.black,
+            primaryColorDark: Colors.white,
             accentColor: Colors.red,
           ),
           home: Map()),

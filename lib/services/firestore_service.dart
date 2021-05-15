@@ -1,4 +1,5 @@
 import 'package:bulovva/Models/campaing_model.dart';
+import 'package:bulovva/Models/comments_model.dart';
 import 'package:bulovva/Models/product.dart';
 import 'package:bulovva/Models/product_category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,6 +55,20 @@ class FirestoreService {
         .map((snapshot) => snapshot.docs
             .map((doc) => Product.fromFirestore(doc.data()))
             .toList());
+  }
+
+  Future<String> saveComment(String docId, Comments comment) async {
+    try {
+      await _db
+          .collection('stores')
+          .doc(docId)
+          .collection('reports')
+          .doc(comment.reportId)
+          .set(comment.toMap());
+      return 'Görüşünüz başarıyla bildirilmiştir !';
+    } catch (e) {
+      throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+    }
   }
 
   Stream<List<ProductCategory>> getProductCategories(String docId) {

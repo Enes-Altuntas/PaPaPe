@@ -118,246 +118,236 @@ class _Map extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
-    return (isLoading != true)
-        ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              leading: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => Filter()));
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.filter_alt,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ],
-                    ),
-                  )),
-              title: Text('Bulovva',
-                  style: TextStyle(
-                      fontSize: 25.0,
-                      fontFamily: 'Bebas',
-                      color: Theme.of(context).primaryColor)),
-              centerTitle: true,
-            ),
-            body: StreamBuilder<List<FirestoreMarkers>>(
-                stream: firestoreService.getMapData(_filterProvider.getLive,
-                    _filterProvider.getAltCat, _filterProvider.getCat),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData == true) {
-                    markers.clear();
-                    snapshot.data.forEach((element) {
-                      markers.add(Marker(
-                          markerId: MarkerId(element.markerTitle),
-                          draggable: false,
-                          infoWindow: InfoWindow(
-                              title: element.markerTitle,
-                              snippet:
-                                  'Kampanya detayları için dokunmanız yeterli !',
-                              onTap: () {
-                                firestoreService
-                                    .getStore(element.markerId)
-                                    .then((value) {
-                                  StoreModel _store =
-                                      StoreModel.fromFirestore(value.data());
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => Store(
-                                            storeData: _store,
-                                            docId: value.id,
-                                          )));
-                                });
-                              }),
-                          position: LatLng(element.markerLatitude,
-                              element.markerLongtitude)));
-                    });
-                  }
-                  return (snapshot.connectionState == ConnectionState.active)
-                      ? (markers.length != 0)
-                          ? FutureBuilder(
-                              future: getLocation,
-                              builder:
-                                  (BuildContext context, snapshotPosition) {
-                                return (snapshotPosition.connectionState ==
-                                        ConnectionState.done)
-                                    ? (snapshotPosition.data != null)
-                                        ? Stack(
-                                            children: [
-                                              GoogleMap(
-                                                onMapCreated:
-                                                    (GoogleMapController
-                                                        controller) {
-                                                  changeMapMode();
-                                                  _controller = controller;
-                                                },
-                                                initialCameraPosition:
-                                                    CameraPosition(
-                                                        target: LatLng(
-                                                            snapshotPosition
-                                                                .data.latitude,
-                                                            snapshotPosition
-                                                                .data
-                                                                .longitude),
-                                                        zoom: 17.0),
-                                                zoomGesturesEnabled: true,
-                                                myLocationEnabled: true,
-                                                myLocationButtonEnabled: true,
-                                                markers: Set.from(markers),
-                                              ),
-                                              Positioned(
-                                                  top: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      30,
-                                                  left: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      30,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 12),
-                                                        decoration: BoxDecoration(
-                                                            color: (_filterProvider
-                                                                        .getLive ==
-                                                                    true)
-                                                                ? Colors
-                                                                    .green[800]
-                                                                : Theme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20))),
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              'Sadece Aktif Kampanyalar',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                            Switch(
-                                                              value:
-                                                                  _filterProvider
-                                                                      .getLive,
-                                                              activeColor:
-                                                                  Colors.green,
-                                                              inactiveThumbColor:
-                                                                  Colors.red,
-                                                              inactiveTrackColor:
-                                                                  Colors
-                                                                      .red[300],
-                                                              onChanged:
-                                                                  (bool value) {
-                                                                changeLive(
-                                                                    value);
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Filter()));
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20.0),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.filter_alt,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ],
+              ),
+            )),
+        title: Text('Bulovva',
+            style: TextStyle(
+                fontSize: 25.0,
+                fontFamily: 'Bebas',
+                color: Theme.of(context).primaryColor)),
+        centerTitle: true,
+      ),
+      body: (isLoading != true)
+          ? StreamBuilder<List<FirestoreMarkers>>(
+              stream: firestoreService.getMapData(_filterProvider.getLive,
+                  _filterProvider.getAltCat, _filterProvider.getCat),
+              builder: (context, snapshot) {
+                if (snapshot.hasData == true) {
+                  markers.clear();
+                  snapshot.data.forEach((element) {
+                    markers.add(Marker(
+                        markerId: MarkerId(element.markerTitle),
+                        draggable: false,
+                        infoWindow: InfoWindow(
+                            title: element.markerTitle,
+                            snippet:
+                                'Kampanya detayları için dokunmanız yeterli !',
+                            onTap: () {
+                              firestoreService
+                                  .getStore(element.markerId)
+                                  .then((value) {
+                                StoreModel _store =
+                                    StoreModel.fromFirestore(value.data());
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => Store(
+                                          storeData: _store,
+                                          docId: value.id,
+                                        )));
+                              });
+                            }),
+                        position: LatLng(
+                            element.markerLatitude, element.markerLongtitude)));
+                  });
+                }
+                return (snapshot.connectionState == ConnectionState.active)
+                    ? (markers.length != 0)
+                        ? FutureBuilder(
+                            future: getLocation,
+                            builder: (BuildContext context, snapshotPosition) {
+                              return (snapshotPosition.connectionState ==
+                                      ConnectionState.done)
+                                  ? (snapshotPosition.data != null)
+                                      ? Stack(
+                                          children: [
+                                            GoogleMap(
+                                              onMapCreated: (GoogleMapController
+                                                  controller) {
+                                                changeMapMode();
+                                                _controller = controller;
+                                              },
+                                              initialCameraPosition:
+                                                  CameraPosition(
+                                                      target: LatLng(
+                                                          snapshotPosition
+                                                              .data.latitude,
+                                                          snapshotPosition
+                                                              .data.longitude),
+                                                      zoom: 17.0),
+                                              zoomGesturesEnabled: true,
+                                              myLocationEnabled: true,
+                                              myLocationButtonEnabled: true,
+                                              markers: Set.from(markers),
+                                            ),
+                                            Positioned(
+                                                top: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    30,
+                                                left: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    30,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 12),
+                                                      decoration: BoxDecoration(
+                                                          color: (_filterProvider
+                                                                      .getLive ==
+                                                                  true)
+                                                              ? Colors
+                                                                  .green[800]
+                                                              : Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20))),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            'Sadece Aktif Kampanyalar',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          Switch(
+                                                            value:
+                                                                _filterProvider
+                                                                    .getLive,
+                                                            activeColor:
+                                                                Colors.green,
+                                                            inactiveThumbColor:
+                                                                Colors.red,
+                                                            inactiveTrackColor:
+                                                                Colors.red[300],
+                                                            onChanged:
+                                                                (bool value) {
+                                                              changeLive(value);
+                                                            },
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ))
-                                            ],
-                                          )
-                                        : Center(
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 50.0),
-                                                    child: Icon(
-                                                        Icons.cancel_outlined,
-                                                        size: 100,
-                                                        color: Colors.white),
-                                                  ),
-                                                  Text('Lütfen',
+                                                    ),
+                                                  ],
+                                                ))
+                                          ],
+                                        )
+                                      : Center(
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 50.0),
+                                                  child: Icon(
+                                                      Icons.cancel_outlined,
+                                                      size: 100,
+                                                      color: Colors.white),
+                                                ),
+                                                Text('Lütfen',
+                                                    style: TextStyle(
+                                                        fontSize: 50,
+                                                        color: Colors.white,
+                                                        fontFamily: 'Bebas')),
+                                                Center(
+                                                  child: Text(
+                                                      'Konum servisinizi açın !',
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style: TextStyle(
-                                                          fontSize: 50,
+                                                          fontSize: 25,
                                                           color: Colors.white,
                                                           fontFamily: 'Bebas')),
-                                                  Center(
-                                                    child: Text(
-                                                        'Konum servisinizi açın !',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 25,
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                'Bebas')),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          )
-                                    : Center(
-                                        child: CircularProgressIndicator(
-                                            backgroundColor: Colors.white),
-                                      );
-                              },
-                            )
-                          : Center(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                color: Theme.of(context).primaryColor,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 50.0),
-                                      child: Icon(
-                                          Icons.add_location_alt_outlined,
-                                          size: 100,
-                                          color: Colors.white),
-                                    ),
-                                    Text('Üzgünüz',
+                                          ),
+                                        )
+                                  : Center(
+                                      child: CircularProgressIndicator(
+                                          backgroundColor: Colors.white),
+                                    );
+                            },
+                          )
+                        : Center(
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              color: Theme.of(context).primaryColor,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 50.0),
+                                    child: Icon(Icons.add_location_alt_outlined,
+                                        size: 100, color: Colors.white),
+                                  ),
+                                  Text('Üzgünüz',
+                                      style: TextStyle(
+                                          fontSize: 50,
+                                          color: Colors.white,
+                                          fontFamily: 'Bebas')),
+                                  Center(
+                                    child: Text(
+                                        'Yakınlarınızda bir kampanya bulunamadı !',
                                         style: TextStyle(
-                                            fontSize: 50,
+                                            fontSize: 25,
                                             color: Colors.white,
                                             fontFamily: 'Bebas')),
-                                    Center(
-                                      child: Text(
-                                          'Yakınlarınızda bir kampanya bulunamadı !',
-                                          style: TextStyle(
-                                              fontSize: 25,
-                                              color: Colors.white,
-                                              fontFamily: 'Bebas')),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            )
-                      : Center(
-                          child: CircularProgressIndicator(
-                              backgroundColor: Colors.white),
-                        );
-                }),
-          )
-        : Center(
-            child: CircularProgressIndicator(backgroundColor: Colors.white),
-          );
+                            ),
+                          )
+                    : Center(
+                        child: CircularProgressIndicator(
+                            backgroundColor: Colors.white),
+                      );
+              })
+          : Center(
+              child: CircularProgressIndicator(backgroundColor: Colors.white),
+            ),
+    );
   }
 }
