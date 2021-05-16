@@ -71,6 +71,21 @@ class FirestoreService {
     }
   }
 
+  Future<String> updateCounter(String docId, String campaignId,
+      int campaignCounter, String campaignCode) async {
+    try {
+      await _db
+          .collection('stores')
+          .doc(docId)
+          .collection('campaigns')
+          .doc(campaignId)
+          .update({'campaignCounter': campaignCounter});
+      return "Kampanya kodunuz #$campaignCode'dir. Bu kampanya kodunu gittiğiniz işletmede ödemenizi yaparken kullanabilirsiniz !";
+    } catch (e) {
+      throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
   Stream<List<ProductCategory>> getProductCategories(String docId) {
     return _db
         .collection('stores')

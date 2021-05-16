@@ -6,7 +6,6 @@ import 'package:bulovva/Models/stores_model.dart';
 import 'package:bulovva/Services/firestore_service.dart';
 import 'package:bulovva/Services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
@@ -37,15 +36,21 @@ class _StoreState extends State<Store> {
     return dateFormat.format(_date);
   }
 
-  getCampaignCode(String campaignCode) {
-    CoolAlert.show(
-      context: context,
-      title: 'Tebrikler !',
-      type: CoolAlertType.success,
-      confirmBtnText: 'Tamam',
-      text:
-          "Kampanya kodunuz #$campaignCode'dir. Bu kampanya kodunu gittiğiniz işletmede ödemenizi yaparken kullanabilirsiniz !",
-    );
+  getCampaignCode(String campaignCode, String campaignId, int campaignCounter) {
+    setState(() {
+      isLoading = true;
+    });
+    campaignCounter = campaignCounter + 1;
+    FirestoreService()
+        .updateCounter(widget.docId, campaignId, campaignCounter, campaignCode)
+        .then((value) => ToastService().showSuccess(value, context))
+        .onError(
+            (error, stackTrace) => ToastService().showError(error, context))
+        .whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   makePhoneCall() async {
@@ -59,7 +64,12 @@ class _StoreState extends State<Store> {
   }
 
   sendComment() {
-    if (formKey.currentState.validate() && rating != null) {
+    if (rating == null) {
+      setState(() {
+        rating = 2.5;
+      });
+    }
+    if (formKey.currentState.validate()) {
       setState(() {
         isLoading = true;
       });
@@ -420,7 +430,13 @@ class _StoreState extends State<Store> {
                                                             getCampaignCode(
                                                                 snapshot
                                                                     .data[index]
-                                                                    .campaignKey);
+                                                                    .campaignKey,
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .campaignId,
+                                                                snapshot
+                                                                    .data[index]
+                                                                    .campaignCounter);
                                                           },
                                                           child: Text(
                                                             'Kampanya Kodu Al',
