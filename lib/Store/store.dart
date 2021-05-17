@@ -158,26 +158,27 @@ class _StoreState extends State<Store> {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: Container(
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
                           padding: const EdgeInsets.only(top: 5.0),
-                          child: RatingBar.builder(
-                            initialRating: 2.5,
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Theme.of(context).primaryColor,
+                          child: Container(
+                            child: RatingBar.builder(
+                              initialRating: 2.5,
+                              minRating: 1,
+                              direction: Axis.horizontal,
+                              allowHalfRating: true,
+                              itemCount: 5,
+                              itemBuilder: (context, _) => Icon(
+                                Icons.star,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onRatingUpdate: (value) {
+                                setState(() {
+                                  rating = value;
+                                });
+                              },
                             ),
-                            onRatingUpdate: (value) {
-                              setState(() {
-                                rating = value;
-                              });
-                            },
                           )),
                       Padding(
                         padding: const EdgeInsets.only(top: 15.0),
