@@ -18,14 +18,13 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => FilterProvider()),
       ],
       child: MaterialApp(
-          title: 'Bulovva',
+          title: 'BULB',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
-            backgroundColor: Colors.white,
-            primaryColor: Colors.red[700],
-            primaryColorDark: Colors.white,
-            accentColor: Colors.red,
+            primaryColor: Colors.purple,
+            primaryColorDark: Colors.black,
+            accentColor: Colors.red[600],
+            hintColor: Colors.grey.shade800,
           ),
           home: Map()),
     );

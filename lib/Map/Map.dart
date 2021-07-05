@@ -1,16 +1,21 @@
+import 'dart:math';
+
 import 'package:bulovva/Filter/filter.dart';
 import 'package:bulovva/Models/markers_model.dart';
 import 'package:bulovva/Models/stores_model.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/Services/firestore_service.dart';
 import 'package:bulovva/Store/store.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Map extends StatefulWidget {
   Map({Key key}) : super(key: key);
@@ -22,6 +27,7 @@ class Map extends StatefulWidget {
 class _Map extends State<Map> {
   final firestoreService = FirestoreService();
   final List<Marker> markers = [];
+  final List<Circle> circles = [];
   SharedPreferences preferences;
   Future getLocation;
   GoogleMapController _controller;
@@ -65,6 +71,12 @@ class _Map extends State<Map> {
     } else {
       _filterProvider.changeAltCat(null);
     }
+
+    if (preferences.getDouble('distance') != null) {
+      _filterProvider.changeDistance(preferences.getDouble('distance'));
+    } else {
+      _filterProvider.changeDistance(5.0);
+    }
   }
 
   changeLive(bool value) {
@@ -80,12 +92,32 @@ class _Map extends State<Map> {
     }
   }
 
+  @override
+  void dispose() {
+    setState(() {
+      _controller = null;
+    });
+    super.dispose();
+  }
+
   Future<String> getJsonFile(String path) async {
     return await rootBundle.loadString(path);
   }
 
   void setMapStyle(String mapStyle) {
     _controller.setMapStyle(mapStyle);
+  }
+
+  getSearchCircle(Position position) {
+    circles.clear();
+    Circle circle = Circle(
+        circleId: CircleId('search'),
+        center: LatLng(position.latitude, position.longitude),
+        radius: _filterProvider.getDist * 1000,
+        strokeWidth: 3,
+        fillColor: Theme.of(context).primaryColor.withOpacity(0.2),
+        strokeColor: Theme.of(context).accentColor.withOpacity(0.2));
+    circles.add(circle);
   }
 
   @override
@@ -116,11 +148,54 @@ class _Map extends State<Map> {
     });
   }
 
+  makePhoneCall(storePhone) async {
+    await launch("tel:$storePhone");
+  }
+
+  double getZoomLevel() {
+    if (_filterProvider.getDist == 5) {
+      return 11.8;
+    } else if (_filterProvider.getDist == 10) {
+      return 10.8;
+    } else if (_filterProvider.getDist == 15) {
+      return 10.2;
+    } else if (_filterProvider.getDist == 20) {
+      return 9.7;
+    } else if (_filterProvider.getDist == 25) {
+      return 9.5;
+    } else if (_filterProvider.getDist == 30) {
+      return 9.3;
+    } else if (_filterProvider.getDist == 35) {
+      return 9.1;
+    } else if (_filterProvider.getDist == 40) {
+      return 8.9;
+    } else if (_filterProvider.getDist == 45) {
+      return 8.7;
+    } else if (_filterProvider.getDist == 50) {
+      return 8.5;
+    } else {
+      return 11.8;
+    }
+  }
+
+  findPlace(storeLat, storeLong) async {
+    String googleMapslocationUrl =
+        "https://www.google.com/maps/search/?api=1&query=$storeLat,$storeLong";
+    await launch(googleMapslocationUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          elevation: 10,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.red[600], Colors.purple[500]],
+                    begin: Alignment.centerRight,
+                    end: Alignment.centerLeft)),
+          ),
           leading: GestureDetector(
               onTap: () {
                 Navigator.of(context)
@@ -132,288 +207,401 @@ class _Map extends State<Map> {
                   children: [
                     Icon(
                       Icons.filter_alt,
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.white,
                     ),
                   ],
                 ),
               )),
-          title: Text('Bulovva',
+          title: Text('bulb',
               style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: 'Bebas',
-                  color: Theme.of(context).primaryColor)),
+                  fontSize: 40.0, fontFamily: 'Dancing', color: Colors.white)),
           centerTitle: true,
         ),
-        body: StreamBuilder<List<FirestoreMarkers>>(
-            stream: firestoreService.getMapData(_filterProvider.getLive,
-                _filterProvider.getAltCat, _filterProvider.getCat),
-            builder: (context, snapshot) {
-              if (snapshot.hasData == true) {
-                markers.clear();
-                snapshot.data.forEach((element) {
-                  markers.add(Marker(
-                      markerId: MarkerId(element.markerTitle),
-                      draggable: false,
-                      infoWindow: InfoWindow(
-                          title: element.markerTitle,
-                          snippet:
-                              'Kampanya detayları için dokunmanız yeterli !',
-                          onTap: () {
-                            firestoreService
-                                .getStore(element.markerId)
-                                .then((value) {
-                              StoreModel _store =
-                                  StoreModel.fromFirestore(value.data());
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => Store(
-                                        storeData: _store,
-                                        docId: value.id,
-                                      )));
-                            });
-                          }),
-                      position: LatLng(
-                          element.markerLatitude, element.markerLongtitude)));
-                });
-              }
-              return (isLoading == false)
-                  ? (snapshot.connectionState == ConnectionState.active)
-                      ? (markers.length != 0)
-                          ? FutureBuilder(
-                              future: getLocation,
-                              builder:
-                                  (BuildContext context, snapshotPosition) {
-                                return (snapshotPosition.connectionState ==
-                                        ConnectionState.done)
-                                    ? (snapshotPosition.data != null)
-                                        ? Stack(
-                                            children: [
-                                              GoogleMap(
-                                                onMapCreated:
-                                                    (GoogleMapController
-                                                        controller) {
-                                                  changeMapMode();
-                                                  _controller = controller;
-                                                },
-                                                initialCameraPosition:
-                                                    CameraPosition(
-                                                        target: LatLng(
-                                                            snapshotPosition
-                                                                .data.latitude,
-                                                            snapshotPosition
-                                                                .data
-                                                                .longitude),
-                                                        zoom: 17.0),
-                                                zoomGesturesEnabled: true,
-                                                myLocationEnabled: true,
-                                                myLocationButtonEnabled: true,
-                                                markers: Set.from(markers),
-                                              ),
-                                              Positioned(
-                                                  top: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      30,
-                                                  left: MediaQuery.of(context)
-                                                          .size
-                                                          .width /
-                                                      30,
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Container(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                left: 12),
+        body: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.red[600], Colors.purple[500]],
+                    begin: Alignment.centerRight,
+                    end: Alignment.centerLeft)),
+            child: FutureBuilder(
+              future: getLocation,
+              builder: (BuildContext context, snapshotPosition) {
+                return (snapshotPosition.connectionState ==
+                        ConnectionState.done)
+                    ? (snapshotPosition.hasData)
+                        ? StreamBuilder<List<FirestoreMarkers>>(
+                            stream: firestoreService.getMapData(
+                                _filterProvider.getLive,
+                                _filterProvider.getAltCat,
+                                _filterProvider.getCat,
+                                _filterProvider.getDist,
+                                snapshotPosition.data.latitude,
+                                snapshotPosition.data.longitude),
+                            builder: (context, snapshot) {
+                              markers.clear();
+                              if (snapshot.connectionState ==
+                                      ConnectionState.active &&
+                                  snapshot.hasData == true &&
+                                  snapshot.data.length != 0) {
+                                snapshot.data.forEach((element) {
+                                  markers.add(Marker(
+                                      markerId: MarkerId(element.storeId),
+                                      draggable: false,
+                                      onTap: () async {
+                                        StoreModel store;
+                                        String id;
+                                        await firestoreService
+                                            .getStore(element.storeId)
+                                            .then((value) {
+                                          store = StoreModel.fromFirestore(
+                                              value.data());
+                                          id = value.id;
+                                        });
+                                        showModalBottomSheet(
+                                            context: context,
+                                            clipBehavior: Clip.antiAlias,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                      Radius.circular(50.0),
+                                                  topRight:
+                                                      Radius.circular(50.0)),
+                                            ),
+                                            builder: (context) {
+                                              return Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    3,
+                                                decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                        colors: [
+                                                      Colors.red[600],
+                                                      Colors.purple[500]
+                                                    ],
+                                                        begin: Alignment
+                                                            .centerRight,
+                                                        end: Alignment
+                                                            .centerLeft)),
+                                                child: Column(
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              15.0),
+                                                      child: Container(
+                                                        clipBehavior:
+                                                            Clip.antiAlias,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height /
+                                                            3.6,
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
                                                         decoration: BoxDecoration(
-                                                            color: (_filterProvider
-                                                                        .getLive ==
-                                                                    true)
-                                                                ? Colors
-                                                                    .green[800]
-                                                                : Theme.of(
-                                                                        context)
-                                                                    .primaryColor,
+                                                            color: Colors
+                                                                .purple[800],
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20))),
-                                                        child: Row(
-                                                          children: [
-                                                            Text(
-                                                              'Sadece Aktif Kampanyalar',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                            Switch(
-                                                              value:
-                                                                  _filterProvider
-                                                                      .getLive,
-                                                              activeColor:
-                                                                  Colors.green,
-                                                              inactiveThumbColor:
-                                                                  Colors.red,
-                                                              inactiveTrackColor:
-                                                                  Colors
-                                                                      .red[300],
-                                                              onChanged:
-                                                                  (bool value) {
-                                                                changeLive(
-                                                                    value);
-                                                              },
-                                                            ),
-                                                          ],
-                                                        ),
+                                                                    .circular(
+                                                                        50.0)),
+                                                        child: (store != null &&
+                                                                store.storePicRef !=
+                                                                    null)
+                                                            ? Stack(
+                                                                children: [
+                                                                  ColorFiltered(
+                                                                    colorFilter: ColorFilter.mode(
+                                                                        Colors
+                                                                            .black
+                                                                            .withOpacity(
+                                                                                0.6),
+                                                                        BlendMode
+                                                                            .darken),
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      height: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .height,
+                                                                      child: Image.network(
+                                                                          store
+                                                                              .storePicRef,
+                                                                          fit: BoxFit
+                                                                              .fill),
+                                                                    ),
+                                                                  ),
+                                                                  Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Flexible(
+                                                                        child:
+                                                                            Text(
+                                                                          store
+                                                                              .storeName,
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              shadows: <Shadow>[
+                                                                                Shadow(
+                                                                                  offset: Offset(1.0, 1.0),
+                                                                                  blurRadius: 15.0,
+                                                                                  color: Colors.purple[500],
+                                                                                ),
+                                                                              ],
+                                                                              color: Colors.white,
+                                                                              fontSize: (store.storeName.length > 30) ? 30.0 : 40.0,
+                                                                              fontFamily: 'Bebas'),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.only(top: 20.0),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.spaceAround,
+                                                                          children: [
+                                                                            Container(
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                      50.0),
+                                                                                  gradient: LinearGradient(colors: [
+                                                                                    Colors.red[600],
+                                                                                    Colors.purple[500]
+                                                                                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+                                                                              child: IconButton(
+                                                                                  onPressed: () {
+                                                                                    findPlace(store.storeLocLat, store.storeLocLong);
+                                                                                  },
+                                                                                  icon: Icon(
+                                                                                    Icons.location_on_outlined,
+                                                                                    size: 30.0,
+                                                                                    color: Colors.white,
+                                                                                  )),
+                                                                            ),
+                                                                            Container(
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                      50.0),
+                                                                                  gradient: LinearGradient(colors: [
+                                                                                    Colors.red[600],
+                                                                                    Colors.purple[500]
+                                                                                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+                                                                              child: IconButton(
+                                                                                  onPressed: () {
+                                                                                    Navigator.of(context).push(MaterialPageRoute(
+                                                                                        builder: (context) => Store(
+                                                                                              storeData: store,
+                                                                                              docId: id,
+                                                                                            )));
+                                                                                  },
+                                                                                  icon: Icon(
+                                                                                    Icons.arrow_forward_ios,
+                                                                                    size: 30.0,
+                                                                                    color: Colors.white,
+                                                                                  )),
+                                                                            ),
+                                                                            Container(
+                                                                              decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(
+                                                                                      50.0),
+                                                                                  gradient: LinearGradient(colors: [
+                                                                                    Colors.red[600],
+                                                                                    Colors.purple[500]
+                                                                                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+                                                                              child: IconButton(
+                                                                                  onPressed: () {
+                                                                                    makePhoneCall(store.storePhone);
+                                                                                  },
+                                                                                  icon: Icon(
+                                                                                    Icons.call,
+                                                                                    size: 30.0,
+                                                                                    color: Colors.white,
+                                                                                  )),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              )
+                                                            : Center(
+                                                                child: Text(store
+                                                                    .storeName)),
                                                       ),
-                                                    ],
-                                                  ))
-                                            ],
-                                          )
-                                        : Center(
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            bottom: 30.0),
-                                                    child: Icon(
-                                                        Icons.cancel_outlined,
-                                                        size: 100,
-                                                        color: Colors.white),
-                                                  ),
-                                                  Text('Lütfen',
-                                                      style: TextStyle(
-                                                          fontSize: 50,
-                                                          color: Colors.white,
-                                                          fontFamily: 'Bebas')),
-                                                  Center(
-                                                    child: Text(
-                                                        'Konum servisinizi açın !',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 25,
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                'Bebas')),
-                                                  ),
-                                                ],
-                                              ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            });
+                                      },
+                                      position: LatLng(
+                                          element.position.geopoint.latitude,
+                                          element
+                                              .position.geopoint.longitude)));
+                                });
+                              }
+                              getSearchCircle(snapshotPosition.data);
+                              return (snapshot.connectionState ==
+                                      ConnectionState.active)
+                                  ? (snapshot.hasData &&
+                                          snapshot.data != null &&
+                                          snapshot.data.length != 0)
+                                      ? Stack(
+                                          children: [
+                                            GoogleMap(
+                                              onMapCreated: (GoogleMapController
+                                                  controller) {
+                                                _controller = controller;
+                                                changeMapMode();
+                                              },
+                                              initialCameraPosition:
+                                                  CameraPosition(
+                                                      target: LatLng(
+                                                          snapshotPosition
+                                                              .data.latitude,
+                                                          snapshotPosition
+                                                              .data.longitude),
+                                                      zoom: getZoomLevel()),
+                                              zoomGesturesEnabled: true,
+                                              myLocationEnabled: true,
+                                              myLocationButtonEnabled: true,
+                                              markers: Set.from(markers),
+                                              circles: Set.from(circles),
                                             ),
-                                          )
-                                    : Center(
-                                        child: Container(
+                                            Positioned(
+                                                bottom: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    25,
+                                                left: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    30,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      padding: EdgeInsets.only(
+                                                          left: 12),
+                                                      decoration: BoxDecoration(
+                                                          gradient: LinearGradient(
+                                                              colors: [
+                                                                Colors.red[600],
+                                                                Colors
+                                                                    .purple[500]
+                                                              ],
+                                                              begin: Alignment
+                                                                  .centerRight,
+                                                              end: Alignment
+                                                                  .centerLeft),
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          20))),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            'Aktif Kampanyalar',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white),
+                                                          ),
+                                                          Switch(
+                                                            value:
+                                                                _filterProvider
+                                                                    .getLive,
+                                                            activeColor: Theme
+                                                                    .of(context)
+                                                                .primaryColor,
+                                                            inactiveThumbColor:
+                                                                Theme.of(
+                                                                        context)
+                                                                    .accentColor,
+                                                            inactiveTrackColor:
+                                                                Colors.red[300],
+                                                            onChanged:
+                                                                (bool value) {
+                                                              changeLive(value);
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ))
+                                          ],
+                                        )
+                                      : Container(
                                           width:
                                               MediaQuery.of(context).size.width,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
                                             children: [
+                                              FaIcon(
+                                                FontAwesomeIcons.sadTear,
+                                                color: Colors.white,
+                                                size: 100.0,
+                                              ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
-                                                    bottom: 15.0),
-                                                child: Icon(Icons.location_on,
-                                                    size: 60,
-                                                    color: Theme.of(context)
-                                                        .primaryColor),
-                                              ),
-                                              Text('Konumunuz alınıyor !',
+                                                    top: 20.0),
+                                                child: Text(
+                                                  'Üzgünüz !',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                      fontSize: 30,
-                                                      color: Theme.of(context)
-                                                          .primaryColor,
-                                                      fontFamily: 'Bebas')),
+                                                      color: Colors.white,
+                                                      fontFamily: 'Bebas',
+                                                      fontSize: 40.0),
+                                                ),
+                                              ),
                                               Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 15.0),
-                                                child:
-                                                    CircularProgressIndicator(
-                                                        backgroundColor:
-                                                            Colors.white),
+                                                padding:
+                                                    const EdgeInsets.all(20.0),
+                                                child: Text(
+                                                  'Yakınlarınızda arama kriterlerinize uygun bir kampanya bulamadık !',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      fontFamily: 'Bebas',
+                                                      color: Colors.white,
+                                                      fontSize: 25.0),
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      );
-                              },
-                            )
-                          : Center(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                color: Theme.of(context).primaryColor,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 50.0),
-                                      child: Icon(
-                                          Icons.add_location_alt_outlined,
-                                          size: 100,
-                                          color: Colors.white),
-                                    ),
-                                    Text('Üzgünüz',
-                                        style: TextStyle(
-                                            fontSize: 50,
-                                            color: Colors.white,
-                                            fontFamily: 'Bebas')),
-                                    Center(
-                                      child: Text(
-                                          'Yakınlarınızda bir kampanya bulunamadı !',
-                                          style: TextStyle(
-                                              fontSize: 25,
-                                              color: Colors.white,
-                                              fontFamily: 'Bebas')),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                      : Center(
-                          child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 15.0),
-                                  child: Icon(Icons.alarm,
-                                      size: 60,
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                                Text('Kampanyalarınız yolda !',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 30,
-                                        color: Theme.of(context).primaryColor,
-                                        fontFamily: 'Bebas')),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15.0),
-                                  child: CircularProgressIndicator(
-                                      backgroundColor: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                  : Center(
-                      child: CircularProgressIndicator(
-                          backgroundColor: Colors.white));
-            }));
+                                        )
+                                  : Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
+                                    );
+                            })
+                        : Center(
+                            child: Text('Konumunuz bulunamadı !'),
+                          )
+                    : Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      );
+              },
+            )));
   }
 }

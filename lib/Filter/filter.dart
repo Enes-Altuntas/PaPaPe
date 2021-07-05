@@ -88,148 +88,222 @@ class _FilterState extends State<Filter> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor, //change your color here
+            color: Colors.white, //change your color here
           ),
-          backgroundColor: Colors.white,
-          title: Text('Bulovva',
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [Colors.red[600], Colors.purple[500]],
+                    begin: Alignment.centerRight,
+                    end: Alignment.centerLeft)),
+          ),
+          elevation: 0,
+          title: Text('bulb',
               style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: 'Bebas',
-                  color: Theme.of(context).primaryColor)),
+                  fontSize: 40.0, fontFamily: 'Dancing', color: Colors.white)),
           centerTitle: true,
         ),
-        body: FutureBuilder(
-            future: _getCategories,
-            builder: (BuildContext context, snapshotData) {
-              return (snapshotData.connectionState == ConnectionState.done)
-                  ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 10.0),
-                          child: Text(
-                            'Arama Seçenekleri',
-                            style: TextStyle(
-                                fontFamily: 'Bebas',
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 25.0),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 10.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Sadece Aktif Kampanyalar',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Switch(
-                                  value: _filterProvider.getLive,
-                                  onChanged: (value) {
-                                    _filterProvider.changeLive(value);
-                                    preferences.setBool('live', value);
-                                  })
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20.0, left: 10.0, right: 10.0),
-                          child: Container(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: DropdownButton(
-                                value: _filterProvider.getCat,
-                                isExpanded: true,
-                                underline: SizedBox(),
-                                hint: Text("Kategori"),
-                                items: storeCats.map((StoreCategory storeCat) {
-                                  return new DropdownMenuItem<String>(
-                                    value: storeCat.storeCatName,
-                                    onTap: () {
-                                      _filterProvider
-                                          .changeCat(storeCat.storeCatName);
-                                    },
-                                    child: new Text(
-                                      storeCat.storeCatName,
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  _filterProvider.changeAltCat(null);
-                                  preferences.remove('alt_category');
-                                  preferences.setString('category', value);
-                                  selectCategory(value);
-                                }),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20.0, left: 10.0, right: 10.0),
-                          child: Container(
-                            padding: EdgeInsets.only(left: 10, right: 10),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                borderRadius: BorderRadius.circular(5)),
-                            child: DropdownButton(
-                                value: _filterProvider.getAltCat,
-                                isExpanded: true,
-                                underline: SizedBox(),
-                                hint: Text("Alt Kategori"),
-                                items: storeAltCats
-                                    .map((StoreAltCategory storeAltCat) {
-                                  return new DropdownMenuItem<String>(
-                                    value: storeAltCat.storeAltCatName,
-                                    onTap: () {
-                                      _filterProvider.changeAltCat(
-                                          storeAltCat.storeAltCatName);
-                                    },
-                                    child: new Text(
-                                      storeAltCat.storeAltCatName,
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  _filterProvider.changeAltCat(value);
-                                  preferences.setString('alt_category', value);
-                                }),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 10.0),
-                          child: Text(
-                            'Görüntü Seçenekleri',
-                            style: TextStyle(
-                                fontFamily: 'Bebas',
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 25.0),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0, left: 10.0),
-                          child: Row(
-                            children: [
-                              Text(
-                                'Gece Modu',
-                                style: TextStyle(fontSize: 15.0),
-                              ),
-                              Switch(
-                                  value: _filterProvider.getMode,
-                                  onChanged: (value) {
-                                    _filterProvider.changeMode(value);
-                                    preferences.setBool('dark', value);
-                                  })
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(
-                          backgroundColor: Colors.white),
-                    );
-            }));
+        body: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.red[600], Colors.purple[500]],
+                  begin: Alignment.centerRight,
+                  end: Alignment.centerLeft)),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(50.0),
+                      topRight: Radius.circular(50.0))),
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(left: 10.0, top: 20.0, right: 10.0),
+                child: FutureBuilder(
+                    future: _getCategories,
+                    builder: (BuildContext context, snapshotData) {
+                      return (snapshotData.connectionState ==
+                              ConnectionState.done)
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, left: 10.0),
+                                  child: Text(
+                                    'Arama Seçenekleri',
+                                    style: TextStyle(
+                                        fontFamily: 'Bebas',
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 25.0),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, left: 10.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Sadece Aktif Kampanyalar',
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                      Switch(
+                                          value: _filterProvider.getLive,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          inactiveThumbColor:
+                                              Theme.of(context).accentColor,
+                                          inactiveTrackColor: Colors.red[300],
+                                          onChanged: (value) {
+                                            _filterProvider.changeLive(value);
+                                            preferences.setBool('live', value);
+                                          })
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, left: 10.0, right: 10.0),
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 10),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: DropdownButton(
+                                        value: _filterProvider.getCat,
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        hint: Text("Kategori"),
+                                        items: storeCats
+                                            .map((StoreCategory storeCat) {
+                                          return new DropdownMenuItem<String>(
+                                            value: storeCat.storeCatName,
+                                            onTap: () {
+                                              _filterProvider.changeCat(
+                                                  storeCat.storeCatName);
+                                            },
+                                            child: new Text(
+                                              storeCat.storeCatName,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          _filterProvider.changeAltCat(null);
+                                          preferences.remove('alt_category');
+                                          preferences.setString(
+                                              'category', value);
+                                          selectCategory(value);
+                                        }),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, left: 10.0, right: 10.0),
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.only(left: 10, right: 10),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: DropdownButton(
+                                        value: _filterProvider.getAltCat,
+                                        isExpanded: true,
+                                        underline: SizedBox(),
+                                        hint: Text("Alt Kategori"),
+                                        items: storeAltCats.map(
+                                            (StoreAltCategory storeAltCat) {
+                                          return new DropdownMenuItem<String>(
+                                            value: storeAltCat.storeAltCatName,
+                                            onTap: () {
+                                              _filterProvider.changeAltCat(
+                                                  storeAltCat.storeAltCatName);
+                                            },
+                                            child: new Text(
+                                              storeAltCat.storeAltCatName,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          _filterProvider.changeAltCat(value);
+                                          preferences.setString(
+                                              'alt_category', value);
+                                        }),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 30.0, left: 10.0, right: 10.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Arama Uzaklığı :'),
+                                      Slider(
+                                          value: _filterProvider.getDist,
+                                          min: 5,
+                                          max: 50,
+                                          divisions: 9,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          inactiveColor:
+                                              Theme.of(context).accentColor,
+                                          label:
+                                              '${_filterProvider.getDist} km',
+                                          onChanged: (localValue) {
+                                            _filterProvider
+                                                .changeDistance(localValue);
+                                            preferences.setDouble(
+                                                'distance', localValue);
+                                          }),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, left: 10.0),
+                                  child: Text(
+                                    'Görüntü Seçenekleri',
+                                    style: TextStyle(
+                                        fontFamily: 'Bebas',
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 25.0),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 20.0, left: 10.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'Gece Modu',
+                                        style: TextStyle(fontSize: 15.0),
+                                      ),
+                                      Switch(
+                                          value: _filterProvider.getMode,
+                                          activeColor:
+                                              Theme.of(context).primaryColor,
+                                          inactiveThumbColor:
+                                              Theme.of(context).accentColor,
+                                          inactiveTrackColor: Colors.red[300],
+                                          onChanged: (value) {
+                                            _filterProvider.changeMode(value);
+                                            preferences.setBool('dark', value);
+                                          })
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Center(
+                              child: CircularProgressIndicator(
+                                  backgroundColor: Colors.white),
+                            );
+                    }),
+              ),
+            ),
+          ),
+        ));
   }
 }

@@ -4,32 +4,41 @@ import 'package:bulovva/Models/product.dart';
 import 'package:bulovva/Models/product_category.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bulovva/Models/markers_model.dart';
+import 'package:geoflutterfire/geoflutterfire.dart';
 
 class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
+  Geoflutterfire geo = Geoflutterfire();
 
-  Stream<List<FirestoreMarkers>> getMapData(
-      bool active, String altCat, String cat) {
-    if (active == true) {
-      return _db
+  Stream<List<FirestoreMarkers>> getMapData(bool active, String altCat,
+      String cat, double distance, double lat, double long) {
+    Query ref;
+
+    if (active) {
+      ref = _db
           .collection('markers')
           .where('storeCategory', isEqualTo: cat)
           .where('storeAltCategory', isEqualTo: altCat)
-          .where('hasCampaign', isEqualTo: active)
-          .snapshots()
-          .map((snapshot) => snapshot.docs
-              .map((doc) => FirestoreMarkers.fromFirestore(doc.data()))
-              .toList());
+          .where('hasCampaign', isEqualTo: active);
     } else {
-      return _db
+      ref = _db
           .collection('markers')
           .where('storeCategory', isEqualTo: cat)
-          .where('storeAltCategory', isEqualTo: altCat)
-          .snapshots()
-          .map((snapshot) => snapshot.docs
-              .map((doc) => FirestoreMarkers.fromFirestore(doc.data()))
-              .toList());
+          .where('storeAltCategory', isEqualTo: altCat);
     }
+
+    GeoFirePoint center = geo.point(latitude: lat, longitude: long);
+
+    return geo
+        .collection(collectionRef: ref)
+        .within(
+            center: center,
+            radius: distance,
+            field: 'position',
+            strictMode: true)
+        .map((snapshot) => snapshot
+            .map((doc) => FirestoreMarkers.fromFirestore(doc.data()))
+            .toList());
   }
 
   Stream<List<Campaign>> getStoreCampaigns(docId) {
@@ -98,8 +107,8 @@ class FirestoreService {
             .toList());
   }
 
-  Future<DocumentSnapshot> getStore(String markerId) async {
-    return await _db.collection('stores').doc(markerId).get();
+  Future<DocumentSnapshot> getStore(String storeId) async {
+    return await _db.collection('stores').doc(storeId).get();
   }
 
   Future getStoreCat() async {

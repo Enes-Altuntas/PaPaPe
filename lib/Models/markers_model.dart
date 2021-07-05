@@ -1,40 +1,34 @@
+import 'package:bulovva/Models/position_model.dart';
+
 class FirestoreMarkers {
   final bool hasCampaign;
   final String storeCategory;
-  final double markerLatitude;
-  final double markerLongtitude;
-  final String markerTitle;
-  final String markerId;
+  final String storeAltCategory;
+  final PositionMarker position;
   final String storeId;
 
   FirestoreMarkers({
     this.storeCategory,
+    this.storeAltCategory,
     this.hasCampaign,
-    this.markerId,
-    this.markerLatitude,
-    this.markerLongtitude,
-    this.markerTitle,
+    this.position,
     this.storeId,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'storeCategory': storeCategory,
+      'storeAltCategory': storeAltCategory,
       'hasCampaign': hasCampaign,
-      'markerLatitude': markerLatitude,
-      'markerLongtitude': markerLongtitude,
-      'markerTitle': markerTitle,
-      'markerId': markerId,
+      'position': position,
       'storeId': storeId,
     };
   }
 
   FirestoreMarkers.fromFirestore(Map<String, dynamic> firestore)
       : storeCategory = firestore['storeCategory'],
+        storeAltCategory = firestore['storeAltCategory'],
         hasCampaign = firestore['hasCampaign'],
-        markerId = firestore['markerId'],
-        markerLatitude = firestore['markerLatitude'],
-        markerLongtitude = firestore['markerLongtitude'],
-        markerTitle = firestore['markerTitle'],
+        position = PositionMarker.fromFirestore(firestore['position']),
         storeId = firestore['storeId'];
 }

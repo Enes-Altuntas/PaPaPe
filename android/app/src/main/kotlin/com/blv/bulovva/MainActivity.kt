@@ -1,4 +1,4 @@
-package com.example.bulovva
+package com.blv.bulovva
 
 import io.flutter.embedding.android.FlutterActivity
 
