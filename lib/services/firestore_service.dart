@@ -10,21 +10,17 @@ class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
   Geoflutterfire geo = Geoflutterfire();
 
-  Stream<List<FirestoreMarkers>> getMapData(bool active, String altCat,
-      String cat, double distance, double lat, double long) {
+  Stream<List<FirestoreMarkers>> getMapData(
+      bool active, String cat, double distance, double lat, double long) {
     Query ref;
 
     if (active) {
       ref = _db
           .collection('markers')
           .where('storeCategory', isEqualTo: cat)
-          .where('storeAltCategory', isEqualTo: altCat)
           .where('hasCampaign', isEqualTo: active);
     } else {
-      ref = _db
-          .collection('markers')
-          .where('storeCategory', isEqualTo: cat)
-          .where('storeAltCategory', isEqualTo: altCat);
+      ref = _db.collection('markers').where('storeCategory', isEqualTo: cat);
     }
 
     GeoFirePoint center = geo.point(latitude: lat, longitude: long);
@@ -115,15 +111,6 @@ class FirestoreService {
     return await _db
         .collection('categories')
         .orderBy('storeCatRow', descending: false)
-        .get();
-  }
-
-  Future getStoreAltCat(String catId) async {
-    return await _db
-        .collection('categories')
-        .doc(catId)
-        .collection('alt_categories')
-        .orderBy('storeAltCatRow', descending: false)
         .get();
   }
 }

@@ -63,12 +63,6 @@ class _Map extends State<Map> {
       _filterProvider.changeCat('Yeme İçme');
     }
 
-    if (preferences.getString('alt_category') != null) {
-      _filterProvider.changeAltCat(preferences.getString('alt_category'));
-    } else {
-      _filterProvider.changeAltCat(null);
-    }
-
     if (preferences.getDouble('distance') != null) {
       _filterProvider.changeDistance(preferences.getDouble('distance'));
     } else {
@@ -233,7 +227,6 @@ class _Map extends State<Map> {
                         ? StreamBuilder<List<FirestoreMarkers>>(
                             stream: firestoreService.getMapData(
                                 _filterProvider.getLive,
-                                _filterProvider.getAltCat,
                                 _filterProvider.getCat,
                                 _filterProvider.getDist,
                                 snapshotPosition.data.latitude,

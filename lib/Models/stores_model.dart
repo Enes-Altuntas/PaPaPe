@@ -4,7 +4,6 @@ class StoreModel {
   final String storePicRef;
   final String storeAddress;
   final String storeCategory;
-  final String storeAltCategory;
   final String storePhone;
   final String storeTaxNo;
   final String storeTaxLoc;
@@ -23,7 +22,6 @@ class StoreModel {
     this.storePicRef,
     this.storeAddress,
     this.storeCategory,
-    this.storeAltCategory,
     this.storePhone,
     this.storeTaxNo,
     this.storeTaxLoc,
@@ -43,7 +41,6 @@ class StoreModel {
         storePicRef = data['storePicRef'],
         storeAddress = data['storeAddress'],
         storeCategory = data['storeCategory'],
-        storeAltCategory = data['storeAltCategory'],
         storePhone = data['storePhone'],
         storeTaxNo = data['storeTaxNo'],
         storeTaxLoc = data['storeTaxLoc'],
@@ -63,7 +60,6 @@ class StoreModel {
       'storePicRef': storePicRef,
       'storeAddress': storeAddress,
       'storeCategory': storeCategory,
-      'storeAltCategory': storeAltCategory,
       'storePhone': storePhone,
       'storeTaxNo': storeTaxNo,
       'storeTaxLoc': storeTaxLoc,
