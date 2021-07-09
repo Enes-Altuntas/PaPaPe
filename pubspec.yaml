@@ -47,11 +47,11 @@ flutter:
       fonts:
         - asset: assets/fonts/BebasNeue-Regular.ttf
           weight: 400
-    - family: Dancing
-      fonts:
-        - asset: assets/fonts/DancingScript-Regular.ttf
-          weight: 400
     - family: Roboto
       fonts:
         - asset: assets/fonts/RobotoCondensed-Regular.ttf
+          weight: 400
+    - family: Armatic
+      fonts:
+        - asset: assets/fonts/AmaticSC-Regular.ttf
           weight: 400

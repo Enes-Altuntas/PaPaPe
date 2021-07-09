@@ -92,23 +92,27 @@ class _FilterState extends State<Filter> {
           ),
           flexibleSpace: Container(
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.red[600], Colors.purple[500]],
-                    begin: Alignment.centerRight,
-                    end: Alignment.centerLeft)),
+                gradient: LinearGradient(colors: [
+              Theme.of(context).accentColor,
+              Theme.of(context).primaryColor
+            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           elevation: 0,
           title: Text('bulb',
               style: TextStyle(
-                  fontSize: 40.0, fontFamily: 'Dancing', color: Colors.white)),
+                fontSize: 45.0,
+                color: Colors.white,
+                fontFamily: 'Armatic',
+                fontWeight: FontWeight.bold,
+              )),
           centerTitle: true,
         ),
         body: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.red[600], Colors.purple[500]],
-                  begin: Alignment.centerRight,
-                  end: Alignment.centerLeft)),
+              gradient: LinearGradient(colors: [
+            Theme.of(context).accentColor,
+            Theme.of(context).primaryColor
+          ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
@@ -154,7 +158,7 @@ class _FilterState extends State<Filter> {
                                               Theme.of(context).primaryColor,
                                           inactiveThumbColor:
                                               Theme.of(context).accentColor,
-                                          inactiveTrackColor: Colors.red[300],
+                                          inactiveTrackColor: Colors.amber[200],
                                           onChanged: (value) {
                                             _filterProvider.changeLive(value);
                                             preferences.setBool('live', value);
@@ -239,7 +243,8 @@ class _FilterState extends State<Filter> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Arama Uzaklığı :'),
+                                      Text(
+                                          'Arama Uzaklığı : ${_filterProvider.getDist} km'),
                                       Slider(
                                           value: _filterProvider.getDist,
                                           min: 5,
@@ -286,7 +291,7 @@ class _FilterState extends State<Filter> {
                                               Theme.of(context).primaryColor,
                                           inactiveThumbColor:
                                               Theme.of(context).accentColor,
-                                          inactiveTrackColor: Colors.red[300],
+                                          inactiveTrackColor: Colors.amber[200],
                                           onChanged: (value) {
                                             _filterProvider.changeMode(value);
                                             preferences.setBool('dark', value);

@@ -21,9 +21,9 @@ class MyApp extends StatelessWidget {
           title: 'BULB',
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            primaryColor: Colors.purple,
+            primaryColor: Colors.amber[900],
             primaryColorDark: Colors.black,
-            accentColor: Colors.red[600],
+            accentColor: Colors.amber,
             hintColor: Colors.grey.shade800,
           ),
           home: Map()),

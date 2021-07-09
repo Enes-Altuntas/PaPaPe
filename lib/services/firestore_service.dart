@@ -112,7 +112,10 @@ class FirestoreService {
   }
 
   Future getStoreCat() async {
-    return await _db.collection('categories').get();
+    return await _db
+        .collection('categories')
+        .orderBy('storeCatRow', descending: false)
+        .get();
   }
 
   Future getStoreAltCat(String catId) async {
@@ -120,6 +123,7 @@ class FirestoreService {
         .collection('categories')
         .doc(catId)
         .collection('alt_categories')
+        .orderBy('storeAltCatRow', descending: false)
         .get();
   }
 }

@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:bulovva/Filter/filter.dart';
 import 'package:bulovva/Models/markers_model.dart';
 import 'package:bulovva/Models/stores_model.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/Services/firestore_service.dart';
 import 'package:bulovva/Store/store.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -191,10 +188,10 @@ class _Map extends State<Map> {
           elevation: 10,
           flexibleSpace: Container(
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.red[600], Colors.purple[500]],
-                    begin: Alignment.centerRight,
-                    end: Alignment.centerLeft)),
+                gradient: LinearGradient(colors: [
+              Theme.of(context).accentColor,
+              Theme.of(context).primaryColor
+            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           leading: GestureDetector(
               onTap: () {
@@ -214,15 +211,19 @@ class _Map extends State<Map> {
               )),
           title: Text('bulb',
               style: TextStyle(
-                  fontSize: 40.0, fontFamily: 'Dancing', color: Colors.white)),
+                fontSize: 45.0,
+                fontFamily: 'Armatic',
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              )),
           centerTitle: true,
         ),
         body: Container(
             decoration: BoxDecoration(
-                gradient: LinearGradient(
-                    colors: [Colors.red[600], Colors.purple[500]],
-                    begin: Alignment.centerRight,
-                    end: Alignment.centerLeft)),
+                gradient: LinearGradient(colors: [
+              Theme.of(context).accentColor,
+              Theme.of(context).primaryColor
+            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
             child: FutureBuilder(
               future: getLocation,
               builder: (BuildContext context, snapshotPosition) {
@@ -279,8 +280,10 @@ class _Map extends State<Map> {
                                                 decoration: BoxDecoration(
                                                     gradient: LinearGradient(
                                                         colors: [
-                                                      Colors.red[600],
-                                                      Colors.purple[500]
+                                                      Theme.of(context)
+                                                          .accentColor,
+                                                      Theme.of(context)
+                                                          .primaryColor
                                                     ],
                                                         begin: Alignment
                                                             .centerRight,
@@ -379,8 +382,8 @@ class _Map extends State<Map> {
                                                                                   borderRadius: BorderRadius.circular(
                                                                                       50.0),
                                                                                   gradient: LinearGradient(colors: [
-                                                                                    Colors.red[600],
-                                                                                    Colors.purple[500]
+                                                                                    Theme.of(context).accentColor,
+                                                                                    Theme.of(context).primaryColor
                                                                                   ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
                                                                               child: IconButton(
                                                                                   onPressed: () {
@@ -397,8 +400,8 @@ class _Map extends State<Map> {
                                                                                   borderRadius: BorderRadius.circular(
                                                                                       50.0),
                                                                                   gradient: LinearGradient(colors: [
-                                                                                    Colors.red[600],
-                                                                                    Colors.purple[500]
+                                                                                    Theme.of(context).accentColor,
+                                                                                    Theme.of(context).primaryColor
                                                                                   ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
                                                                               child: IconButton(
                                                                                   onPressed: () {
@@ -419,8 +422,8 @@ class _Map extends State<Map> {
                                                                                   borderRadius: BorderRadius.circular(
                                                                                       50.0),
                                                                                   gradient: LinearGradient(colors: [
-                                                                                    Colors.red[600],
-                                                                                    Colors.purple[500]
+                                                                                    Theme.of(context).accentColor,
+                                                                                    Theme.of(context).primaryColor
                                                                                   ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
                                                                               child: IconButton(
                                                                                   onPressed: () {
@@ -487,7 +490,7 @@ class _Map extends State<Map> {
                                                 bottom: MediaQuery.of(context)
                                                         .size
                                                         .height /
-                                                    25,
+                                                    20,
                                                 left: MediaQuery.of(context)
                                                         .size
                                                         .width /
@@ -502,9 +505,12 @@ class _Map extends State<Map> {
                                                       decoration: BoxDecoration(
                                                           gradient: LinearGradient(
                                                               colors: [
-                                                                Colors.red[600],
-                                                                Colors
-                                                                    .purple[500]
+                                                                Theme.of(
+                                                                        context)
+                                                                    .accentColor,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .primaryColor
                                                               ],
                                                               begin: Alignment
                                                                   .centerRight,
@@ -535,7 +541,8 @@ class _Map extends State<Map> {
                                                                         context)
                                                                     .accentColor,
                                                             inactiveTrackColor:
-                                                                Colors.red[300],
+                                                                Colors
+                                                                    .amber[200],
                                                             onChanged:
                                                                 (bool value) {
                                                               changeLive(value);
