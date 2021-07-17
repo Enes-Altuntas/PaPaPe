@@ -1,4 +1,4 @@
-import 'package:bulovva/Models/stores_model.dart';
+import 'package:bulb/Models/store_model.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,33 +33,56 @@ class _InfoState extends State<Info> {
           child: Stack(
             alignment: AlignmentDirectional.center,
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Theme.of(context).accentColor,
-                  Theme.of(context).primaryColor
-                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-                child: Image.network(
-                  widget.storeData.storePicRef,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              Text(
-                widget.storeData.storeName,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Bebas',
-                  fontSize: MediaQuery.of(context).size.height / 12,
-                  shadows: <Shadow>[
-                    Shadow(
-                      blurRadius: 10.0,
-                      color: Colors.amber,
+              (widget.storeData.storePicRef != null)
+                  ? ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.2), BlendMode.darken),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                                colors: [
+                              Theme.of(context).accentColor,
+                              Theme.of(context).primaryColor
+                            ],
+                                begin: Alignment.centerRight,
+                                end: Alignment.centerLeft)),
+                        child: Image.network(
+                          widget.storeData.storePicRef,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                    )
+                  : Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                            Theme.of(context).accentColor,
+                            Theme.of(context).primaryColor
+                          ],
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft)),
                     ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  widget.storeData.storeName,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Bebas',
+                    fontSize: MediaQuery.of(context).size.height / 12,
+                    shadows: <Shadow>[
+                      Shadow(
+                        blurRadius: 10.0,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               )
             ],
           ),
@@ -67,7 +90,9 @@ class _InfoState extends State<Info> {
         Container(
           padding: EdgeInsets.all(5.0),
           height: MediaQuery.of(context).size.height / 10,
-          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+          decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              boxShadow: [BoxShadow(color: Colors.white, spreadRadius: 3)]),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [

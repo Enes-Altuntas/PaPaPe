@@ -1,9 +1,10 @@
-import 'package:bulovva/Models/campaign_model.dart';
-import 'package:bulovva/Models/comments_model.dart';
-import 'package:bulovva/Models/product.dart';
-import 'package:bulovva/Models/product_category.dart';
+import 'package:bulb/Models/campaign_model.dart';
+import 'package:bulb/Models/comment_model.dart';
+import 'package:bulb/Models/product_category_model.dart';
+import 'package:bulb/Models/product_model.dart';
+import 'package:bulb/Models/reservations_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bulovva/Models/markers_model.dart';
+import 'package:bulb/Models/markers_model.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
 class FirestoreService {
@@ -62,6 +63,51 @@ class FirestoreService {
             .toList());
   }
 
+  Stream<List<ProductCategory>> getProductCategories(String docId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('products')
+        .orderBy('categoryRow', descending: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => ProductCategory.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<Comments>> getReports(String docId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('reports')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Comments.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<Reservations>> getReservations(String docId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('reservations')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Reservations.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Future<DocumentSnapshot> getStore(String storeId) async {
+    return await _db.collection('stores').doc(storeId).get();
+  }
+
+  Future getStoreCat() async {
+    return await _db
+        .collection('categories')
+        .orderBy('storeCatRow', descending: false)
+        .get();
+  }
+
   Future<String> saveComment(String docId, Comments comment) async {
     try {
       await _db
@@ -89,28 +135,5 @@ class FirestoreService {
     } catch (e) {
       throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
     }
-  }
-
-  Stream<List<ProductCategory>> getProductCategories(String docId) {
-    return _db
-        .collection('stores')
-        .doc(docId)
-        .collection('products')
-        .orderBy('categoryRow', descending: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => ProductCategory.fromFirestore(doc.data()))
-            .toList());
-  }
-
-  Future<DocumentSnapshot> getStore(String storeId) async {
-    return await _db.collection('stores').doc(storeId).get();
-  }
-
-  Future getStoreCat() async {
-    return await _db
-        .collection('categories')
-        .orderBy('storeCatRow', descending: false)
-        .get();
   }
 }

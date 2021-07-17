@@ -1,4 +1,4 @@
-import 'package:bulovva/Models/position_model.dart';
+import 'package:bulb/Models/position_model.dart';
 
 class FirestoreMarkers {
   final bool hasCampaign;
@@ -17,7 +17,7 @@ class FirestoreMarkers {
     return {
       'storeCategory': storeCategory,
       'hasCampaign': hasCampaign,
-      'position': position,
+      'position': position.toMap(),
       'storeId': storeId,
     };
   }

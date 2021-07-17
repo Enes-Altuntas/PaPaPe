@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class StoreModel {
   final String storeId;
   final String storeName;
@@ -15,6 +17,7 @@ class StoreModel {
   final String pers1Phone;
   final String pers2Phone;
   final String pers3Phone;
+  File storeLocalImagePath;
 
   StoreModel({
     this.storeId,
@@ -33,6 +36,7 @@ class StoreModel {
     this.pers1Phone,
     this.pers2Phone,
     this.pers3Phone,
+    this.storeLocalImagePath,
   });
 
   StoreModel.fromFirestore(Map<String, dynamic> data)

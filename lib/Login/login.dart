@@ -1,5 +1,5 @@
-import 'package:bulb/Dashboard/dashboard.dart';
 import 'package:bulb/Login/sign.dart';
+import 'package:bulb/Map/Map.dart';
 import 'package:bulb/Services/authentication_service.dart';
 import 'package:bulb/Services/toast_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
             if (FirebaseAuth.instance.currentUser != null &&
                 FirebaseAuth.instance.currentUser.emailVerified) {
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => Dashboard()));
+                  MaterialPageRoute(builder: (context) => Map()));
             } else {
               ToastService().showError(value, context);
             }
@@ -87,8 +87,8 @@ class _LoginState extends State<Login> {
         .read<AuthService>()
         .googleLogin()
         .then((value) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => Dashboard()));
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => Map()));
         })
         .onError(
             (error, stackTrace) => ToastService().showError(error, context))
@@ -132,7 +132,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return (FirebaseAuth.instance.currentUser != null &&
             FirebaseAuth.instance.currentUser.emailVerified)
-        ? Dashboard()
+        ? Map()
         : Scaffold(
             resizeToAvoidBottomInset: false,
             body: (isLoading == false)

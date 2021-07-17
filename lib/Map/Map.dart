@@ -1,9 +1,9 @@
-import 'package:bulovva/Filter/filter.dart';
-import 'package:bulovva/Models/markers_model.dart';
-import 'package:bulovva/Models/stores_model.dart';
-import 'package:bulovva/Providers/filter_provider.dart';
-import 'package:bulovva/Services/firestore_service.dart';
-import 'package:bulovva/Store/store.dart';
+import 'package:bulb/Filter/filter.dart';
+import 'package:bulb/Models/markers_model.dart';
+import 'package:bulb/Models/store_model.dart';
+import 'package:bulb/Providers/filter_provider.dart';
+import 'package:bulb/Services/firestore_service.dart';
+import 'package:bulb/Store/store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -83,13 +83,13 @@ class _Map extends State<Map> {
     }
   }
 
-  @override
-  void dispose() {
-    setState(() {
-      _controller = null;
-    });
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   setState(() {
+  //     _controller = null;
+  //   });
+  //   super.dispose();
+  // }
 
   Future<String> getJsonFile(String path) async {
     return await rootBundle.loadString(path);
@@ -291,157 +291,173 @@ class _Map extends State<Map> {
                                                           const EdgeInsets.all(
                                                               15.0),
                                                       child: Container(
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        height: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .height /
-                                                            3.6,
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        decoration: BoxDecoration(
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .accentColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50.0)),
-                                                        child: (store != null &&
-                                                                store.storePicRef !=
-                                                                    null)
-                                                            ? Stack(
-                                                                children: [
-                                                                  ColorFiltered(
-                                                                    colorFilter: ColorFilter.mode(
-                                                                        Colors
-                                                                            .black
-                                                                            .withOpacity(
-                                                                                0.6),
-                                                                        BlendMode
-                                                                            .darken),
-                                                                    child:
-                                                                        Container(
-                                                                      width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width,
-                                                                      height: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .height,
-                                                                      child: Image.network(
-                                                                          store
-                                                                              .storePicRef,
-                                                                          fit: BoxFit
-                                                                              .fill),
-                                                                    ),
-                                                                  ),
-                                                                  Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      Flexible(
-                                                                        child:
-                                                                            Text(
-                                                                          store
-                                                                              .storeName,
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: TextStyle(
-                                                                              shadows: <Shadow>[
-                                                                                Shadow(
-                                                                                  offset: Offset(1.0, 1.0),
-                                                                                  blurRadius: 15.0,
-                                                                                  color: Theme.of(context).primaryColor,
-                                                                                ),
-                                                                              ],
-                                                                              color: Colors.white,
-                                                                              fontSize: (store.storeName.length > 30) ? 30.0 : 40.0,
-                                                                              fontFamily: 'Bebas'),
-                                                                        ),
+                                                          clipBehavior:
+                                                              Clip.antiAlias,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              3.6,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                                  color: Theme.of(
+                                                                          context)
+                                                                      .accentColor,
+                                                                  boxShadow: [
+                                                                    BoxShadow(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        spreadRadius:
+                                                                            3),
+                                                                  ],
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              50.0)),
+                                                          child: Stack(
+                                                            children: [
+                                                              ColorFiltered(
+                                                                colorFilter: ColorFilter.mode(
+                                                                    Colors.black
+                                                                        .withOpacity(
+                                                                            0.6),
+                                                                    BlendMode
+                                                                        .darken),
+                                                                child: (store !=
+                                                                            null &&
+                                                                        store.storePicRef !=
+                                                                            null)
+                                                                    ? Container(
+                                                                        width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width,
+                                                                        height: MediaQuery.of(context)
+                                                                            .size
+                                                                            .height,
+                                                                        child: Image.network(
+                                                                            store
+                                                                                .storePicRef,
+                                                                            fit:
+                                                                                BoxFit.fill),
+                                                                      )
+                                                                    : Container(
+                                                                        width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width,
+                                                                        height: MediaQuery.of(context)
+                                                                            .size
+                                                                            .height,
                                                                       ),
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.only(top: 20.0),
-                                                                        child:
-                                                                            Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.spaceAround,
-                                                                          children: [
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(
-                                                                                      50.0),
-                                                                                  gradient: LinearGradient(colors: [
-                                                                                    Theme.of(context).accentColor,
-                                                                                    Theme.of(context).primaryColor
-                                                                                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-                                                                              child: IconButton(
-                                                                                  onPressed: () {
-                                                                                    findPlace(store.storeLocLat, store.storeLocLong);
-                                                                                  },
-                                                                                  icon: Icon(
-                                                                                    Icons.location_on_outlined,
-                                                                                    size: 30.0,
-                                                                                    color: Colors.white,
-                                                                                  )),
-                                                                            ),
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(
-                                                                                      50.0),
-                                                                                  gradient: LinearGradient(colors: [
-                                                                                    Theme.of(context).accentColor,
-                                                                                    Theme.of(context).primaryColor
-                                                                                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-                                                                              child: IconButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.of(context).push(MaterialPageRoute(
-                                                                                        builder: (context) => Store(
-                                                                                              storeData: store,
-                                                                                              docId: id,
-                                                                                            )));
-                                                                                  },
-                                                                                  icon: Icon(
-                                                                                    Icons.arrow_forward_ios,
-                                                                                    size: 30.0,
-                                                                                    color: Colors.white,
-                                                                                  )),
-                                                                            ),
-                                                                            Container(
-                                                                              decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(
-                                                                                      50.0),
-                                                                                  gradient: LinearGradient(colors: [
-                                                                                    Theme.of(context).accentColor,
-                                                                                    Theme.of(context).primaryColor
-                                                                                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-                                                                              child: IconButton(
-                                                                                  onPressed: () {
-                                                                                    makePhoneCall(store.storePhone);
-                                                                                  },
-                                                                                  icon: Icon(
-                                                                                    Icons.call,
-                                                                                    size: 30.0,
-                                                                                    color: Colors.white,
-                                                                                  )),
+                                                              ),
+                                                              Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Flexible(
+                                                                    child: Text(
+                                                                      store
+                                                                          .storeName,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          shadows: <
+                                                                              Shadow>[
+                                                                            Shadow(
+                                                                              offset: Offset(1.0, 1.0),
+                                                                              blurRadius: 15.0,
+                                                                              color: Theme.of(context).primaryColor,
                                                                             ),
                                                                           ],
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontSize: (store.storeName.length > 30)
+                                                                              ? 30.0
+                                                                              : 40.0,
+                                                                          fontFamily:
+                                                                              'Bebas'),
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        top:
+                                                                            20.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .spaceAround,
+                                                                      children: [
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Theme.of(context).primaryColor,
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(50.0),
+                                                                          ),
+                                                                          child: IconButton(
+                                                                              onPressed: () {
+                                                                                findPlace(store.storeLocLat, store.storeLocLong);
+                                                                              },
+                                                                              icon: Icon(
+                                                                                Icons.location_on_outlined,
+                                                                                size: 30.0,
+                                                                                color: Colors.white,
+                                                                              )),
                                                                         ),
-                                                                      ),
-                                                                    ],
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(50.0),
+                                                                            color:
+                                                                                Theme.of(context).primaryColor,
+                                                                          ),
+                                                                          child: IconButton(
+                                                                              onPressed: () {
+                                                                                Navigator.of(context).push(MaterialPageRoute(
+                                                                                    builder: (context) => Store(
+                                                                                          storeData: store,
+                                                                                          docId: id,
+                                                                                        )));
+                                                                              },
+                                                                              icon: Icon(
+                                                                                Icons.arrow_forward_ios,
+                                                                                size: 30.0,
+                                                                                color: Colors.white,
+                                                                              )),
+                                                                        ),
+                                                                        Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(50.0),
+                                                                            color:
+                                                                                Theme.of(context).primaryColor,
+                                                                          ),
+                                                                          child: IconButton(
+                                                                              onPressed: () {
+                                                                                makePhoneCall(store.storePhone);
+                                                                              },
+                                                                              icon: Icon(
+                                                                                Icons.call,
+                                                                                size: 30.0,
+                                                                                color: Colors.white,
+                                                                              )),
+                                                                        ),
+                                                                      ],
+                                                                    ),
                                                                   ),
                                                                 ],
-                                                              )
-                                                            : Center(
-                                                                child: Text(store
-                                                                    .storeName)),
-                                                      ),
+                                                              ),
+                                                            ],
+                                                          )),
                                                     ),
                                                   ],
                                                 ),

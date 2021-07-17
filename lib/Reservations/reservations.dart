@@ -1,15 +1,15 @@
 import 'package:bulb/Models/reservations_model.dart';
+import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Services/firestore_service.dart';
-import 'package:bulb/Services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Reservation extends StatefulWidget {
-  Reservation({Key key}) : super(key: key);
+  final StoreModel storeData;
+
+  Reservation({Key key, this.storeData}) : super(key: key);
 
   @override
   _ReservationState createState() => _ReservationState();
@@ -19,7 +19,6 @@ class _ReservationState extends State<Reservation> {
   final DateFormat dateFormat = DateFormat("dd/MM/yyyy HH:mm:ss");
   bool isLoading = false;
   bool btnVis = true;
-  Reservations selectedReservation;
 
   String formatDate(Timestamp date) {
     var _date = DateTime.fromMillisecondsSinceEpoch(date.millisecondsSinceEpoch)
@@ -29,76 +28,6 @@ class _ReservationState extends State<Reservation> {
 
   makePhoneCall(storePhone) async {
     await launch("tel:$storePhone");
-  }
-
-  approveReservation() async {
-    setState(() {
-      isLoading = true;
-    });
-    await FirestoreService()
-        .approveReservation(selectedReservation)
-        .then((value) => ToastService().showSuccess(value, context))
-        .onError(
-            (error, stackTrace) => ToastService().showError(error, context))
-        .whenComplete(() => setState(() {
-              isLoading = false;
-            }));
-  }
-
-  approveReservationYesNo() {
-    CoolAlert.show(
-        context: context,
-        type: CoolAlertType.warning,
-        title: '',
-        text: 'Rezervasyonu onaylamak istediğinize emin misiniz ?',
-        backgroundColor: Theme.of(context).primaryColor,
-        confirmBtnColor: Theme.of(context).primaryColor,
-        showCancelBtn: true,
-        cancelBtnText: 'Hayır',
-        barrierDismissible: false,
-        onCancelBtnTap: () {
-          Navigator.of(context).pop();
-        },
-        onConfirmBtnTap: () {
-          Navigator.of(context).pop();
-          approveReservation();
-        },
-        confirmBtnText: 'Evet');
-  }
-
-  rejectReservation() async {
-    setState(() {
-      isLoading = true;
-    });
-    await FirestoreService()
-        .rejectReservation(selectedReservation)
-        .then((value) => ToastService().showSuccess(value, context))
-        .onError(
-            (error, stackTrace) => ToastService().showError(error, context))
-        .whenComplete(() => setState(() {
-              isLoading = false;
-            }));
-  }
-
-  rejectReservationYesNo() {
-    CoolAlert.show(
-        context: context,
-        type: CoolAlertType.warning,
-        title: '',
-        text: 'Rezervasyonu reddetmek istediğinize emin misiniz ?',
-        backgroundColor: Theme.of(context).primaryColor,
-        confirmBtnColor: Theme.of(context).primaryColor,
-        showCancelBtn: true,
-        cancelBtnText: 'Hayır',
-        barrierDismissible: false,
-        onCancelBtnTap: () {
-          Navigator.of(context).pop();
-        },
-        onConfirmBtnTap: () {
-          Navigator.of(context).pop();
-          rejectReservation();
-        },
-        confirmBtnText: 'Evet');
   }
 
   @override
@@ -123,7 +52,8 @@ class _ReservationState extends State<Reservation> {
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: StreamBuilder<List<Reservations>>(
-              stream: FirestoreService().getReservations(),
+              stream:
+                  FirestoreService().getReservations(widget.storeData.storeId),
               builder: (context, snapshot) {
                 return (snapshot.connectionState == ConnectionState.active)
                     ? (snapshot.data.length > 0)
@@ -239,116 +169,6 @@ class _ReservationState extends State<Reservation> {
                                                 ),
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 20.0),
-                                              child: Visibility(
-                                                  visible: snapshot.data[index]
-                                                              .reservationStatus ==
-                                                          'waiting'
-                                                      ? true
-                                                      : false,
-                                                  child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceAround,
-                                                      children: [
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  Colors.green,
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          50.0))),
-                                                          child: TextButton(
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  selectedReservation =
-                                                                      snapshot.data[
-                                                                          index];
-                                                                });
-                                                                approveReservationYesNo();
-                                                              },
-                                                              child: Row(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10.0),
-                                                                    child: FaIcon(
-                                                                        FontAwesomeIcons
-                                                                            .thumbsUp,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10.0,
-                                                                        right:
-                                                                            10.0),
-                                                                    child: Text(
-                                                                      'Onayla',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              )),
-                                                        ),
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                              color: Colors
-                                                                  .red[400],
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          50.0))),
-                                                          child: TextButton(
-                                                              onPressed: () {
-                                                                setState(() {
-                                                                  selectedReservation =
-                                                                      snapshot.data[
-                                                                          index];
-                                                                });
-                                                                rejectReservationYesNo();
-                                                              },
-                                                              child: Row(
-                                                                children: [
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10.0),
-                                                                    child: FaIcon(
-                                                                        FontAwesomeIcons
-                                                                            .thumbsDown,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10.0,
-                                                                        right:
-                                                                            10.0),
-                                                                    child: Text(
-                                                                      'Reddet',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              )),
-                                                        )
-                                                      ])),
-                                            )
                                           ],
                                         ),
                                       ),
@@ -373,7 +193,7 @@ class _ReservationState extends State<Reservation> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.8,
                                     child: Text(
-                                      'Henüz işletmeniz adına herhangi bir rezervasyon bulunmamaktadır !',
+                                      'Henüz herhangi bir rezervasyon talebiniz bulunmamaktadır !',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 25.0,

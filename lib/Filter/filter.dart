@@ -1,6 +1,6 @@
-import 'package:bulovva/Models/store_category.dart';
-import 'package:bulovva/Providers/filter_provider.dart';
-import 'package:bulovva/Services/firestore_service.dart';
+import 'package:bulb/Models/store_category.dart';
+import 'package:bulb/Providers/filter_provider.dart';
+import 'package:bulb/Services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

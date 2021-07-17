@@ -1,11 +1,14 @@
 import 'package:bulb/Models/comment_model.dart';
+import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Reports extends StatefulWidget {
-  Reports({Key key}) : super(key: key);
+  final StoreModel storeData;
+
+  Reports({Key key, this.storeData}) : super(key: key);
 
   @override
   _ReportsState createState() => _ReportsState();
@@ -39,7 +42,7 @@ class _ReportsState extends State<Reports> {
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: StreamBuilder<List<Comments>>(
-              stream: FirestoreService().getReports(),
+              stream: FirestoreService().getReports(widget.storeData.storeId),
               builder: (context, snapshot) {
                 return (snapshot.connectionState == ConnectionState.active)
                     ? (snapshot.hasData == true)
