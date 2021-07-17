@@ -1,4 +1,3 @@
-import 'package:bulovva/Models/store_alt_category.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/Services/firestore_service.dart';

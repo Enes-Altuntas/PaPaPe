@@ -1,4 +1,5 @@
-import 'package:bulovva/Models/campaing_model.dart';
+import 'package:bulovva/Info/info.dart';
+import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/comments_model.dart';
 import 'package:bulovva/Models/product.dart';
 import 'package:bulovva/Models/product_category.dart';
@@ -8,6 +9,7 @@ import 'package:bulovva/Services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
@@ -226,275 +228,44 @@ class _StoreState extends State<Store> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+              Theme.of(context).accentColor,
+              Theme.of(context).primaryColor
+            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+          ),
           iconTheme: IconThemeData(
-            color: Theme.of(context).primaryColor, //change your color here
+            color: Colors.white,
           ),
           backgroundColor: Colors.white,
           bottom: TabBar(
-            labelColor: Theme.of(context).primaryColor,
-            labelStyle: TextStyle(fontFamily: 'Bebas', fontSize: 18.0),
+            indicatorColor: Colors.white,
             tabs: [
               Tab(
-                text: 'Bilgiler',
+                icon: FaIcon(FontAwesomeIcons.info, color: Colors.white),
               ),
-              Tab(text: 'Kampanyalar'),
-              Tab(text: 'Ürünler'),
+              Tab(icon: FaIcon(FontAwesomeIcons.tags, color: Colors.white)),
+              Tab(icon: FaIcon(FontAwesomeIcons.bookOpen, color: Colors.white)),
+              Tab(icon: FaIcon(FontAwesomeIcons.bullhorn, color: Colors.white)),
+              Tab(icon: FaIcon(FontAwesomeIcons.bell, color: Colors.white)),
             ],
           ),
           centerTitle: true,
-          title: Text('Bulovva',
+          title: Text('Bulb',
               style: TextStyle(
-                  fontSize: 25.0,
-                  fontFamily: 'Bebas',
-                  color: Theme.of(context).primaryColor)),
+                  fontSize: 45.0,
+                  fontFamily: 'Armatic',
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
         ),
         body: (isLoading == false)
             ? TabBarView(
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: [
-                            ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                  Colors.black.withOpacity(0.6),
-                                  BlendMode.multiply),
-                              child: Container(
-                                height: MediaQuery.of(context).size.height,
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(color: Colors.red),
-                                child: Image.network(
-                                  widget.storeData.storePicRef,
-                                  fit: BoxFit.scaleDown,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              widget.storeData.storeName,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: 'Bebas',
-                                fontSize:
-                                    MediaQuery.of(context).size.height / 12,
-                                shadows: <Shadow>[
-                                  Shadow(
-                                    blurRadius: 10.0,
-                                    color: Colors.amber,
-                                  ),
-                                ],
-                              ),
-                              textAlign: TextAlign.center,
-                            )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(5.0),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                makePhoneCall();
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.call, color: Colors.white),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      'İşletmeyi Ara',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Bebas'),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                findPlace();
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.my_location,
-                                    color: Colors.white,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text('Haritada Göster',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Bebas')),
-                                  )
-                                ],
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                openCommentDialog();
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.mail, color: Colors.white),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                      'Görüş Bildir',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Bebas'),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  StreamBuilder<List<Campaign>>(
-                    stream: FirestoreService().getStoreCampaigns(widget.docId),
-                    builder: (context, snapshot) {
-                      return (snapshot.connectionState ==
-                              ConnectionState.active)
-                          ? (snapshot.data.length != 0)
-                              ? ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Card(
-                                        color: (snapshot
-                                                .data[index].campaignActive)
-                                            ? Colors.green[800]
-                                            : Theme.of(context).primaryColor,
-                                        shadowColor:
-                                            Theme.of(context).primaryColor,
-                                        elevation: 10.0,
-                                        child: ListTile(
-                                          title: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 8.0),
-                                            child: Text(
-                                              snapshot.data[index].campaignDesc,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          subtitle: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Kampanya Başlangıç: ${formatDate(snapshot.data[index].campaignStart)}',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                Text(
-                                                  'Kampanya Bitiş: ${formatDate(snapshot.data[index].campaignFinish)}',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 10.0),
-                                                  child: (snapshot.data[index]
-                                                              .campaignActive ==
-                                                          false)
-                                                      ? Text(
-                                                          'Kampanya Anahtarı: #${snapshot.data[index].campaignKey}',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white),
-                                                        )
-                                                      : ElevatedButton(
-                                                          onPressed: () {
-                                                            getCampaignCode(
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .campaignKey,
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .campaignId,
-                                                                snapshot
-                                                                    .data[index]
-                                                                    .campaignCounter);
-                                                          },
-                                                          child: Text(
-                                                            'Kampanya Kodu Al',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .green[800],
-                                                                fontFamily:
-                                                                    'Bebas'),
-                                                          ),
-                                                          style: ElevatedButton
-                                                              .styleFrom(
-                                                                  primary: Colors
-                                                                      .white)),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )
-                              : Center(
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(Icons.assignment_late_outlined,
-                                            size: 100.0,
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 20.0),
-                                          child: Text(
-                                            'Henüz yayınlanmış herhangi bir kampanya bulunmamaktadır !',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                fontSize: 25.0,
-                                                color: Theme.of(context)
-                                                    .primaryColor),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                )
-                          : Center(
-                              child: CircularProgressIndicator(
-                                backgroundColor: Theme.of(context).primaryColor,
-                              ),
-                            );
-                    },
-                  ),
+                  Info(storeData: widget.storeData),
                   StreamBuilder<List<ProductCategory>>(
                     stream:
                         FirestoreService().getProductCategories(widget.docId),

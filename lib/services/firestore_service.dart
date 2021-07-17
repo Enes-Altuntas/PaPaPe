@@ -1,4 +1,4 @@
-import 'package:bulovva/Models/campaing_model.dart';
+import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/comments_model.dart';
 import 'package:bulovva/Models/product.dart';
 import 'package:bulovva/Models/product_category.dart';

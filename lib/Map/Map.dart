@@ -247,9 +247,11 @@ class _Map extends State<Map> {
                                         await firestoreService
                                             .getStore(element.storeId)
                                             .then((value) {
-                                          store = StoreModel.fromFirestore(
-                                              value.data());
-                                          id = value.id;
+                                          if (value.data() != null) {
+                                            store = StoreModel.fromFirestore(
+                                                value.data());
+                                            id = value.id;
+                                          }
                                         });
                                         showModalBottomSheet(
                                             context: context,
@@ -301,8 +303,9 @@ class _Map extends State<Map> {
                                                             .size
                                                             .width,
                                                         decoration: BoxDecoration(
-                                                            color: Colors
-                                                                .purple[800],
+                                                            color: Theme.of(
+                                                                    context)
+                                                                .accentColor,
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
@@ -354,7 +357,7 @@ class _Map extends State<Map> {
                                                                                 Shadow(
                                                                                   offset: Offset(1.0, 1.0),
                                                                                   blurRadius: 15.0,
-                                                                                  color: Colors.purple[500],
+                                                                                  color: Theme.of(context).primaryColor,
                                                                                 ),
                                                                               ],
                                                                               color: Colors.white,
@@ -480,7 +483,7 @@ class _Map extends State<Map> {
                                               circles: Set.from(circles),
                                             ),
                                             Positioned(
-                                                bottom: MediaQuery.of(context)
+                                                top: MediaQuery.of(context)
                                                         .size
                                                         .height /
                                                     20,
