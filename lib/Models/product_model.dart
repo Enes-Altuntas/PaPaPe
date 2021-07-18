@@ -1,6 +1,6 @@
 import 'dart:io';
 
-class Product {
+class ProductModel {
   final String productDesc;
   final String productName;
   final int productPrice;
@@ -9,7 +9,7 @@ class Product {
   String productPicRef;
   File productLocalImage;
 
-  Product(
+  ProductModel(
       {this.productDesc,
       this.productName,
       this.productPrice,
@@ -18,7 +18,7 @@ class Product {
       this.productPicRef,
       this.productLocalImage});
 
-  Product.fromFirestore(Map<String, dynamic> data)
+  ProductModel.fromFirestore(Map<String, dynamic> data)
       : productDesc = data['productDesc'],
         productName = data['productName'],
         productPrice = data['productPrice'],

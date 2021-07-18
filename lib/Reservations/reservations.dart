@@ -1,21 +1,23 @@
 import 'package:bulb/Models/reservations_model.dart';
 import 'package:bulb/Models/store_model.dart';
+import 'package:bulb/Reservations/reservation.dart';
 import 'package:bulb/Services/firestore_service.dart';
+import 'package:bulb/Services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Reservation extends StatefulWidget {
+class Reservations extends StatefulWidget {
   final StoreModel storeData;
 
-  Reservation({Key key, this.storeData}) : super(key: key);
+  Reservations({Key key, this.storeData}) : super(key: key);
 
   @override
-  _ReservationState createState() => _ReservationState();
+  _ReservationsState createState() => _ReservationsState();
 }
 
-class _ReservationState extends State<Reservation> {
+class _ReservationsState extends State<Reservations> {
   final DateFormat dateFormat = DateFormat("dd/MM/yyyy HH:mm:ss");
   bool isLoading = false;
   bool btnVis = true;
@@ -28,6 +30,25 @@ class _ReservationState extends State<Reservation> {
 
   makePhoneCall(storePhone) async {
     await launch("tel:$storePhone");
+  }
+
+  sendReservation() async {
+    await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Reservation(storeId: widget.storeData.storeId)));
+  }
+
+  cancelReservation(String resId) async {
+    setState(() {
+      isLoading = true;
+    });
+    FirestoreService()
+        .cancelReservation(widget.storeData.storeId, resId)
+        .then((value) => ToastService().showSuccess(value, context))
+        .onError(
+            (error, stackTrace) => ToastService().showError(error, context))
+        .whenComplete(() => setState(() {
+              isLoading = false;
+            }));
   }
 
   @override
@@ -48,10 +69,33 @@ class _ReservationState extends State<Reservation> {
                 fontWeight: FontWeight.bold),
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.7,
+            child: TextButton(
+                child: Text("Rezervasyon Yaptır".toUpperCase(),
+                    style: TextStyle(fontSize: 14, fontFamily: 'Roboto')),
+                style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.all(15)),
+                    foregroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).primaryColor),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50.0),
+                            side: BorderSide(
+                                width: 2,
+                                color: Theme.of(context).primaryColor)))),
+                onPressed: () {
+                  sendReservation();
+                }),
+          ),
+        ),
         Flexible(
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0),
-            child: StreamBuilder<List<Reservations>>(
+            child: StreamBuilder<List<ReservationModel>>(
               stream:
                   FirestoreService().getReservations(widget.storeData.storeId),
               builder: (context, snapshot) {
@@ -110,17 +154,7 @@ class _ReservationState extends State<Reservation> {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                'İsim-Soyisim: ${snapshot.data[index].reservationName}',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Colors.white),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 8.0),
-                                              child: Text(
-                                                'Başvuru Durumu: ${(snapshot.data[index].reservationStatus == 'waiting') ? 'Beklemede' : (snapshot.data[index].reservationStatus == 'approved') ? 'Onaylanmış' : 'Reddedilmiş'}',
+                                                'Rez. İsim-Soyisim: ${snapshot.data[index].reservationName}',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.white),
@@ -130,42 +164,88 @@ class _ReservationState extends State<Reservation> {
                                               padding: const EdgeInsets.only(
                                                   top: 10.0),
                                               child: Text(
-                                                  'Rezervasyon Saati: ${formatDate(snapshot.data[index].reservationTime)}',
+                                                  'Rez. Telefon: +90${snapshot.data[index].reservationPhone}',
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
                                                       fontSize: 15.0)),
                                             ),
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 15.0),
+                                                  top: 10.0),
+                                              child: Text(
+                                                  'Rez. Saati: ${formatDate(snapshot.data[index].reservationTime)}',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15.0)),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Text(
+                                                'Başvuru Durumu: ${(snapshot.data[index].reservationStatus == 'waiting') ? 'Beklemede' : (snapshot.data[index].reservationStatus == 'approved') ? 'Onaylanmış' : 'Reddedilmiş'}',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 20.0),
                                               child: Container(
-                                                decoration: BoxDecoration(
-                                                    color: Colors.white,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                50.0))),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5.0),
-                                                  child: TextButton(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red[400],
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(
+                                                                      50.0),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      50.0),
+                                                              bottomLeft: Radius
+                                                                  .circular(
+                                                                      50.0),
+                                                              bottomRight: Radius
+                                                                  .circular(
+                                                                      50.0))),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: TextButton(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(
+                                                            Icons.delete,
+                                                            color: Colors.white,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 10.0),
+                                                            child: Text(
+                                                                'Rezervasyonu İptal Et',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                )),
+                                                          ),
+                                                        ],
+                                                      ),
                                                       onPressed: () {
-                                                        makePhoneCall(snapshot
-                                                            .data[index]
-                                                            .reservationPhone);
+                                                        cancelReservation(
+                                                            snapshot.data[index]
+                                                                .reservationId);
                                                       },
-                                                      child: Text(
-                                                        'Rez. Telefon: +90${snapshot.data[index].reservationPhone}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontSize: 15.0,
-                                                            color: Theme.of(
-                                                                    context)
-                                                                .primaryColor),
-                                                      )),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -193,7 +273,7 @@ class _ReservationState extends State<Reservation> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.8,
                                     child: Text(
-                                      'Henüz herhangi bir rezervasyon talebiniz bulunmamaktadır !',
+                                      'Henüz bu işletmeye herhangi bir rezervasyon talebiniz bulunmamaktadır !',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           fontSize: 25.0,

@@ -1,13 +1,13 @@
-class Tokens {
+class TokenModel {
   final String tokenId;
   final String tokenUser;
 
-  Tokens({
+  TokenModel({
     this.tokenId,
     this.tokenUser,
   });
 
-  Tokens.fromFirestore(Map<String, dynamic> data)
+  TokenModel.fromFirestore(Map<String, dynamic> data)
       : tokenId = data['tokenId'],
         tokenUser = data['tokenUser'];
 

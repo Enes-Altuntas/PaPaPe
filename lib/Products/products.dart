@@ -15,8 +15,10 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   List<ProductCategory> category;
-  List<Product> products;
+  List<ProductModel> products;
   bool _isLoading = false;
+
+  showImage(String url) {}
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,6 @@ class _MenuState extends State<Menu> {
                                   return Container(
                                     width:
                                         MediaQuery.of(context).size.width / 8,
-                                    color: Colors.white,
                                     child: Padding(
                                       padding: const EdgeInsets.all(12.0),
                                       child: Column(
@@ -76,7 +77,7 @@ class _MenuState extends State<Menu> {
                                               ],
                                             ),
                                           ),
-                                          StreamBuilder<List<Product>>(
+                                          StreamBuilder<List<ProductModel>>(
                                               stream: FirestoreService()
                                                   .getProducts(
                                                       widget.storeData.storeId,
@@ -130,6 +131,11 @@ class _MenuState extends State<Menu> {
                                                                                 child: Padding(
                                                                                   padding: const EdgeInsets.all(15.0),
                                                                                   child: ListTile(
+                                                                                    onTap: () {
+                                                                                      if (snapshotProduct.data[indexDishes].productPicRef != null) {
+                                                                                        showImage(snapshotProduct.data[indexDishes].productPicRef);
+                                                                                      }
+                                                                                    },
                                                                                     title: Row(
                                                                                       children: [
                                                                                         Flexible(
@@ -147,7 +153,7 @@ class _MenuState extends State<Menu> {
                                                                                         child: Column(
                                                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                                                           children: [
-                                                                                            Icon(Icons.arrow_forward, color: Colors.white)
+                                                                                            Icon(Icons.image, color: Colors.white)
                                                                                           ],
                                                                                         ),
                                                                                       ),

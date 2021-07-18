@@ -135,23 +135,6 @@ class _InfoState extends State<Info> {
                   ],
                 ),
               ),
-              TextButton(
-                onPressed: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.mail, color: Colors.white),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: Text(
-                        'Görüş Bildir',
-                        style:
-                            TextStyle(color: Colors.white, fontFamily: 'Bebas'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
             ],
           ),
         ),

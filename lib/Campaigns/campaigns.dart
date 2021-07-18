@@ -42,7 +42,7 @@ class _CampaignsState extends State<Campaigns> {
                 ),
               ),
               Flexible(
-                child: StreamBuilder<List<Campaign>>(
+                child: StreamBuilder<List<CampaignModel>>(
                   stream: FirestoreService()
                       .getStoreCampaigns(widget.storeData.storeId),
                   builder: (context, snapshot) {

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Campaign {
+class CampaignModel {
   final String campaignStatus;
   String campaignPicRef;
   final bool automatedStart;
@@ -17,7 +17,7 @@ class Campaign {
   final Timestamp createdAt;
   File campaignLocalImage;
 
-  Campaign(
+  CampaignModel(
       {this.campaignStatus,
       this.campaignPicRef,
       this.automatedStart,
@@ -33,7 +33,7 @@ class Campaign {
       this.createdAt,
       this.campaignLocalImage});
 
-  Campaign.fromFirestore(Map<String, dynamic> data)
+  CampaignModel.fromFirestore(Map<String, dynamic> data)
       : campaignStatus = data['campaignStatus'],
         automatedStart = data['automatedStart'],
         campaignPicRef = data['campaignPicRef'],

@@ -94,7 +94,7 @@ class _StoreState extends State<Store> {
                   Reports(
                     storeData: widget.storeData,
                   ),
-                  Reservation(
+                  Reservations(
                     storeData: widget.storeData,
                   )
                 ],

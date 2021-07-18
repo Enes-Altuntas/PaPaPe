@@ -224,7 +224,7 @@ class _Map extends State<Map> {
                 return (snapshotPosition.connectionState ==
                         ConnectionState.done)
                     ? (snapshotPosition.hasData)
-                        ? StreamBuilder<List<FirestoreMarkers>>(
+                        ? StreamBuilder<List<MarkerModel>>(
                             stream: firestoreService.getMapData(
                                 _filterProvider.getLive,
                                 _filterProvider.getCat,

@@ -3,15 +3,17 @@ import 'package:bulb/Models/comment_model.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/reservations_model.dart';
+import 'package:bulb/Services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bulb/Models/markers_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 
 class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
   Geoflutterfire geo = Geoflutterfire();
 
-  Stream<List<FirestoreMarkers>> getMapData(
+  Stream<List<MarkerModel>> getMapData(
       bool active, String cat, double distance, double lat, double long) {
     Query ref;
 
@@ -34,23 +36,24 @@ class FirestoreService {
             field: 'position',
             strictMode: true)
         .map((snapshot) => snapshot
-            .map((doc) => FirestoreMarkers.fromFirestore(doc.data()))
+            .map((doc) => MarkerModel.fromFirestore(doc.data()))
             .toList());
   }
 
-  Stream<List<Campaign>> getStoreCampaigns(docId) {
+  Stream<List<CampaignModel>> getStoreCampaigns(docId) {
     return _db
         .collection('stores')
         .doc(docId)
         .collection('campaigns')
+        .where('delInd', isEqualTo: false)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Campaign.fromFirestore(doc.data()))
+            .map((doc) => CampaignModel.fromFirestore(doc.data()))
             .toList());
   }
 
-  Stream<List<Product>> getProducts(String docId, String categoryId) {
+  Stream<List<ProductModel>> getProducts(String docId, String categoryId) {
     return _db
         .collection('stores')
         .doc(docId)
@@ -59,7 +62,7 @@ class FirestoreService {
         .collection('alt_products')
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Product.fromFirestore(doc.data()))
+            .map((doc) => ProductModel.fromFirestore(doc.data()))
             .toList());
   }
 
@@ -75,25 +78,29 @@ class FirestoreService {
             .toList());
   }
 
-  Stream<List<Comments>> getReports(String docId) {
+  Stream<List<CommentModel>> getReports(String docId) {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
         .collection('stores')
         .doc(docId)
         .collection('reports')
+        .where('reportUser', isEqualTo: _uuid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Comments.fromFirestore(doc.data()))
+            .map((doc) => CommentModel.fromFirestore(doc.data()))
             .toList());
   }
 
-  Stream<List<Reservations>> getReservations(String docId) {
+  Stream<List<ReservationModel>> getReservations(String docId) {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
         .collection('stores')
         .doc(docId)
         .collection('reservations')
+        .where('reservationUser', isEqualTo: _uuid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => Reservations.fromFirestore(doc.data()))
+            .map((doc) => ReservationModel.fromFirestore(doc.data()))
             .toList());
   }
 
@@ -108,7 +115,7 @@ class FirestoreService {
         .get();
   }
 
-  Future<String> saveComment(String docId, Comments comment) async {
+  Future<String> saveComment(String docId, CommentModel comment) async {
     try {
       await _db
           .collection('stores')
@@ -116,9 +123,38 @@ class FirestoreService {
           .collection('reports')
           .doc(comment.reportId)
           .set(comment.toMap());
-      return 'Görüşünüz başarıyla bildirilmiştir !';
+      return 'Dilek & Şikayetiniz başarıyla iletilmiştir !';
     } catch (e) {
-      throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Dilek & Şikayetiniz iletilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
+  Future<String> saveReservation(
+      String docId, ReservationModel reservation) async {
+    try {
+      await _db
+          .collection('stores')
+          .doc(docId)
+          .collection('reservations')
+          .doc(reservation.reservationId)
+          .set(reservation.toMap());
+      return 'Rezervasyon talebiniz başarıyla iletilmiştir !';
+    } catch (e) {
+      throw 'Rezervasyon talebiniz iletilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
+  Future<String> cancelReservation(String storeId, String resId) async {
+    try {
+      await _db
+          .collection('stores')
+          .doc(storeId)
+          .collection('reservations')
+          .doc(resId)
+          .delete();
+      return 'Rezervasyon talebiniz başarıyla iptal edilmiştir !';
+    } catch (e) {
+      throw 'Rezervasyon talebiniz iptal edilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
     }
   }
 
