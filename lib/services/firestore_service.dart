@@ -3,6 +3,7 @@ import 'package:bulb/Models/comment_model.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/reservations_model.dart';
+import 'package:bulb/Models/store_category.dart';
 import 'package:bulb/Services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bulb/Models/markers_model.dart';
@@ -101,6 +102,16 @@ class FirestoreService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => ReservationModel.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<StoreCategory>> getStoreCategories() {
+    return _db
+        .collection('categories')
+        .orderBy('storeCatRow', descending: false)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => StoreCategory.fromFirestore(doc.data()))
             .toList());
   }
 
