@@ -21,10 +21,11 @@ class FirestoreService {
     if (active) {
       ref = _db
           .collection('markers')
-          .where('storeCategory', isEqualTo: cat)
-          .where('hasCampaign', isEqualTo: active);
+          .where('storeCategory', arrayContains: cat)
+          .where('campaignStatus', isEqualTo: 'active');
     } else {
-      ref = _db.collection('markers').where('storeCategory', isEqualTo: cat);
+      ref =
+          _db.collection('markers').where('storeCategory', arrayContains: cat);
     }
 
     GeoFirePoint center = geo.point(latitude: lat, longitude: long);
@@ -123,6 +124,13 @@ class FirestoreService {
     return await _db
         .collection('categories')
         .orderBy('storeCatRow', descending: false)
+        .get();
+  }
+
+  Future getCategoryPic(categoryName) async {
+    return await _db
+        .collection('categories')
+        .where('storeCatName', isEqualTo: categoryName)
         .get();
   }
 

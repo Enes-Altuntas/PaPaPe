@@ -129,7 +129,6 @@ class _FilterState extends State<Filter> {
                                           inactiveTrackColor: Colors.amber[200],
                                           onChanged: (value) {
                                             _filterProvider.changeLive(value);
-                                            preferences.setBool('live', value);
                                           })
                                     ],
                                   ),
@@ -162,8 +161,7 @@ class _FilterState extends State<Filter> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          preferences.setString(
-                                              'category', value);
+                                          _filterProvider.changeCat(value);
                                         }),
                                   ),
                                 ),
@@ -178,9 +176,9 @@ class _FilterState extends State<Filter> {
                                           'Arama Uzaklığı : ${_filterProvider.getDist} km'),
                                       Slider(
                                           value: _filterProvider.getDist,
-                                          min: 5,
-                                          max: 50,
-                                          divisions: 9,
+                                          min: 1,
+                                          max: 5,
+                                          divisions: 4,
                                           activeColor:
                                               Theme.of(context).primaryColor,
                                           inactiveColor:

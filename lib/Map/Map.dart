@@ -46,11 +46,7 @@ class _Map extends State<Map> {
   }
 
   setLocalData() {
-    if (preferences.getBool('live') != null) {
-      _filterProvider.changeLive(preferences.getBool('live'));
-    } else {
-      _filterProvider.changeLive(false);
-    }
+    _filterProvider.changeLive(false);
 
     if (preferences.getBool('dark') != null) {
       _filterProvider.changeMode(preferences.getBool('dark'));
@@ -58,22 +54,22 @@ class _Map extends State<Map> {
       _filterProvider.changeMode(false);
     }
 
-    if (preferences.getString('category') != null) {
-      _filterProvider.changeCat(preferences.getString('category'));
-    } else {
-      _filterProvider.changeCat('Yeme İçme');
-    }
+    _filterProvider.changeCat('Restoran');
 
     if (preferences.getDouble('distance') != null) {
       _filterProvider.changeDistance(preferences.getDouble('distance'));
     } else {
-      _filterProvider.changeDistance(5.0);
+      _filterProvider.changeDistance(1.0);
     }
   }
 
   changeLive(bool value) {
     preferences.setBool('live', value);
     _filterProvider.changeLive(value);
+  }
+
+  changeCat(String value) {
+    _filterProvider.changeCat(value);
   }
 
   changeMapMode() {
@@ -99,8 +95,8 @@ class _Map extends State<Map> {
         center: LatLng(position.latitude, position.longitude),
         radius: _filterProvider.getDist * 1000,
         strokeWidth: 3,
-        fillColor: Theme.of(context).primaryColor.withOpacity(0.2),
-        strokeColor: Theme.of(context).accentColor.withOpacity(0.2));
+        fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        strokeColor: Theme.of(context).accentColor.withOpacity(0.1));
     circles.add(circle);
   }
 
@@ -137,28 +133,18 @@ class _Map extends State<Map> {
   }
 
   double getZoomLevel() {
-    if (_filterProvider.getDist == 5) {
-      return 11.8;
-    } else if (_filterProvider.getDist == 10) {
-      return 10.8;
-    } else if (_filterProvider.getDist == 15) {
-      return 10.2;
-    } else if (_filterProvider.getDist == 20) {
-      return 9.7;
-    } else if (_filterProvider.getDist == 25) {
-      return 9.5;
-    } else if (_filterProvider.getDist == 30) {
-      return 9.3;
-    } else if (_filterProvider.getDist == 35) {
-      return 9.1;
-    } else if (_filterProvider.getDist == 40) {
-      return 8.9;
-    } else if (_filterProvider.getDist == 45) {
-      return 8.7;
-    } else if (_filterProvider.getDist == 50) {
-      return 8.5;
+    if (_filterProvider.getDist == 1) {
+      return 14;
+    } else if (_filterProvider.getDist == 2) {
+      return 13.4;
+    } else if (_filterProvider.getDist == 3) {
+      return 12.8;
+    } else if (_filterProvider.getDist == 4) {
+      return 12.4;
+    } else if (_filterProvider.getDist == 5) {
+      return 12.0;
     } else {
-      return 11.8;
+      return 12.0;
     }
   }
 
@@ -215,7 +201,7 @@ class _Map extends State<Map> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    height: 80.0,
+                    height: 110.0,
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           colors: [
@@ -238,19 +224,40 @@ class _Map extends State<Map> {
                                       padding: const EdgeInsets.all(10.0),
                                       child: InkWell(
                                         onTap: () {
-                                          _filterProvider.changeCat(snapshot
+                                          changeCat(snapshot
                                               .data[index].storeCatName);
                                         },
-                                        child: Container(
-                                          height: 60.0,
-                                          width: 60.0,
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(
-                                                snapshot.data[index]
-                                                    .storeCatPicRef),
-                                            backgroundColor: Colors.white,
-                                            maxRadius: 30.0,
-                                          ),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 60.0,
+                                              width: 60.0,
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                    snapshot.data[index]
+                                                        .storeCatPicRef),
+                                                backgroundColor:
+                                                    (_filterProvider.getCat ==
+                                                            snapshot.data[index]
+                                                                .storeCatName)
+                                                        ? Colors
+                                                            .greenAccent[400]
+                                                        : Colors.white,
+                                                maxRadius: 30.0,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 5.0),
+                                              child: Text(
+                                                snapshot.data[index].storeShort,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white),
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ),
                                     );
@@ -285,6 +292,22 @@ class _Map extends State<Map> {
                                         markers.add(Marker(
                                             markerId: MarkerId(element.storeId),
                                             draggable: false,
+                                            icon: (element.campaignStatus ==
+                                                    'active')
+                                                ? BitmapDescriptor
+                                                    .defaultMarkerWithHue(
+                                                        BitmapDescriptor
+                                                            .hueGreen)
+                                                : (element.campaignStatus ==
+                                                        'wait')
+                                                    ? BitmapDescriptor
+                                                        .defaultMarkerWithHue(
+                                                            BitmapDescriptor
+                                                                .hueOrange)
+                                                    : BitmapDescriptor
+                                                        .defaultMarkerWithHue(
+                                                            BitmapDescriptor
+                                                                .hueRed),
                                             onTap: () async {
                                               StoreModel store;
                                               String id;
@@ -376,7 +399,7 @@ class _Map extends State<Map> {
                                                                           ? Container(
                                                                               width: MediaQuery.of(context).size.width,
                                                                               height: MediaQuery.of(context).size.height,
-                                                                              child: Image.network(store.storePicRef, fit: BoxFit.fill),
+                                                                              child: Image.network(store.storePicRef, fit: BoxFit.fitWidth),
                                                                             )
                                                                           : Container(
                                                                               width: MediaQuery.of(context).size.width,
@@ -618,7 +641,7 @@ class _Map extends State<Map> {
                                                           const EdgeInsets.all(
                                                               20.0),
                                                       child: Text(
-                                                        'Yakınlarınızda arama kriterlerinize uygun bir kampanya bulamadık !',
+                                                        '" ${_filterProvider.getCat} " kategorisinde , hiçbir kampanya bulunamadı !',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(

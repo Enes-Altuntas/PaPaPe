@@ -24,6 +24,12 @@ class _InfoState extends State<Info> {
     await launch(googleMapslocationUrl);
   }
 
+  addFavorites() async {
+    String googleMapslocationUrl =
+        "https://www.google.com/maps/search/?api=1&query=${widget.storeData.storeLocLat},${widget.storeData.storeLocLong}";
+    await launch(googleMapslocationUrl);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -50,7 +56,7 @@ class _InfoState extends State<Info> {
                                 end: Alignment.centerLeft)),
                         child: Image.network(
                           widget.storeData.storePicRef,
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                     )
@@ -108,6 +114,25 @@ class _InfoState extends State<Info> {
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
                         'İşletmeyi Ara',
+                        style:
+                            TextStyle(color: Colors.white, fontFamily: 'Bebas'),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  addFavorites();
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.star, color: Colors.white),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        'Favorilere Ekle',
                         style:
                             TextStyle(color: Colors.white, fontFamily: 'Bebas'),
                       ),

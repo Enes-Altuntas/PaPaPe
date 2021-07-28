@@ -1,14 +1,14 @@
 import 'package:bulb/Models/position_model.dart';
 
 class MarkerModel {
-  final bool hasCampaign;
-  final String storeCategory;
+  final String campaignStatus;
+  final List storeCategory;
   final PositionModel position;
   final String storeId;
 
   MarkerModel({
     this.storeCategory,
-    this.hasCampaign,
+    this.campaignStatus,
     this.position,
     this.storeId,
   });
@@ -16,7 +16,7 @@ class MarkerModel {
   Map<String, dynamic> toMap() {
     return {
       'storeCategory': storeCategory,
-      'hasCampaign': hasCampaign,
+      'campaignStatus': campaignStatus,
       'position': position.toMap(),
       'storeId': storeId,
     };
@@ -24,7 +24,7 @@ class MarkerModel {
 
   MarkerModel.fromFirestore(Map<String, dynamic> firestore)
       : storeCategory = firestore['storeCategory'],
-        hasCampaign = firestore['hasCampaign'],
+        campaignStatus = firestore['campaignStatus'],
         position = PositionModel.fromFirestore(firestore['position']),
         storeId = firestore['storeId'];
 }

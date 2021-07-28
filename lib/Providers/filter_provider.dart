@@ -4,13 +4,11 @@ class FilterProvider with ChangeNotifier {
   bool live;
   bool mode;
   String category;
-  String altCategory;
   double distance;
 
   bool get getLive => live;
   bool get getMode => mode;
   String get getCat => category;
-  String get getAltCat => altCategory;
   double get getDist => distance;
 
   changeLive(bool value) {
@@ -25,11 +23,6 @@ class FilterProvider with ChangeNotifier {
 
   changeCat(String value) {
     category = value;
-    notifyListeners();
-  }
-
-  changeAltCat(String value) {
-    altCategory = value;
     notifyListeners();
   }
 
