@@ -29,24 +29,55 @@ class _ReservationState extends State<Reservation> {
   Timestamp resTime;
   bool _isLoading = false;
 
-  String _validateCatRow(String value) {
+  String _resDescCh(String value) {
     if (value.isEmpty) {
-      return '* Dilek & Şikayet başlığı boş olmamalıdır !';
+      return '* Rezervasyon açıklaması boş olmamalıdır !';
     }
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ\d]')) != true) {
-      return '* Harf veya rakam içermelidir !';
+    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ]')) != true) {
+      return '* Harf içermelidir !';
     }
 
     return null;
   }
 
-  String _validateCatName(String value) {
+  String _resPersCount(String value) {
     if (value.isEmpty) {
-      return '* Dilek & Şikayet açıklaması boş olmamalıdır !';
+      return '* Rezervasyon kişi sayısı boş olmamalıdır !';
     }
 
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ\d]')) != true) {
-      return '* Harf veya rakam içermelidir !';
+    if (value.contains(RegExp(r'[^\d]')) == true) {
+      return '* Sadece rakam içermelidir !';
+    }
+
+    return null;
+  }
+
+  String _resFullName(String value) {
+    if (value.isEmpty) {
+      return '* Rezervasyon isim-soyisim boş olmamalıdır !';
+    }
+    if (value.contains(RegExp(r'[^a-zA-ZğüşöçİĞÜŞÖÇ ]')) == true) {
+      return '* Sadece harf içermelidir !';
+    }
+
+    return null;
+  }
+
+  String _resDate(String value) {
+    if (value.isEmpty) {
+      return '* Rezervasyon tarihi boş olmamalıdır !';
+    }
+
+    return null;
+  }
+
+  String _resPhoneCh(String value) {
+    if (value.isEmpty) {
+      return '* Rezervasyon telefonu boş olmamalıdır !';
+    }
+
+    if (value.contains(RegExp(r'[^\d]')) == true) {
+      return '* Sadece rakam içermelidir !';
     }
 
     return null;
@@ -156,7 +187,7 @@ class _ReservationState extends State<Reservation> {
                                     controller: _resDesc,
                                     maxLength: 255,
                                     maxLines: 3,
-                                    validator: _validateCatRow,
+                                    validator: _resDescCh,
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
                                         labelText: 'Rezervasyon Açıklaması',
@@ -177,7 +208,7 @@ class _ReservationState extends State<Reservation> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: TextFormField(
-                                    validator: _validateCatName,
+                                    validator: _resPersCount,
                                     controller: _resCount,
                                     maxLength: 3,
                                     keyboardType: TextInputType.number,
@@ -200,7 +231,7 @@ class _ReservationState extends State<Reservation> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: TextFormField(
-                                    validator: _validateCatName,
+                                    validator: _resFullName,
                                     controller: _resName,
                                     maxLength: 50,
                                     keyboardType: TextInputType.text,
@@ -223,7 +254,7 @@ class _ReservationState extends State<Reservation> {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 10.0),
                                   child: TextFormField(
-                                    validator: _validateCatName,
+                                    validator: _resPhoneCh,
                                     controller: _resPhone,
                                     maxLength: 10,
                                     keyboardType: TextInputType.phone,
@@ -249,7 +280,7 @@ class _ReservationState extends State<Reservation> {
                                       top: 8.0, bottom: 8.0),
                                   child: TextFormField(
                                     controller: _resTime,
-                                    validator: _validateCatName,
+                                    validator: _resDate,
                                     readOnly: true,
                                     decoration: InputDecoration(
                                         labelText: 'Rezervasyon Tarihi',

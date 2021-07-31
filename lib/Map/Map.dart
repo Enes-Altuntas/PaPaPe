@@ -1,10 +1,13 @@
 import 'package:bulb/Filter/filter.dart';
+import 'package:bulb/Login/login.dart';
 import 'package:bulb/Models/markers_model.dart';
 import 'package:bulb/Models/store_category.dart';
 import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Providers/filter_provider.dart';
+import 'package:bulb/Services/authentication_service.dart';
 import 'package:bulb/Services/firestore_service.dart';
 import 'package:bulb/Store/store.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +31,7 @@ class _Map extends State<Map> {
   final List<Circle> circles = [];
   SharedPreferences preferences;
   Future getLocation;
+  Future getStoreCategories;
   GoogleMapController _controller;
   FilterProvider _filterProvider;
   bool firstTime = true;
@@ -43,6 +47,30 @@ class _Map extends State<Map> {
     setState(() {
       preferences = _preferences;
     });
+  }
+
+  exitYesNo() {
+    CoolAlert.show(
+        context: context,
+        type: CoolAlertType.warning,
+        title: '',
+        text: 'Çıkmak istediğinize emin misiniz ?',
+        showCancelBtn: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        confirmBtnColor: Theme.of(context).primaryColor,
+        cancelBtnText: 'Hayır',
+        onCancelBtnTap: () {
+          Navigator.of(context).pop();
+        },
+        onConfirmBtnTap: () {
+          Navigator.of(context).pop();
+          context.read<AuthService>().signOut().then((value) {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => Login()));
+          });
+        },
+        barrierDismissible: false,
+        confirmBtnText: 'Evet');
   }
 
   setLocalData() {
@@ -95,7 +123,9 @@ class _Map extends State<Map> {
         center: LatLng(position.latitude, position.longitude),
         radius: _filterProvider.getDist * 1000,
         strokeWidth: 3,
-        fillColor: Theme.of(context).primaryColor.withOpacity(0.1),
+        fillColor: (_filterProvider.getMode == true)
+            ? Theme.of(context).primaryColor.withOpacity(0.1)
+            : Theme.of(context).primaryColor.withOpacity(0.2),
         strokeColor: Theme.of(context).accentColor.withOpacity(0.1));
     circles.add(circle);
   }
@@ -105,6 +135,7 @@ class _Map extends State<Map> {
     if (firstTime) {
       _filterProvider = Provider.of<FilterProvider>(context);
       getLocation = _getLocation();
+      getStoreCategories = _getStoreCategories();
       getLocalData().then((value) {
         setLocalData();
       });
@@ -116,16 +147,12 @@ class _Map extends State<Map> {
   }
 
   Future<Position> _getLocation() async {
-    setState(() {
-      isLoading = true;
-    });
     return await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best)
-        .whenComplete(() {
-      setState(() {
-        isLoading = false;
-      });
-    });
+        desiredAccuracy: LocationAccuracy.best);
+  }
+
+  Future<List<StoreCategory>> _getStoreCategories() async {
+    return firestoreService.getStoreCategories();
   }
 
   makePhoneCall(storePhone) async {
@@ -135,14 +162,16 @@ class _Map extends State<Map> {
   double getZoomLevel() {
     if (_filterProvider.getDist == 1) {
       return 14;
-    } else if (_filterProvider.getDist == 2) {
-      return 13.4;
-    } else if (_filterProvider.getDist == 3) {
-      return 12.8;
     } else if (_filterProvider.getDist == 4) {
-      return 12.4;
-    } else if (_filterProvider.getDist == 5) {
-      return 12.0;
+      return 12.2;
+    } else if (_filterProvider.getDist == 7) {
+      return 11.5;
+    } else if (_filterProvider.getDist == 10) {
+      return 11.0;
+    } else if (_filterProvider.getDist == 13) {
+      return 10.6;
+    } else if (_filterProvider.getDist == 16) {
+      return 10.3;
     } else {
       return 12.0;
     }
@@ -182,6 +211,20 @@ class _Map extends State<Map> {
                   ],
                 ),
               )),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  exitYesNo();
+                },
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.exit_to_app,
+                      color: Colors.white,
+                    )
+                  ],
+                )),
+          ],
           title: Text('bulb',
               style: TextStyle(
                 fontSize: 45.0,
@@ -192,11 +235,7 @@ class _Map extends State<Map> {
           centerTitle: true,
         ),
         body: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Theme.of(context).accentColor,
-              Theme.of(context).primaryColor
-            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+            decoration: BoxDecoration(color: Colors.white),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -211,308 +250,286 @@ class _Map extends State<Map> {
                           begin: Alignment.centerRight,
                           end: Alignment.centerLeft),
                     ),
-                    child: StreamBuilder<List<StoreCategory>>(
-                        stream: firestoreService.getStoreCategories(),
+                    child: FutureBuilder<List<StoreCategory>>(
+                        future: _getStoreCategories(),
                         builder: (context, snapshot) {
-                          return (snapshot.connectionState ==
-                                  ConnectionState.active)
-                              ? ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          changeCat(snapshot
-                                              .data[index].storeCatName);
-                                        },
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              height: 60.0,
-                                              width: 60.0,
-                                              child: CircleAvatar(
-                                                backgroundImage: NetworkImage(
-                                                    snapshot.data[index]
-                                                        .storeCatPicRef),
-                                                backgroundColor:
-                                                    (_filterProvider.getCat ==
-                                                            snapshot.data[index]
-                                                                .storeCatName)
-                                                        ? Colors
-                                                            .greenAccent[400]
-                                                        : Colors.white,
-                                                maxRadius: 30.0,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 5.0),
-                                              child: Text(
-                                                snapshot.data[index].storeShort,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.white),
-                                              ),
-                                            )
-                                          ],
+                          return ListView.builder(
+                              itemCount: (snapshot.data != null)
+                                  ? snapshot.data.length
+                                  : 0,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      changeCat(
+                                          snapshot.data[index].storeCatName);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 60.0,
+                                          width: 60.0,
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                snapshot.data[index]
+                                                    .storeCatPicRef),
+                                            backgroundColor:
+                                                (_filterProvider.getCat ==
+                                                        snapshot.data[index]
+                                                            .storeCatName)
+                                                    ? Colors.greenAccent[400]
+                                                    : Colors.white,
+                                            maxRadius: 30.0,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  })
-                              : Center(
-                                  child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Text(
+                                            snapshot.data[index].storeShort,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
+                              });
                         })),
                 Expanded(
-                  child: FutureBuilder(
-                    future: getLocation,
-                    builder: (BuildContext context, snapshotPosition) {
-                      return (snapshotPosition.connectionState ==
-                              ConnectionState.done)
-                          ? (snapshotPosition.hasData)
-                              ? StreamBuilder<List<MarkerModel>>(
-                                  stream: firestoreService.getMapData(
-                                      _filterProvider.getLive,
-                                      _filterProvider.getCat,
-                                      _filterProvider.getDist,
-                                      snapshotPosition.data.latitude,
-                                      snapshotPosition.data.longitude),
-                                  builder: (context, snapshot) {
-                                    markers.clear();
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.active &&
-                                        snapshot.hasData == true &&
-                                        snapshot.data.length != 0) {
-                                      snapshot.data.forEach((element) {
-                                        markers.add(Marker(
-                                            markerId: MarkerId(element.storeId),
-                                            draggable: false,
-                                            icon: (element.campaignStatus ==
-                                                    'active')
-                                                ? BitmapDescriptor
-                                                    .defaultMarkerWithHue(
-                                                        BitmapDescriptor
-                                                            .hueGreen)
-                                                : (element.campaignStatus ==
-                                                        'wait')
+                  child: Stack(
+                    children: [
+                      FutureBuilder(
+                        future: getLocation,
+                        builder: (BuildContext context, snapshotPosition) {
+                          return (snapshotPosition.connectionState ==
+                                  ConnectionState.done)
+                              ? (snapshotPosition.hasData)
+                                  ? StreamBuilder<List<MarkerModel>>(
+                                      stream: firestoreService.getMapData(
+                                          _filterProvider.getLive,
+                                          _filterProvider.getCat,
+                                          _filterProvider.getDist,
+                                          snapshotPosition.data.latitude,
+                                          snapshotPosition.data.longitude),
+                                      builder: (context, snapshot) {
+                                        markers.clear();
+                                        if (snapshot.connectionState ==
+                                                ConnectionState.active &&
+                                            snapshot.hasData == true &&
+                                            snapshot.data.length != 0) {
+                                          snapshot.data.forEach((element) {
+                                            markers.add(Marker(
+                                                markerId:
+                                                    MarkerId(element.storeId),
+                                                draggable: false,
+                                                icon: (element.campaignStatus ==
+                                                        'active')
                                                     ? BitmapDescriptor
                                                         .defaultMarkerWithHue(
                                                             BitmapDescriptor
-                                                                .hueOrange)
-                                                    : BitmapDescriptor
-                                                        .defaultMarkerWithHue(
-                                                            BitmapDescriptor
-                                                                .hueRed),
-                                            onTap: () async {
-                                              StoreModel store;
-                                              String id;
-                                              await firestoreService
-                                                  .getStore(element.storeId)
-                                                  .then((value) {
-                                                if (value.data() != null) {
-                                                  store =
-                                                      StoreModel.fromFirestore(
-                                                          value.data());
-                                                  id = value.id;
-                                                }
-                                              });
-                                              showModalBottomSheet(
-                                                  context: context,
-                                                  clipBehavior: Clip.antiAlias,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius
-                                                        .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    50.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    50.0)),
-                                                  ),
-                                                  builder: (context) {
-                                                    return Container(
-                                                      width:
-                                                          MediaQuery.of(context)
+                                                                .hueGreen)
+                                                    : (element.campaignStatus ==
+                                                            'wait')
+                                                        ? BitmapDescriptor
+                                                            .defaultMarkerWithHue(
+                                                                BitmapDescriptor
+                                                                    .hueOrange)
+                                                        : BitmapDescriptor
+                                                            .defaultMarkerWithHue(
+                                                                BitmapDescriptor
+                                                                    .hueRed),
+                                                onTap: () async {
+                                                  StoreModel store;
+                                                  String id;
+                                                  await firestoreService
+                                                      .getStore(element.storeId)
+                                                      .then((value) {
+                                                    if (value.data() != null) {
+                                                      store = StoreModel
+                                                          .fromFirestore(
+                                                              value.data());
+                                                      id = value.id;
+                                                    }
+                                                  });
+                                                  showModalBottomSheet(
+                                                      context: context,
+                                                      clipBehavior:
+                                                          Clip.antiAlias,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        50.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        50.0)),
+                                                      ),
+                                                      builder: (context) {
+                                                        return Container(
+                                                          width: MediaQuery.of(
+                                                                  context)
                                                               .size
                                                               .width,
-                                                      height:
-                                                          MediaQuery.of(context)
+                                                          height: MediaQuery.of(
+                                                                      context)
                                                                   .size
                                                                   .height /
                                                               3,
-                                                      decoration: BoxDecoration(
-                                                          gradient: LinearGradient(
-                                                              colors: [
-                                                            Theme.of(context)
-                                                                .accentColor,
-                                                            Theme.of(context)
-                                                                .primaryColor
-                                                          ],
-                                                              begin: Alignment
-                                                                  .centerRight,
-                                                              end: Alignment
-                                                                  .centerLeft)),
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(15.0),
-                                                            child: Container(
-                                                                clipBehavior: Clip
-                                                                    .antiAlias,
-                                                                height: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .height /
-                                                                    3.6,
-                                                                width: MediaQuery.of(
+                                                          decoration: BoxDecoration(
+                                                              gradient: LinearGradient(
+                                                                  colors: [
+                                                                Theme.of(
                                                                         context)
-                                                                    .size
-                                                                    .width,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                        color: Theme.of(context)
-                                                                            .accentColor,
+                                                                    .accentColor,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .primaryColor
+                                                              ],
+                                                                  begin: Alignment
+                                                                      .centerRight,
+                                                                  end: Alignment
+                                                                      .centerLeft)),
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        15.0),
+                                                                child: Container(
+                                                                    clipBehavior: Clip.antiAlias,
+                                                                    height: MediaQuery.of(context).size.height / 3.6,
+                                                                    width: MediaQuery.of(context).size.width,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Theme.of(context).accentColor,
                                                                         boxShadow: [
                                                                           BoxShadow(
                                                                               color: Colors.white,
                                                                               spreadRadius: 3),
                                                                         ],
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(50.0)),
-                                                                child: Stack(
-                                                                  children: [
-                                                                    ColorFiltered(
-                                                                      colorFilter: ColorFilter.mode(
-                                                                          Colors
-                                                                              .black
-                                                                              .withOpacity(0.6),
-                                                                          BlendMode.darken),
-                                                                      child: (store != null &&
-                                                                              store.storePicRef != null)
-                                                                          ? Container(
-                                                                              width: MediaQuery.of(context).size.width,
-                                                                              height: MediaQuery.of(context).size.height,
-                                                                              child: Image.network(store.storePicRef, fit: BoxFit.fitWidth),
-                                                                            )
-                                                                          : Container(
-                                                                              width: MediaQuery.of(context).size.width,
-                                                                              height: MediaQuery.of(context).size.height,
-                                                                            ),
-                                                                    ),
-                                                                    Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
+                                                                        borderRadius: BorderRadius.circular(50.0)),
+                                                                    child: Stack(
                                                                       children: [
-                                                                        Flexible(
-                                                                          child:
-                                                                              Text(
-                                                                            store.storeName,
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            style:
-                                                                                TextStyle(shadows: <Shadow>[
-                                                                              Shadow(
-                                                                                offset: Offset(1.0, 1.0),
-                                                                                blurRadius: 15.0,
-                                                                                color: Theme.of(context).primaryColor,
-                                                                              ),
-                                                                            ], color: Colors.white, fontSize: (store.storeName.length > 30) ? 30.0 : 40.0, fontFamily: 'Bebas'),
-                                                                          ),
+                                                                        ColorFiltered(
+                                                                          colorFilter: ColorFilter.mode(
+                                                                              Colors.black.withOpacity(0.6),
+                                                                              BlendMode.darken),
+                                                                          child: (store != null && store.storePicRef != null)
+                                                                              ? Container(
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  height: MediaQuery.of(context).size.height,
+                                                                                  child: Image.network(store.storePicRef, fit: BoxFit.fitWidth),
+                                                                                )
+                                                                              : Container(
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  height: MediaQuery.of(context).size.height,
+                                                                                ),
                                                                         ),
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.only(top: 20.0),
-                                                                          child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.spaceAround,
-                                                                            children: [
-                                                                              Container(
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Theme.of(context).primaryColor,
-                                                                                  borderRadius: BorderRadius.circular(50.0),
-                                                                                ),
-                                                                                child: IconButton(
-                                                                                    onPressed: () {
-                                                                                      findPlace(store.storeLocLat, store.storeLocLong);
-                                                                                    },
-                                                                                    icon: Icon(
-                                                                                      Icons.location_on_outlined,
-                                                                                      size: 30.0,
-                                                                                      color: Colors.white,
-                                                                                    )),
+                                                                        Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Flexible(
+                                                                              child: Text(
+                                                                                store.storeName,
+                                                                                textAlign: TextAlign.center,
+                                                                                style: TextStyle(shadows: <Shadow>[
+                                                                                  Shadow(
+                                                                                    offset: Offset(1.0, 1.0),
+                                                                                    blurRadius: 15.0,
+                                                                                    color: Theme.of(context).primaryColor,
+                                                                                  ),
+                                                                                ], color: Colors.white, fontSize: (store.storeName.length > 30) ? 30.0 : 40.0, fontFamily: 'Bebas'),
                                                                               ),
-                                                                              Container(
-                                                                                decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(50.0),
-                                                                                  color: Theme.of(context).primaryColor,
-                                                                                ),
-                                                                                child: IconButton(
-                                                                                    onPressed: () {
-                                                                                      Navigator.of(context).push(MaterialPageRoute(
-                                                                                          builder: (context) => Store(
-                                                                                                storeData: store,
-                                                                                                docId: id,
-                                                                                              )));
-                                                                                    },
-                                                                                    icon: Icon(
-                                                                                      Icons.arrow_forward_ios,
-                                                                                      size: 30.0,
-                                                                                      color: Colors.white,
-                                                                                    )),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.only(top: 20.0),
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                children: [
+                                                                                  Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                      color: Theme.of(context).primaryColor,
+                                                                                      borderRadius: BorderRadius.circular(50.0),
+                                                                                    ),
+                                                                                    child: IconButton(
+                                                                                        onPressed: () {
+                                                                                          findPlace(store.storeLocLat, store.storeLocLong);
+                                                                                        },
+                                                                                        icon: Icon(
+                                                                                          Icons.location_on_outlined,
+                                                                                          size: 30.0,
+                                                                                          color: Colors.white,
+                                                                                        )),
+                                                                                  ),
+                                                                                  Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(50.0),
+                                                                                      color: Theme.of(context).primaryColor,
+                                                                                    ),
+                                                                                    child: IconButton(
+                                                                                        onPressed: () {
+                                                                                          Navigator.of(context).push(MaterialPageRoute(
+                                                                                              builder: (context) => Store(
+                                                                                                    storeData: store,
+                                                                                                    docId: id,
+                                                                                                  )));
+                                                                                        },
+                                                                                        icon: Icon(
+                                                                                          Icons.arrow_forward_ios,
+                                                                                          size: 30.0,
+                                                                                          color: Colors.white,
+                                                                                        )),
+                                                                                  ),
+                                                                                  Container(
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius: BorderRadius.circular(50.0),
+                                                                                      color: Theme.of(context).primaryColor,
+                                                                                    ),
+                                                                                    child: IconButton(
+                                                                                        onPressed: () {
+                                                                                          makePhoneCall(store.storePhone);
+                                                                                        },
+                                                                                        icon: Icon(
+                                                                                          Icons.call,
+                                                                                          size: 30.0,
+                                                                                          color: Colors.white,
+                                                                                        )),
+                                                                                  ),
+                                                                                ],
                                                                               ),
-                                                                              Container(
-                                                                                decoration: BoxDecoration(
-                                                                                  borderRadius: BorderRadius.circular(50.0),
-                                                                                  color: Theme.of(context).primaryColor,
-                                                                                ),
-                                                                                child: IconButton(
-                                                                                    onPressed: () {
-                                                                                      makePhoneCall(store.storePhone);
-                                                                                    },
-                                                                                    icon: Icon(
-                                                                                      Icons.call,
-                                                                                      size: 30.0,
-                                                                                      color: Colors.white,
-                                                                                    )),
-                                                                              ),
-                                                                            ],
-                                                                          ),
+                                                                            ),
+                                                                          ],
                                                                         ),
                                                                       ],
-                                                                    ),
-                                                                  ],
-                                                                )),
+                                                                    )),
+                                                              ),
+                                                            ],
                                                           ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
-                                            },
-                                            position: LatLng(
-                                                element
-                                                    .position.geopoint.latitude,
-                                                element.position.geopoint
-                                                    .longitude)));
-                                      });
-                                    }
-                                    getSearchCircle(snapshotPosition.data);
-                                    return (snapshot.connectionState ==
-                                            ConnectionState.active)
-                                        ? (snapshot.hasData &&
-                                                snapshot.data != null &&
-                                                snapshot.data.length != 0)
-                                            ? Stack(
-                                                children: [
-                                                  GoogleMap(
+                                                        );
+                                                      });
+                                                },
+                                                position: LatLng(
+                                                    element.position.geopoint
+                                                        .latitude,
+                                                    element.position.geopoint.longitude)));
+                                          });
+                                        }
+                                        getSearchCircle(snapshotPosition.data);
+                                        return (snapshot.connectionState ==
+                                                ConnectionState.active)
+                                            ? (snapshot.hasData &&
+                                                    snapshot.data != null &&
+                                                    snapshot.data.length != 0)
+                                                ? GoogleMap(
                                                     onMapCreated:
                                                         (GoogleMapController
                                                             controller) {
@@ -536,138 +553,126 @@ class _Map extends State<Map> {
                                                         true,
                                                     markers: Set.from(markers),
                                                     circles: Set.from(circles),
-                                                  ),
-                                                  Positioned(
-                                                      bottom:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height /
-                                                              15,
-                                                      left:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width /
-                                                              30,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Container(
-                                                            padding:
-                                                                EdgeInsets.only(
-                                                                    left: 12),
-                                                            decoration: BoxDecoration(
-                                                                gradient: LinearGradient(
-                                                                    colors: [
-                                                                      Theme.of(
-                                                                              context)
-                                                                          .accentColor,
-                                                                      Theme.of(
-                                                                              context)
-                                                                          .primaryColor
-                                                                    ],
-                                                                    begin: Alignment
-                                                                        .centerRight,
-                                                                    end: Alignment
-                                                                        .centerLeft),
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20))),
-                                                            child: Row(
-                                                              children: [
-                                                                Text(
-                                                                  'Aktif Kampanyalar',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .white),
-                                                                ),
-                                                                Switch(
-                                                                  value: _filterProvider
-                                                                      .getLive,
-                                                                  activeColor: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                  inactiveThumbColor:
-                                                                      Theme.of(
-                                                                              context)
-                                                                          .accentColor,
-                                                                  inactiveTrackColor:
-                                                                      Colors.amber[
-                                                                          200],
-                                                                  onChanged: (bool
-                                                                      value) {
-                                                                    changeLive(
-                                                                        value);
-                                                                  },
-                                                                ),
-                                                              ],
-                                                            ),
+                                                  )
+                                                : Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        FaIcon(
+                                                          FontAwesomeIcons
+                                                              .sadTear,
+                                                          color:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          size: 100.0,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 20.0),
+                                                          child: Text(
+                                                            'Üzgünüz !',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                fontFamily:
+                                                                    'Bebas',
+                                                                fontSize: 40.0),
                                                           ),
-                                                        ],
-                                                      ))
-                                                ],
-                                              )
-                                            : Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    FaIcon(
-                                                      FontAwesomeIcons.sadTear,
-                                                      color: Colors.white,
-                                                      size: 100.0,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(20.0),
+                                                          child: Text(
+                                                            '" ${_filterProvider.getCat} " kategorisinde , hiçbir işletme bulunamadı !',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                fontFamily:
+                                                                    'Bebas',
+                                                                color: Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                                fontSize: 25.0),
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 20.0),
-                                                      child: Text(
-                                                        'Üzgünüz !',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily: 'Bebas',
-                                                            fontSize: 40.0),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              20.0),
-                                                      child: Text(
-                                                        '" ${_filterProvider.getCat} " kategorisinde , hiçbir kampanya bulunamadı !',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            fontFamily: 'Bebas',
-                                                            color: Colors.white,
-                                                            fontSize: 25.0),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                  )
+                                            : Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Colors.white,
                                                 ),
-                                              )
-                                        : Center(
-                                            child: CircularProgressIndicator(
-                                              color: Colors.white,
-                                            ),
-                                          );
-                                  })
+                                              );
+                                      })
+                                  : Center(
+                                      child: Text('Konumunuz bulunamadı !',
+                                          style: TextStyle(
+                                              fontFamily: 'Bebas',
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 25.0)),
+                                    )
                               : Center(
-                                  child: Text('Konumunuz bulunamadı !'),
-                                )
-                          : Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                );
+                        },
+                      ),
+                      Positioned(
+                          bottom: MediaQuery.of(context).size.height / 15,
+                          left: MediaQuery.of(context).size.width / 30,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(left: 12),
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Theme.of(context).accentColor,
+                                          Theme.of(context).primaryColor
+                                        ],
+                                        begin: Alignment.centerRight,
+                                        end: Alignment.centerLeft),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Aktif Kampanyalar',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    Switch(
+                                      value: _filterProvider.getLive,
+                                      activeColor:
+                                          Theme.of(context).primaryColor,
+                                      inactiveThumbColor:
+                                          Theme.of(context).accentColor,
+                                      inactiveTrackColor: Colors.amber[200],
+                                      onChanged: (bool value) {
+                                        changeLive(value);
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            );
-                    },
+                            ],
+                          ))
+                    ],
                   ),
                 ),
               ],

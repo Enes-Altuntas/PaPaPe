@@ -1,10 +1,14 @@
+import 'package:bulb/Models/user_model.dart';
 import 'package:bulb/Services/firestore_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;
   final FirestoreService firestoreService = FirestoreService();
+  FirebaseFirestore _db = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   AuthService(this._firebaseAuth);
@@ -59,6 +63,15 @@ class AuthService {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
 
+      UserModel newUser = UserModel(
+          token: await FirebaseMessaging.instance.getToken(),
+          userId: _firebaseAuth.currentUser.uid);
+
+      await _db
+          .collection('users')
+          .doc(_firebaseAuth.currentUser.uid)
+          .set(newUser.toMap());
+
       await _firebaseAuth.currentUser.sendEmailVerification();
 
       await _firebaseAuth.signOut();
@@ -82,7 +95,7 @@ class AuthService {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
       return 'Şifrenizi yenilemeniz için link mail adresinize gönderilmiştir !';
     } catch (e) {
-      throw 'Şifrenizi yenilemeniz için link mail adresinize gönderilmiştir !';
+      throw 'Sistemde bir hata meydana geldi !';
     }
   }
 

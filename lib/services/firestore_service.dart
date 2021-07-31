@@ -1,5 +1,6 @@
 import 'package:bulb/Models/campaign_model.dart';
 import 'package:bulb/Models/comment_model.dart';
+import 'package:bulb/Models/favorite_model.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/reservations_model.dart';
@@ -106,12 +107,12 @@ class FirestoreService {
             .toList());
   }
 
-  Stream<List<StoreCategory>> getStoreCategories() {
+  Future<List<StoreCategory>> getStoreCategories() {
     return _db
         .collection('categories')
         .orderBy('storeCatRow', descending: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
+        .get()
+        .then((snapshot) => snapshot.docs
             .map((doc) => StoreCategory.fromFirestore(doc.data()))
             .toList());
   }
@@ -142,9 +143,9 @@ class FirestoreService {
           .collection('reports')
           .doc(comment.reportId)
           .set(comment.toMap());
-      return 'Dilek & Şikayetiniz başarıyla iletilmiştir !';
+      return 'Dilek & Şikayetiniz başarıyla iletilmiştir!';
     } catch (e) {
-      throw 'Dilek & Şikayetiniz iletilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Dilek & Şikayetiniz iletilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
     }
   }
 
@@ -157,9 +158,9 @@ class FirestoreService {
           .collection('reservations')
           .doc(reservation.reservationId)
           .set(reservation.toMap());
-      return 'Rezervasyon talebiniz başarıyla iletilmiştir !';
+      return 'Rezervasyon talebiniz başarıyla iletilmiştir!';
     } catch (e) {
-      throw 'Rezervasyon talebiniz iletilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Rezervasyon talebiniz iletilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
     }
   }
 
@@ -170,10 +171,10 @@ class FirestoreService {
           .doc(storeId)
           .collection('reservations')
           .doc(resId)
-          .delete();
-      return 'Rezervasyon talebiniz başarıyla iptal edilmiştir !';
+          .update({'reservationStatus': 'canceled'});
+      return 'Rezervasyon talebiniz başarıyla iptal edilmiştir!';
     } catch (e) {
-      throw 'Rezervasyon talebiniz iptal edilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Rezervasyon talebiniz iptal edilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
     }
   }
 
@@ -185,10 +186,64 @@ class FirestoreService {
           .doc(docId)
           .collection('campaigns')
           .doc(campaignId)
-          .update({'campaignCounter': campaignCounter});
-      return "Kampanya kodunuz #$campaignCode'dir. Bu kampanya kodunu gittiğiniz işletmede ödemenizi yaparken kullanabilirsiniz !";
+          .update({'campaignCounter': campaignCounter + 1});
+
+      return "Kampanya kodunuz #$campaignCode'dir. Bu kampanya kodunu gittiğiniz işletmede ödemenizi yaparken kullanabilirsiniz!";
     } catch (e) {
-      throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı ! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
+  Future<String> addFavorites(String storeId) async {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+
+    try {
+      FavoriteModel newFavor = FavoriteModel(storeId: storeId);
+
+      await _db
+          .collection('users')
+          .doc(_uuid)
+          .collection('favorites')
+          .doc(storeId)
+          .set(newFavor.toMap());
+
+      return "İşletme, favorilerinize eklenmiştir!";
+    } catch (e) {
+      throw 'Favorilere ekleme işlemi sırasında bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
+  Future<String> removeFavorites(String storeId) async {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+
+    try {
+      await _db
+          .collection('users')
+          .doc(_uuid)
+          .collection('favorites')
+          .doc(storeId)
+          .delete();
+
+      return "İşletme, favorilerinizden kaldırılmıştır!";
+    } catch (e) {
+      throw 'Favorilere kaldırma işlemi sırasında bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
+  Future<bool> isFavorite(String storeId) async {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+
+    try {
+      DocumentSnapshot ds = await _db
+          .collection('users')
+          .doc(_uuid)
+          .collection('favorites')
+          .doc(storeId)
+          .get();
+
+      return ds.exists;
+    } catch (e) {
+      return false;
     }
   }
 }

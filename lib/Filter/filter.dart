@@ -177,8 +177,8 @@ class _FilterState extends State<Filter> {
                                       Slider(
                                           value: _filterProvider.getDist,
                                           min: 1,
-                                          max: 5,
-                                          divisions: 4,
+                                          max: 16,
+                                          divisions: 5,
                                           activeColor:
                                               Theme.of(context).primaryColor,
                                           inactiveColor:

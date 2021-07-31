@@ -182,17 +182,25 @@ class _ReservationsState extends State<Reservations> {
                                               padding: const EdgeInsets.only(
                                                   top: 8.0),
                                               child: Text(
-                                                'Başvuru Durumu: ${(snapshot.data[index].reservationStatus == 'waiting') ? 'Beklemede' : (snapshot.data[index].reservationStatus == 'approved') ? 'Onaylanmış' : 'Reddedilmiş'}',
+                                                'Başvuru Durumu: ${(snapshot.data[index].reservationStatus == 'waiting') ? 'Beklemede' : (snapshot.data[index].reservationStatus == 'approved') ? 'Onaylanmış' : (snapshot.data[index].reservationStatus == 'canceled') ? 'İptal edilmiş' : 'Reddedilmiş'}',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     color: Colors.white),
                                               ),
                                             ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 20.0),
-                                              child: Container(
+                                            Visibility(
+                                              visible: (snapshot.data[index]
+                                                              .reservationStatus !=
+                                                          'rejected' &&
+                                                      snapshot.data[index]
+                                                              .reservationStatus !=
+                                                          'canceled')
+                                                  ? true
+                                                  : false,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 20.0),
                                                 child: Container(
                                                   decoration: BoxDecoration(
                                                       color: Colors.red[400],

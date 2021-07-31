@@ -18,7 +18,37 @@ class _MenuState extends State<Menu> {
   List<ProductModel> products;
   bool _isLoading = false;
 
-  showImage(String url) {}
+  showImage(String url) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height / 3.5,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Theme.of(context).accentColor,
+                  Theme.of(context).primaryColor
+                ], begin: Alignment.centerRight, end: Alignment.centerLeft),
+              ),
+              child: Image.network(
+                url,
+                loadingBuilder: (context, child, loadingProgress) {
+                  return loadingProgress == null
+                      ? child
+                      : Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
+                },
+                fit: BoxFit.fitWidth,
+              ),
+            ),
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {

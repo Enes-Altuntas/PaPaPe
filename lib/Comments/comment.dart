@@ -26,8 +26,8 @@ class _CommentState extends State<Comment> {
     if (value.isEmpty) {
       return '* Dilek & Şikayet başlığı boş olmamalıdır !';
     }
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ\d]')) != true) {
-      return '* Harf veya rakam içermelidir !';
+    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ]')) != true) {
+      return '* Harf içermelidir !';
     }
 
     return null;
@@ -38,8 +38,8 @@ class _CommentState extends State<Comment> {
       return '* Dilek & Şikayet açıklaması boş olmamalıdır !';
     }
 
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ\d]')) != true) {
-      return '* Harf veya rakam içermelidir !';
+    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ]')) != true) {
+      return '* Harf içermelidir !';
     }
 
     return null;
