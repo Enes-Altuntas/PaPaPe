@@ -61,6 +61,7 @@ class _StoreState extends State<Store> {
             color: Colors.white,
           ),
           backgroundColor: Colors.white,
+          elevation: 0,
           bottom: TabBar(
             indicatorColor: Colors.white,
             tabs: [
@@ -82,22 +83,40 @@ class _StoreState extends State<Store> {
                   color: Colors.white)),
         ),
         body: (isLoading == false)
-            ? TabBarView(
-                children: [
-                  Info(storeData: widget.storeData),
-                  Campaigns(
-                    storeData: widget.storeData,
+            ? Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Theme.of(context).accentColor,
+                  Theme.of(context).primaryColor
+                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50.0),
+                            topRight: Radius.circular(50.0))),
+                    child: TabBarView(
+                      children: [
+                        Info(storeData: widget.storeData),
+                        Campaigns(
+                          storeData: widget.storeData,
+                        ),
+                        Menu(
+                          storeData: widget.storeData,
+                        ),
+                        Reports(
+                          storeData: widget.storeData,
+                        ),
+                        Reservations(
+                          storeData: widget.storeData,
+                        )
+                      ],
+                    ),
                   ),
-                  Menu(
-                    storeData: widget.storeData,
-                  ),
-                  Reports(
-                    storeData: widget.storeData,
-                  ),
-                  Reservations(
-                    storeData: widget.storeData,
-                  )
-                ],
+                ),
               )
             : Center(
                 child: CircularProgressIndicator(

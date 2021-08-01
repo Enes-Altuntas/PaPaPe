@@ -70,25 +70,20 @@ class _InfoState extends State<Info> {
                       alignment: AlignmentDirectional.center,
                       children: [
                         (widget.storeData.storePicRef != null)
-                            ? ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                    Colors.black.withOpacity(0.2),
-                                    BlendMode.darken),
-                                child: Container(
-                                  height: MediaQuery.of(context).size.height,
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          colors: [
-                                        Theme.of(context).accentColor,
-                                        Theme.of(context).primaryColor
-                                      ],
-                                          begin: Alignment.centerRight,
-                                          end: Alignment.centerLeft)),
-                                  child: Image.network(
-                                    widget.storeData.storePicRef,
-                                    fit: BoxFit.fitWidth,
-                                  ),
+                            ? Container(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                      Theme.of(context).accentColor,
+                                      Theme.of(context).primaryColor
+                                    ],
+                                        begin: Alignment.centerRight,
+                                        end: Alignment.centerLeft)),
+                                child: Image.network(
+                                  widget.storeData.storePicRef,
+                                  fit: BoxFit.fitWidth,
                                 ),
                               )
                             : Container(

@@ -5,7 +5,7 @@ class StoreModel {
   final String storeName;
   final String storePicRef;
   final String storeAddress;
-  final String storeCategory;
+  final List storeCategory;
   final String storePhone;
   final String storeTaxNo;
   final String storeTaxLoc;
