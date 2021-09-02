@@ -1,6 +1,6 @@
 import 'package:bulb/Campaigns/campaigns.dart';
-import 'package:bulb/Comments/comments.dart';
-import 'package:bulb/Info/info.dart';
+import 'package:bulb/Components/favorite_button.dart';
+import 'package:bulb/Wishes/wishes.dart';
 import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Products/products.dart';
 import 'package:bulb/Reservations/reservations.dart';
@@ -47,7 +47,7 @@ class _StoreState extends State<Store> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
@@ -60,14 +60,16 @@ class _StoreState extends State<Store> {
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
+          actions: [
+            FavoriteButton(
+              storeId: widget.storeData.storeId,
+            )
+          ],
           backgroundColor: Colors.white,
           elevation: 0,
           bottom: TabBar(
             indicatorColor: Colors.white,
             tabs: [
-              Tab(
-                icon: FaIcon(FontAwesomeIcons.info, color: Colors.white),
-              ),
               Tab(icon: FaIcon(FontAwesomeIcons.tags, color: Colors.white)),
               Tab(icon: FaIcon(FontAwesomeIcons.bookOpen, color: Colors.white)),
               Tab(icon: FaIcon(FontAwesomeIcons.bullhorn, color: Colors.white)),
@@ -100,14 +102,13 @@ class _StoreState extends State<Store> {
                             topRight: Radius.circular(50.0))),
                     child: TabBarView(
                       children: [
-                        Info(storeData: widget.storeData),
                         Campaigns(
                           storeData: widget.storeData,
                         ),
                         Menu(
                           storeData: widget.storeData,
                         ),
-                        Reports(
+                        Wishes(
                           storeData: widget.storeData,
                         ),
                         Reservations(

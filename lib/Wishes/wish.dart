@@ -1,4 +1,5 @@
-import 'package:bulb/Models/comment_model.dart';
+import 'package:bulb/Models/store_model.dart';
+import 'package:bulb/Models/wishes_model.dart';
 import 'package:bulb/Services/authentication_service.dart';
 import 'package:bulb/Services/firestore_service.dart';
 import 'package:bulb/Services/toast_service.dart';
@@ -7,16 +8,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-class Comment extends StatefulWidget {
-  final String storeId;
+class Wish extends StatefulWidget {
+  final StoreModel store;
 
-  Comment({Key key, this.storeId}) : super(key: key);
+  Wish({Key key, this.store}) : super(key: key);
 
   @override
   _CommentState createState() => _CommentState();
 }
 
-class _CommentState extends State<Comment> {
+class _CommentState extends State<Wish> {
   final TextEditingController _reportTitle = TextEditingController();
   final TextEditingController _reportDesc = TextEditingController();
   GlobalKey<FormState> formKeyComment = GlobalKey<FormState>();
@@ -51,15 +52,17 @@ class _CommentState extends State<Comment> {
         _isLoading = true;
       });
 
-      CommentModel newComment = CommentModel(
-          reportId: Uuid().v4(),
-          reportTitle: _reportTitle.text,
-          reportDesc: _reportDesc.text,
-          reportUser: AuthService(FirebaseAuth.instance).getUserId(),
+      WishesModel newComment = WishesModel(
+          wishId: Uuid().v4(),
+          wishTitle: _reportTitle.text,
+          wishDesc: _reportDesc.text,
+          wishStore: widget.store.storeId,
+          wishStoreName: widget.store.storeName,
+          wishUser: AuthService(FirebaseAuth.instance).getUserId(),
           createdAt: Timestamp.now());
 
       FirestoreService()
-          .saveComment(widget.storeId, newComment)
+          .saveWish(newComment)
           .then((value) => ToastService().showSuccess(value, context))
           .onError(
               (error, stackTrace) => ToastService().showError(error, context))

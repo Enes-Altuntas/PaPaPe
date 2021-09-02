@@ -1,8 +1,11 @@
+import 'package:bulb/Components/category_card.dart';
+import 'package:bulb/Components/not_found.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Menu extends StatefulWidget {
   final StoreModel storeData;
@@ -72,222 +75,43 @@ class _MenuState extends State<Menu> {
                       .getProductCategories(widget.storeData.storeId),
                   builder: (context, snapshot) {
                     category = snapshot.data;
-                    return (snapshot.connectionState == ConnectionState.active)
-                        ? (snapshot.data.length > 0)
-                            ? ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 8,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                bottom: 8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  snapshot
-                                                      .data[index].categoryName,
-                                                  style: TextStyle(
-                                                      fontSize: 20.0,
-                                                      fontFamily: 'Bebas',
-                                                      color: Theme.of(context)
-                                                          .primaryColor),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          StreamBuilder<List<ProductModel>>(
-                                              stream: FirestoreService()
-                                                  .getProducts(
-                                                      widget.storeData.storeId,
-                                                      snapshot.data[index]
-                                                          .categoryId),
-                                              builder:
-                                                  (context, snapshotProduct) {
-                                                products = snapshotProduct.data;
-                                                return (snapshotProduct
-                                                            .connectionState ==
-                                                        ConnectionState.active)
-                                                    ? (snapshotProduct
-                                                                .data.length >
-                                                            0)
-                                                        ? Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                        .only(
-                                                                    top: 10.0),
-                                                            child: Column(
-                                                              children: [
-                                                                ListView
-                                                                    .builder(
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        physics:
-                                                                            ClampingScrollPhysics(),
-                                                                        itemCount: snapshotProduct
-                                                                            .data
-                                                                            .length,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                indexDishes) {
-                                                                          return Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.only(bottom: 10.0),
-                                                                            child:
-                                                                                Card(
-                                                                              elevation: 5,
-                                                                              shape: RoundedRectangleBorder(
-                                                                                borderRadius: BorderRadius.circular(50.0),
-                                                                              ),
-                                                                              clipBehavior: Clip.antiAlias,
-                                                                              color: Colors.white,
-                                                                              child: Container(
-                                                                                decoration: BoxDecoration(
-                                                                                    gradient: LinearGradient(colors: [
-                                                                                  Theme.of(context).accentColor,
-                                                                                  Theme.of(context).primaryColor
-                                                                                ], begin: Alignment.bottomRight, end: Alignment.topLeft)),
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.all(15.0),
-                                                                                  child: ListTile(
-                                                                                    onTap: () {
-                                                                                      if (snapshotProduct.data[indexDishes].productPicRef != null) {
-                                                                                        showImage(snapshotProduct.data[indexDishes].productPicRef);
-                                                                                      }
-                                                                                    },
-                                                                                    title: Row(
-                                                                                      children: [
-                                                                                        Flexible(
-                                                                                          child: Text(
-                                                                                            snapshotProduct.data[indexDishes].productName,
-                                                                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16.0),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                    trailing: Container(
-                                                                                      height: MediaQuery.of(context).size.height,
-                                                                                      child: Padding(
-                                                                                        padding: const EdgeInsets.only(left: 10.0),
-                                                                                        child: Column(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          children: [
-                                                                                            Icon(Icons.image, color: Colors.white)
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                    subtitle: Padding(
-                                                                                      padding: const EdgeInsets.only(top: 8.0),
-                                                                                      child: Column(
-                                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                        children: [
-                                                                                          Text(snapshotProduct.data[indexDishes].productDesc, style: TextStyle(color: Colors.white)),
-                                                                                          Padding(
-                                                                                            padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                                                                                            child: Text(
-                                                                                              'Fiyat: ${snapshotProduct.data[indexDishes].productPrice} TRY',
-                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15.0),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          );
-                                                                        }),
-                                                              ],
-                                                            ),
-                                                          )
-                                                        : Center(
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Icon(
-                                                                  Icons
-                                                                      .assignment_late_outlined,
-                                                                  size: 100.0,
-                                                                  color: Theme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                ),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      top:
-                                                                          20.0),
-                                                                  child: Text(
-                                                                    "Henüz '${snapshot.data[index].categoryName}' başlığına kaydedilmiş bir ürününüz bulunmamaktadır !",
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        fontSize:
-                                                                            25.0,
-                                                                        color: Theme.of(context)
-                                                                            .primaryColor),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          )
-                                                    : Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                      ));
-                                              }),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.assignment_late_outlined,
-                                      size: 100.0,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 20.0),
-                                      child: Text(
-                                        'Henüz kaydedilmiş bir başlığınız bulunmamaktadır !',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize: 25.0,
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                        : Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
-                          );
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.active:
+                        switch (snapshot.hasData && snapshot.data.length > 0) {
+                          case true:
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 20.0),
+                                    child: CategoryCard(
+                                      category: snapshot.data[index],
+                                      storeId: widget.storeData.storeId,
+                                    ));
+                              },
+                            );
+                            break;
+                          default:
+                            return NotFound(
+                              notFoundIcon: FontAwesomeIcons.sadTear,
+                              notFoundIconColor: Theme.of(context).primaryColor,
+                              notFoundIconSize: 75,
+                              notFoundText:
+                                  'Şu an yayınlamış olduğunuz hiçbir başlık bulunmamaktadır.',
+                              notFoundTextColor: Theme.of(context).primaryColor,
+                              notFoundTextSize: 30.0,
+                            );
+                        }
+                        break;
+                      default:
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        );
+                    }
                   },
                 ),
               ),

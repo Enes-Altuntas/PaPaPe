@@ -1,4 +1,5 @@
 import 'package:bulb/Models/reservations_model.dart';
+import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Services/authentication_service.dart';
 import 'package:bulb/Services/firestore_service.dart';
 import 'package:bulb/Services/toast_service.dart';
@@ -10,9 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
 class Reservation extends StatefulWidget {
-  final String storeId;
+  final StoreModel store;
 
-  Reservation({Key key, this.storeId}) : super(key: key);
+  Reservation({Key key, this.store}) : super(key: key);
 
   @override
   _ReservationState createState() => _ReservationState();
@@ -88,7 +89,7 @@ class _ReservationState extends State<Reservation> {
       setState(() {
         _isLoading = true;
       });
-      ReservationModel newReservation = ReservationModel(
+      ReservationsModel newReservation = ReservationsModel(
           reservationId: Uuid().v4(),
           reservationDesc: _resDesc.text,
           reservationCount: int.parse(_resCount.text),
@@ -96,10 +97,12 @@ class _ReservationState extends State<Reservation> {
           reservationPhone: _resPhone.text,
           reservationStatus: 'waiting',
           reservationUser: AuthService(FirebaseAuth.instance).getUserId(),
+          reservationStore: widget.store.storeId,
+          reservationStoreName: widget.store.storeName,
           reservationTime: resTime);
 
       FirestoreService()
-          .saveReservation(widget.storeId, newReservation)
+          .saveReservation(newReservation)
           .then((value) => ToastService().showSuccess(value, context))
           .onError(
               (error, stackTrace) => ToastService().showError(error, context))

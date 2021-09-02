@@ -1,10 +1,11 @@
 import 'package:bulb/Models/campaign_model.dart';
-import 'package:bulb/Models/comment_model.dart';
 import 'package:bulb/Models/favorite_model.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/reservations_model.dart';
 import 'package:bulb/Models/store_category.dart';
+import 'package:bulb/Models/user_model.dart';
+import 'package:bulb/Models/wishes_model.dart';
 import 'package:bulb/Services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bulb/Models/markers_model.dart';
@@ -56,10 +57,10 @@ class FirestoreService {
             .toList());
   }
 
-  Stream<List<ProductModel>> getProducts(String docId, String categoryId) {
+  Stream<List<ProductModel>> getProducts(String storeId, String categoryId) {
     return _db
         .collection('stores')
-        .doc(docId)
+        .doc(storeId)
         .collection('products')
         .doc(categoryId)
         .collection('alt_products')
@@ -81,29 +82,25 @@ class FirestoreService {
             .toList());
   }
 
-  Stream<List<CommentModel>> getReports(String docId) {
+  Stream<List<WishesModel>> getReports() {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
-        .collection('stores')
-        .doc(docId)
-        .collection('reports')
-        .where('reportUser', isEqualTo: _uuid)
+        .collection('wishes')
+        .where('wishUser', isEqualTo: _uuid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => CommentModel.fromFirestore(doc.data()))
+            .map((doc) => WishesModel.fromFirestore(doc.data()))
             .toList());
   }
 
-  Stream<List<ReservationModel>> getReservations(String docId) {
+  Stream<List<ReservationsModel>> getReservations() {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
-        .collection('stores')
-        .doc(docId)
         .collection('reservations')
         .where('reservationUser', isEqualTo: _uuid)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => ReservationModel.fromFirestore(doc.data()))
+            .map((doc) => ReservationsModel.fromFirestore(doc.data()))
             .toList());
   }
 
@@ -128,33 +125,25 @@ class FirestoreService {
         .get();
   }
 
-  Future getCategoryPic(categoryName) async {
+  Future getCategoryPic(String categoryName) async {
     return await _db
         .collection('categories')
         .where('storeCatName', isEqualTo: categoryName)
         .get();
   }
 
-  Future<String> saveComment(String docId, CommentModel comment) async {
+  Future<String> saveWish(WishesModel wish) async {
     try {
-      await _db
-          .collection('stores')
-          .doc(docId)
-          .collection('reports')
-          .doc(comment.reportId)
-          .set(comment.toMap());
+      await _db.collection('wishes').doc(wish.wishId).set(wish.toMap());
       return 'Dilek & Şikayetiniz başarıyla iletilmiştir!';
     } catch (e) {
       throw 'Dilek & Şikayetiniz iletilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
     }
   }
 
-  Future<String> saveReservation(
-      String docId, ReservationModel reservation) async {
+  Future<String> saveReservation(ReservationsModel reservation) async {
     try {
       await _db
-          .collection('stores')
-          .doc(docId)
           .collection('reservations')
           .doc(reservation.reservationId)
           .set(reservation.toMap());
@@ -164,11 +153,9 @@ class FirestoreService {
     }
   }
 
-  Future<String> cancelReservation(String storeId, String resId) async {
+  Future<String> cancelReservation(String resId) async {
     try {
       await _db
-          .collection('stores')
-          .doc(storeId)
           .collection('reservations')
           .doc(resId)
           .update({'reservationStatus': 'canceled'});
@@ -194,39 +181,37 @@ class FirestoreService {
     }
   }
 
-  Future<String> addFavorites(String storeId) async {
+  Future<UserModel> getUser() async {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
 
     try {
-      FavoriteModel newFavor = FavoriteModel(storeId: storeId);
-
-      await _db
+      return await _db
           .collection('users')
           .doc(_uuid)
-          .collection('favorites')
-          .doc(storeId)
-          .set(newFavor.toMap());
-
-      return "İşletme, favorilerinize eklenmiştir!";
+          .get()
+          .then((doc) => UserModel.fromFirestore(doc.data()));
     } catch (e) {
-      throw 'Favorilere ekleme işlemi sırasında bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Kullanıcı bilgileri çekilirken bir hata ile karşılaşıldı !';
     }
   }
 
-  Future<String> removeFavorites(String storeId) async {
+  Future<String> manageFavorites(String storeId) async {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
 
-    try {
-      await _db
-          .collection('users')
-          .doc(_uuid)
-          .collection('favorites')
-          .doc(storeId)
-          .delete();
+    UserModel user = await getUser();
 
-      return "İşletme, favorilerinizden kaldırılmıştır!";
+    if (user.favorites.contains(storeId)) {
+      user.favorites.remove(storeId);
+    } else {
+      user.favorites.add(storeId);
+    }
+
+    try {
+      await _db.collection('users').doc(_uuid).set(user.toMap());
+
+      return 'Bu işletme başarıyla favorilerinize eklendi';
     } catch (e) {
-      throw 'Favorilere kaldırma işlemi sırasında bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Lütfen daha sonra tekrar deneyeniz.';
     }
   }
 
@@ -234,14 +219,17 @@ class FirestoreService {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
 
     try {
-      DocumentSnapshot ds = await _db
+      UserModel user = await _db
           .collection('users')
           .doc(_uuid)
-          .collection('favorites')
-          .doc(storeId)
-          .get();
+          .get()
+          .then((doc) => UserModel.fromFirestore(doc.data()));
 
-      return ds.exists;
+      if (user.favorites.contains(storeId)) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       return false;
     }

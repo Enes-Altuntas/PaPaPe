@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class ReservationModel {
+class ReservationsModel {
   final String reservationDesc;
   final String reservationStatus;
   final String reservationId;
@@ -8,28 +8,33 @@ class ReservationModel {
   final String reservationPhone;
   final int reservationCount;
   final String reservationUser;
+  final String reservationStore;
+  final String reservationStoreName;
   final Timestamp reservationTime;
 
-  ReservationModel({
-    this.reservationDesc,
-    this.reservationStatus,
-    this.reservationCount,
-    this.reservationName,
-    this.reservationPhone,
-    this.reservationId,
-    this.reservationUser,
-    this.reservationTime,
-  });
+  ReservationsModel(
+      {this.reservationDesc,
+      this.reservationStatus,
+      this.reservationCount,
+      this.reservationName,
+      this.reservationPhone,
+      this.reservationId,
+      this.reservationUser,
+      this.reservationTime,
+      this.reservationStoreName,
+      this.reservationStore});
 
-  ReservationModel.fromFirestore(Map<String, dynamic> data)
+  ReservationsModel.fromFirestore(Map<String, dynamic> data)
       : reservationDesc = data['reservationDesc'],
         reservationStatus = data['reservationStatus'],
         reservationCount = data['reservationCount'],
         reservationName = data['reservationName'],
         reservationPhone = data['reservationPhone'],
         reservationId = data['reservationId'],
+        reservationStoreName = data['reservationStoreName'],
         reservationUser = data['reservationUser'],
-        reservationTime = data['reservationTime'];
+        reservationTime = data['reservationTime'],
+        reservationStore = data['reservationStore'];
 
   Map<String, dynamic> toMap() {
     return {
@@ -41,6 +46,8 @@ class ReservationModel {
       'reservationId': reservationId,
       'reservationUser': reservationUser,
       'reservationTime': reservationTime,
+      'reservationStore': reservationStore,
+      'reservationStoreName': reservationStoreName,
     };
   }
 }
