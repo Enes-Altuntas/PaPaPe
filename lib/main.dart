@@ -1,6 +1,8 @@
 import 'package:bulb/Login/login.dart';
+import 'package:bulb/Models/user_model.dart';
 import 'package:bulb/Providers/filter_provider.dart';
 import 'package:bulb/Services/authentication_service.dart';
+import 'package:bulb/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,10 @@ class MyApp extends StatelessWidget {
         Provider<AuthService>(
             create: (context) => AuthService(FirebaseAuth.instance)),
         ChangeNotifierProvider(create: (context) => FilterProvider()),
+        StreamProvider(
+            create: (BuildContext context) =>
+                FirestoreService().getUserDetail(),
+            initialData: UserModel)
       ],
       child: MaterialApp(
           title: 'BULB',

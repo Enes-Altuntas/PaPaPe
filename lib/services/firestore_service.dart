@@ -104,6 +104,15 @@ class FirestoreService {
             .toList());
   }
 
+  Stream<UserModel> getUserDetail() {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+    return _db
+        .collection('users')
+        .doc(_uuid)
+        .snapshots()
+        .map((doc) => UserModel.fromFirestore(doc.data()));
+  }
+
   Future<List<StoreCategory>> getStoreCategories() {
     return _db
         .collection('categories')
@@ -181,24 +190,8 @@ class FirestoreService {
     }
   }
 
-  Future<UserModel> getUser() async {
+  Future<bool> manageFavorites(String storeId, UserModel user) async {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
-
-    try {
-      return await _db
-          .collection('users')
-          .doc(_uuid)
-          .get()
-          .then((doc) => UserModel.fromFirestore(doc.data()));
-    } catch (e) {
-      throw 'Kullanıcı bilgileri çekilirken bir hata ile karşılaşıldı !';
-    }
-  }
-
-  Future<String> manageFavorites(String storeId) async {
-    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
-
-    UserModel user = await getUser();
 
     if (user.favorites.contains(storeId)) {
       user.favorites.remove(storeId);
@@ -208,30 +201,9 @@ class FirestoreService {
 
     try {
       await _db.collection('users').doc(_uuid).set(user.toMap());
-
-      return 'Bu işletme başarıyla favorilerinize eklendi';
+      return true;
     } catch (e) {
-      throw 'Lütfen daha sonra tekrar deneyeniz.';
-    }
-  }
-
-  Future<bool> isFavorite(String storeId) async {
-    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
-
-    try {
-      UserModel user = await _db
-          .collection('users')
-          .doc(_uuid)
-          .get()
-          .then((doc) => UserModel.fromFirestore(doc.data()));
-
-      if (user.favorites.contains(storeId)) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      return false;
+      throw 'Sistemde bir hata meydana geldi !';
     }
   }
 }
