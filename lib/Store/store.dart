@@ -61,8 +61,11 @@ class _StoreState extends State<Store> {
             color: Colors.white,
           ),
           actions: [
-            FavoriteButton(
-              storeId: widget.storeData.storeId,
+            Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: FavoriteButton(
+                storeId: widget.storeData.storeId,
+              ),
             )
           ],
           backgroundColor: Colors.white,

@@ -79,7 +79,7 @@ class _CommentState extends State<Wish> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -113,10 +113,10 @@ class _CommentState extends State<Wish> {
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(50.0),
                           topRight: Radius.circular(50.0))),
-                  child: Column(
-                    children: [
-                      SingleChildScrollView(
-                        child: Form(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Form(
                           key: formKeyComment,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           child: Container(
@@ -215,9 +215,9 @@ class _CommentState extends State<Wish> {
                               ],
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
