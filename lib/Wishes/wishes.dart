@@ -74,7 +74,7 @@ class _ReportsState extends State<Wishes> {
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: StreamBuilder<List<WishesModel>>(
-              stream: FirestoreService().getReports(),
+              stream: FirestoreService().getReports(widget.storeData.storeId),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.active:

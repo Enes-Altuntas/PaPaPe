@@ -99,7 +99,8 @@ class _ReservationsState extends State<Reservations> {
           child: Padding(
             padding: const EdgeInsets.only(top: 5.0),
             child: StreamBuilder<List<ReservationsModel>>(
-              stream: FirestoreService().getReservations(),
+              stream:
+                  FirestoreService().getReservations(widget.storeData.storeId),
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.active:

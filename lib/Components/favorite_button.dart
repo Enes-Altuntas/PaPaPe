@@ -2,7 +2,6 @@ import 'package:bulb/Models/user_model.dart';
 import 'package:bulb/services/firestore_service.dart';
 import 'package:bulb/services/toast_service.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class FavoriteButton extends StatelessWidget {
   final String storeId;

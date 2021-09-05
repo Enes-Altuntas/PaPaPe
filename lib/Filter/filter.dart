@@ -76,6 +76,7 @@ class _FilterState extends State<Filter> {
           centerTitle: true,
         ),
         body: Container(
+          width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
             Theme.of(context).accentColor,

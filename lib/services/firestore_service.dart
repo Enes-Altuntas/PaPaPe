@@ -4,6 +4,7 @@ import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/reservations_model.dart';
 import 'package:bulb/Models/store_category.dart';
+import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Models/user_model.dart';
 import 'package:bulb/Models/wishes_model.dart';
 import 'package:bulb/Services/authentication_service.dart';
@@ -82,18 +83,31 @@ class FirestoreService {
             .toList());
   }
 
-  Stream<List<WishesModel>> getReports() {
+  Stream<List<WishesModel>> getReports(String storeId) {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
         .collection('wishes')
         .where('wishUser', isEqualTo: _uuid)
+        .where('wishStore', isEqualTo: storeId)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => WishesModel.fromFirestore(doc.data()))
             .toList());
   }
 
-  Stream<List<ReservationsModel>> getReservations() {
+  Stream<List<ReservationsModel>> getReservations(String storeId) {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+    return _db
+        .collection('reservations')
+        .where('reservationUser', isEqualTo: _uuid)
+        .where('reservationStore', isEqualTo: storeId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => ReservationsModel.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<ReservationsModel>> getMyReservations() {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
         .collection('reservations')
@@ -101,6 +115,17 @@ class FirestoreService {
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => ReservationsModel.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Stream<List<WishesModel>> getMyWishes() {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+    return _db
+        .collection('wishes')
+        .where('wishUser', isEqualTo: _uuid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => WishesModel.fromFirestore(doc.data()))
             .toList());
   }
 
@@ -125,6 +150,12 @@ class FirestoreService {
 
   Future<DocumentSnapshot> getStore(String storeId) async {
     return await _db.collection('stores').doc(storeId).get();
+  }
+
+  Future<StoreModel> getStoreData(String storeId) async {
+    return await _db.collection('stores').doc(storeId).get().then((value) {
+      return StoreModel.fromFirestore(value.data());
+    });
   }
 
   Future getStoreCat() async {

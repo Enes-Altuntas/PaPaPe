@@ -3,10 +3,13 @@ import 'package:bulb/Login/login.dart';
 import 'package:bulb/Models/markers_model.dart';
 import 'package:bulb/Models/store_category.dart';
 import 'package:bulb/Models/store_model.dart';
+import 'package:bulb/Profile/MyFavorites.dart';
+import 'package:bulb/Profile/MyReservations.dart';
+import 'package:bulb/Profile/MyWishes.dart';
 import 'package:bulb/Providers/filter_provider.dart';
-import 'package:bulb/Services/authentication_service.dart';
 import 'package:bulb/Services/firestore_service.dart';
 import 'package:bulb/Store/store.dart';
+import 'package:bulb/services/authentication_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +52,24 @@ class _Map extends State<Map> {
     });
   }
 
+  setLocalData() {
+    _filterProvider.changeLive(false);
+
+    if (preferences.getBool('dark') != null) {
+      _filterProvider.changeMode(preferences.getBool('dark'));
+    } else {
+      _filterProvider.changeMode(false);
+    }
+
+    _filterProvider.changeCat('Restoran');
+
+    if (preferences.getDouble('distance') != null) {
+      _filterProvider.changeDistance(preferences.getDouble('distance'));
+    } else {
+      _filterProvider.changeDistance(1.0);
+    }
+  }
+
   exitYesNo() {
     CoolAlert.show(
         context: context,
@@ -71,24 +92,6 @@ class _Map extends State<Map> {
         },
         barrierDismissible: false,
         confirmBtnText: 'Evet');
-  }
-
-  setLocalData() {
-    _filterProvider.changeLive(false);
-
-    if (preferences.getBool('dark') != null) {
-      _filterProvider.changeMode(preferences.getBool('dark'));
-    } else {
-      _filterProvider.changeMode(false);
-    }
-
-    _filterProvider.changeCat('Restoran');
-
-    if (preferences.getDouble('distance') != null) {
-      _filterProvider.changeDistance(preferences.getDouble('distance'));
-    } else {
-      _filterProvider.changeDistance(1.0);
-    }
   }
 
   changeLive(bool value) {
@@ -212,18 +215,53 @@ class _Map extends State<Map> {
                 ),
               )),
           actions: [
-            TextButton(
-                onPressed: () {
-                  exitYesNo();
+            Padding(
+              padding: const EdgeInsets.only(right: 15.0),
+              child: PopupMenuButton(
+                onSelected: (value) {
+                  switch (value) {
+                    case 1:
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MyFavorites()));
+                      break;
+                    case 2:
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => MyReservations()));
+                      break;
+                    case 3:
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => MyWishes()));
+                      break;
+                    case 4:
+                      exitYesNo();
+                      break;
+                  }
                 },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.exit_to_app,
-                      color: Colors.white,
-                    )
-                  ],
-                )),
+                itemBuilder: (contect) => [
+                  PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: [Text("Favorilerim")],
+                      )),
+                  PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: [Text("Rezervasyonlarım")],
+                      )),
+                  PopupMenuItem(
+                      value: 3,
+                      child: Row(
+                        children: [Text("Dilek & Şikayetlerim")],
+                      )),
+                  PopupMenuItem(
+                      value: 4,
+                      child: Row(
+                        children: [Text("Çıkış Yap")],
+                      ))
+                ],
+                child: Icon(Icons.more_vert),
+              ),
+            )
           ],
           title: Text('bulb',
               style: TextStyle(
