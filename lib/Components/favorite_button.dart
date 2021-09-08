@@ -23,6 +23,7 @@ class FavoriteButton extends StatelessWidget {
                 Icons.star,
                 size: 30,
                 color: (snapshot.data != null &&
+                        snapshot.data.favorites != null &&
                         snapshot.data.favorites.length > 0 &&
                         snapshot.data.favorites.contains(storeId)
                     ? Colors.green

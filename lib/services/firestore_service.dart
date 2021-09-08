@@ -224,7 +224,7 @@ class FirestoreService {
   Future<bool> manageFavorites(String storeId, UserModel user) async {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
 
-    if (user.favorites.contains(storeId)) {
+    if (user.favorites != null && user.favorites.contains(storeId)) {
       user.favorites.remove(storeId);
     } else {
       user.favorites.add(storeId);

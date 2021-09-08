@@ -50,6 +50,8 @@ class AuthService {
         final credential = GoogleAuthProvider.credential(
             accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
+        await saveUser();
+
         await _firebaseAuth.signInWithCredential(credential);
       }
     } catch (e) {
@@ -63,14 +65,7 @@ class AuthService {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      UserModel newUser = UserModel(
-          token: await FirebaseMessaging.instance.getToken(),
-          userId: _firebaseAuth.currentUser.uid);
-
-      await _db
-          .collection('users')
-          .doc(_firebaseAuth.currentUser.uid)
-          .set(newUser.toMap());
+      await saveUser();
 
       await _firebaseAuth.currentUser.sendEmailVerification();
 
@@ -109,5 +104,17 @@ class AuthService {
     } catch (e) {
       return e.message;
     }
+  }
+
+  Future<void> saveUser() async {
+    UserModel newUser = UserModel(
+        token: await FirebaseMessaging.instance.getToken(),
+        userId: _firebaseAuth.currentUser.uid,
+        favorites: []);
+
+    await _db
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .set(newUser.toMap());
   }
 }

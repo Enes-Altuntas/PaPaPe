@@ -76,6 +76,7 @@ class MyFavorites extends StatelessWidget {
                                 switch (snapshot.connectionState) {
                                   case ConnectionState.active:
                                     switch (snapshot.data != null &&
+                                        snapshot.data.favorites != null &&
                                         snapshot.data.favorites.length > 0) {
                                       case true:
                                         return ListView.builder(

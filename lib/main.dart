@@ -3,13 +3,26 @@ import 'package:bulb/Providers/filter_provider.dart';
 import 'package:bulb/Services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  await init();
+  runApp(MyApp());
+}
+
+FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+
+Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  handleNotifications();
+}
+
+handleNotifications() async {
+  await firebaseMessaging.requestPermission(sound: true);
+  await firebaseMessaging.subscribeToTopic("users");
 }
 
 class MyApp extends StatelessWidget {
@@ -17,9 +30,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => FilterProvider()),
         Provider<AuthService>(
             create: (context) => AuthService(FirebaseAuth.instance)),
-        ChangeNotifierProvider(create: (context) => FilterProvider()),
       ],
       child: MaterialApp(
           title: 'BULB',
