@@ -1,6 +1,8 @@
 import 'package:bulb/Components/gradient_button.dart';
-import 'package:bulb/Services/authentication_service.dart';
-import 'package:bulb/Services/toast_service.dart';
+import 'package:bulb/Components/progress.dart';
+import 'package:bulb/Login/login.dart';
+import 'package:bulb/services/authentication_service.dart';
+import 'package:bulb/services/toast_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -94,136 +96,147 @@ class _SignState extends State<Sign> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: (isLoading == false)
-            ? SingleChildScrollView(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/logo.png"),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                  child: Form(
-                    key: formkey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20.0),
-                          child: Text('bulb',
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontFamily: 'Armatic',
-                                  fontSize:
-                                      MediaQuery.of(context).size.height / 10)),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50.0),
-                            color: Colors.amber[200],
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 30.0,
-                                left: 30.0,
-                                bottom: 20.0,
-                                top: 30.0),
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                    controller: emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                        icon:
-                                            Icon(Icons.account_circle_outlined),
-                                        labelText: 'E-Posta'),
-                                    validator: validateMail),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: TextFormField(
-                                    obscureText:
-                                        (isVisible == false) ? true : false,
-                                    controller: passwordController,
-                                    decoration: InputDecoration(
-                                        icon: Icon(Icons.vpn_key_outlined),
-                                        labelText: 'Yeni Parola',
-                                        suffixIcon: IconButton(
-                                          icon: (isVisible == false)
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
-                                          onPressed: () {
-                                            if (isVisible == true) {
-                                              setState(() {
-                                                isVisible = false;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                isVisible = true;
-                                              });
-                                            }
-                                          },
-                                        )),
-                                    validator: validatePass,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: TextFormField(
-                                    obscureText:
-                                        (isVisible == false) ? true : false,
-                                    controller: passwordVerifyController,
-                                    decoration: InputDecoration(
-                                        icon: Icon(Icons.vpn_key_outlined),
-                                        labelText: 'Yeni Parola (Tekrar)',
-                                        suffixIcon: IconButton(
-                                          icon: (isVisible == false)
-                                              ? Icon(Icons.visibility_off)
-                                              : Icon(Icons.visibility),
-                                          onPressed: () {
-                                            if (isVisible == true) {
-                                              setState(() {
-                                                isVisible = false;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                isVisible = true;
-                                              });
-                                            }
-                                          },
-                                        )),
-                                    validator: validatePass,
-                                  ),
-                                ),
-                                Padding(
-                                    padding: const EdgeInsets.only(top: 40.0),
-                                    child: GradientButton(
-                                      buttonText: 'Kayıt Ol',
-                                      fontFamily: 'Roboto',
-                                      fontSize: 15,
-                                      startColor: Theme.of(context).accentColor,
-                                      finishColor:
-                                          Theme.of(context).primaryColor,
-                                      fontColor: Colors.white,
-                                      iconColor: Colors.white,
-                                      onPressed: signUp,
-                                      icon: FontAwesomeIcons.save,
-                                      widthMultiplier: 0.9,
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+    return (isLoading != true)
+        ? Scaffold(
+            body: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  fit: BoxFit.fill,
                 ),
-              )
-            : Center(
-                child: CircularProgressIndicator(color: Colors.white),
-              ));
+              ),
+              child: Form(
+                key: formkey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Text('bulb',
+                          style: TextStyle(
+                              color: Colors.amber[900],
+                              fontFamily: 'Armatic',
+                              fontSize:
+                                  MediaQuery.of(context).size.height / 10)),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50.0),
+                        color: Colors.amber[200],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 30.0, left: 30.0, bottom: 20.0, top: 30.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.account_circle_outlined),
+                                    labelText: 'E-Posta'),
+                                validator: validateMail),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                obscureText:
+                                    (isVisible == false) ? true : false,
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.vpn_key_outlined),
+                                    labelText: 'Yeni Parola',
+                                    suffixIcon: IconButton(
+                                      icon: (isVisible == false)
+                                          ? Icon(Icons.visibility_off)
+                                          : Icon(Icons.visibility),
+                                      onPressed: () {
+                                        if (isVisible == true) {
+                                          setState(() {
+                                            isVisible = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isVisible = true;
+                                          });
+                                        }
+                                      },
+                                    )),
+                                validator: validatePass,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                obscureText:
+                                    (isVisible == false) ? true : false,
+                                controller: passwordVerifyController,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.vpn_key_outlined),
+                                    labelText: 'Yeni Parola (Tekrar)',
+                                    suffixIcon: IconButton(
+                                      icon: (isVisible == false)
+                                          ? Icon(Icons.visibility_off)
+                                          : Icon(Icons.visibility),
+                                      onPressed: () {
+                                        if (isVisible == true) {
+                                          setState(() {
+                                            isVisible = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isVisible = true;
+                                          });
+                                        }
+                                      },
+                                    )),
+                                validator: validatePass,
+                              ),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(top: 40.0),
+                                child: GradientButton(
+                                  buttonText: 'Kayıt Ol',
+                                  fontFamily: 'Roboto',
+                                  fontSize: 15,
+                                  startColor: Colors.amber[900],
+                                  finishColor: Theme.of(context).primaryColor,
+                                  fontColor: Colors.white,
+                                  iconColor: Colors.white,
+                                  onPressed: signUp,
+                                  icon: FontAwesomeIcons.save,
+                                  widthMultiplier: 0.9,
+                                )),
+                            Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: GradientButton(
+                                  buttonText: 'Geri',
+                                  fontFamily: 'Roboto',
+                                  fontSize: 15,
+                                  startColor: Colors.amber[900],
+                                  finishColor: Theme.of(context).primaryColor,
+                                  fontColor: Colors.white,
+                                  iconColor: Colors.white,
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) => Login()));
+                                  },
+                                  icon: FontAwesomeIcons.arrowLeft,
+                                  widthMultiplier: 0.9,
+                                ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ))
+        : ProgressWidget();
   }
 }

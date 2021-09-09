@@ -1,5 +1,6 @@
 import 'package:bulb/Components/favorite_store.dart';
 import 'package:bulb/Components/not_found.dart';
+import 'package:bulb/Components/title.dart';
 import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Models/user_model.dart';
 import 'package:bulb/services/firestore_service.dart';
@@ -24,13 +25,7 @@ class MyFavorites extends StatelessWidget {
             ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           elevation: 0,
-          title: Text('PaPaPe',
-              style: TextStyle(
-                fontSize: 45.0,
-                color: Colors.white,
-                fontFamily: 'Armatic',
-                fontWeight: FontWeight.bold,
-              )),
+          title: TitleApp(),
           centerTitle: true,
         ),
         body: Container(
@@ -129,7 +124,8 @@ class MyFavorites extends StatelessWidget {
                                                       return Center(
                                                           child:
                                                               CircularProgressIndicator(
-                                                        color: Colors.white,
+                                                        color:
+                                                            Colors.amber[900],
                                                       ));
                                                   }
                                                 });
@@ -154,7 +150,7 @@ class MyFavorites extends StatelessWidget {
                                   default:
                                     return Center(
                                         child: CircularProgressIndicator(
-                                      color: Theme.of(context).primaryColor,
+                                      color: Colors.amber[900],
                                     ));
                                 }
                               }),

@@ -31,7 +31,7 @@ class NotFound extends StatelessWidget {
                 size: this.notFoundIconSize, color: this.notFoundIconColor),
             Padding(
               padding:
-                  const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
+                  const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
               child: Text(
                 this.notFoundText,
                 textAlign: TextAlign.center,

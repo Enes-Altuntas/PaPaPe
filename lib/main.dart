@@ -1,6 +1,7 @@
 import 'package:bulb/Login/login.dart';
+import 'package:bulb/Map/Map.dart';
 import 'package:bulb/Providers/filter_provider.dart';
-import 'package:bulb/Services/authentication_service.dart';
+import 'package:bulb/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -29,21 +30,36 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => FilterProvider()),
-        Provider<AuthService>(
-            create: (context) => AuthService(FirebaseAuth.instance)),
-      ],
-      child: MaterialApp(
-          title: 'BULB',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: Colors.lightBlue[800],
-            primaryColorDark: Colors.black,
-            accentColor: Colors.lightBlue[200],
-            hintColor: Colors.grey.shade800,
-          ),
-          home: Login()),
-    );
+        providers: [
+          ChangeNotifierProvider(create: (context) => FilterProvider()),
+          Provider<AuthService>(
+              create: (context) => AuthService(FirebaseAuth.instance)),
+          StreamProvider(
+              create: (context) => context.read<AuthService>().authStateChanges)
+        ],
+        child: MaterialApp(
+            title: 'BULB',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: Colors.lightBlue[800],
+              primaryColorDark: Colors.black,
+              accentColor: Colors.lightBlue[200],
+              hintColor: Colors.grey.shade800,
+            ),
+            home: AuthWrapper()));
+  }
+}
+
+class AuthWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final User firebaseUser = context.watch<User>();
+    switch (firebaseUser != null && firebaseUser.emailVerified) {
+      case true:
+        return Map();
+        break;
+      default:
+        return Login();
+    }
   }
 }

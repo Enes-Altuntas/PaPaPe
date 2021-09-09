@@ -1,9 +1,8 @@
 import 'package:bulb/Campaigns/campaigns.dart';
 import 'package:bulb/Components/favorite_button.dart';
-import 'package:bulb/Wishes/wishes.dart';
+import 'package:bulb/Components/title.dart';
 import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Products/products.dart';
-import 'package:bulb/Reservations/reservations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -47,7 +46,7 @@ class _StoreState extends State<Store> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
@@ -75,17 +74,10 @@ class _StoreState extends State<Store> {
             tabs: [
               Tab(icon: FaIcon(FontAwesomeIcons.tags, color: Colors.white)),
               Tab(icon: FaIcon(FontAwesomeIcons.bookOpen, color: Colors.white)),
-              Tab(icon: FaIcon(FontAwesomeIcons.bullhorn, color: Colors.white)),
-              Tab(icon: FaIcon(FontAwesomeIcons.bell, color: Colors.white)),
             ],
           ),
           centerTitle: true,
-          title: Text('PaPaPe',
-              style: TextStyle(
-                  fontSize: 45.0,
-                  fontFamily: 'Armatic',
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+          title: TitleApp(),
         ),
         body: (isLoading == false)
             ? Container(
@@ -111,12 +103,6 @@ class _StoreState extends State<Store> {
                         Menu(
                           storeData: widget.storeData,
                         ),
-                        Wishes(
-                          storeData: widget.storeData,
-                        ),
-                        Reservations(
-                          storeData: widget.storeData,
-                        )
                       ],
                     ),
                   ),
@@ -124,7 +110,7 @@ class _StoreState extends State<Store> {
               )
             : Center(
                 child: CircularProgressIndicator(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  color: Colors.amber[900],
                 ),
               ),
       ),

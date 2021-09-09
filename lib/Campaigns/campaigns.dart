@@ -2,8 +2,8 @@ import 'package:bulb/Components/campaign_card.dart';
 import 'package:bulb/Components/not_found.dart';
 import 'package:bulb/Models/campaign_model.dart';
 import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/Services/firestore_service.dart';
-import 'package:bulb/Services/toast_service.dart';
+import 'package:bulb/services/firestore_service.dart';
+import 'package:bulb/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -97,7 +97,7 @@ class _CampaignsState extends State<Campaigns> {
                       default:
                         return Center(
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: Colors.amber[900],
                           ),
                         );
                     }
@@ -108,7 +108,7 @@ class _CampaignsState extends State<Campaigns> {
           )
         : Center(
             child: CircularProgressIndicator(
-              color: Colors.white,
+              color: Colors.amber[900],
             ),
           );
   }

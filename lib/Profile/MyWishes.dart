@@ -1,4 +1,5 @@
 import 'package:bulb/Components/not_found.dart';
+import 'package:bulb/Components/title.dart';
 import 'package:bulb/Components/wish_card.dart';
 import 'package:bulb/Models/wishes_model.dart';
 import 'package:bulb/services/firestore_service.dart';
@@ -23,13 +24,7 @@ class MyWishes extends StatelessWidget {
             ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           elevation: 0,
-          title: Text('PaPaPe',
-              style: TextStyle(
-                fontSize: 45.0,
-                color: Colors.white,
-                fontFamily: 'Armatic',
-                fontWeight: FontWeight.bold,
-              )),
+          title: TitleApp(),
           centerTitle: true,
         ),
         body: Container(
@@ -103,7 +98,7 @@ class MyWishes extends StatelessWidget {
                                 default:
                                   return Center(
                                     child: CircularProgressIndicator(
-                                      color: Theme.of(context).primaryColor,
+                                      color: Colors.amber[900],
                                     ),
                                   );
                               }

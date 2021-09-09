@@ -1,5 +1,6 @@
 import 'package:bulb/Components/not_found.dart';
 import 'package:bulb/Components/reservation_card.dart';
+import 'package:bulb/Components/title.dart';
 import 'package:bulb/Models/reservations_model.dart';
 import 'package:bulb/services/firestore_service.dart';
 import 'package:bulb/services/toast_service.dart';
@@ -45,13 +46,7 @@ class _MyReservationsState extends State<MyReservations> {
             ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           elevation: 0,
-          title: Text('PaPaPe',
-              style: TextStyle(
-                fontSize: 45.0,
-                color: Colors.white,
-                fontFamily: 'Armatic',
-                fontWeight: FontWeight.bold,
-              )),
+          title: TitleApp(),
           centerTitle: true,
         ),
         body: Container(
@@ -134,7 +129,7 @@ class _MyReservationsState extends State<MyReservations> {
                                 default:
                                   return Center(
                                       child: CircularProgressIndicator(
-                                    color: Theme.of(context).primaryColor,
+                                    color: Colors.amber[900],
                                   ));
                               }
                             },

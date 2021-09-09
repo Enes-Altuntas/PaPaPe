@@ -1,8 +1,9 @@
+import 'package:bulb/Components/progress.dart';
 import 'package:bulb/Models/reservations_model.dart';
 import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/Services/authentication_service.dart';
-import 'package:bulb/Services/firestore_service.dart';
-import 'package:bulb/Services/toast_service.dart';
+import 'package:bulb/services/authentication_service.dart';
+import 'package:bulb/services/firestore_service.dart';
+import 'package:bulb/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -128,27 +129,27 @@ class _ReservationState extends State<Reservation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-            Theme.of(context).accentColor,
-            Theme.of(context).primaryColor
-          ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-        ),
-        elevation: 0,
-        centerTitle: true,
-        title: Text('bulb',
-            style: TextStyle(
-                fontSize: 45.0,
-                color: Colors.white,
-                fontFamily: 'Armatic',
-                fontWeight: FontWeight.bold)),
-      ),
-      body: (_isLoading == false)
-          ? Container(
+    return (_isLoading != true)
+        ? Scaffold(
+            resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(colors: [
+                  Theme.of(context).accentColor,
+                  Theme.of(context).primaryColor
+                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+              ),
+              elevation: 0,
+              centerTitle: true,
+              title: Text('bulb',
+                  style: TextStyle(
+                      fontSize: 45.0,
+                      color: Colors.white,
+                      fontFamily: 'Armatic',
+                      fontWeight: FontWeight.bold)),
+            ),
+            body: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Theme.of(context).accentColor,
@@ -179,7 +180,7 @@ class _ReservationState extends State<Reservation> {
                                     " * Rezervasyonunuz ile ilgili işletmenin bilmesi gereken spesifik bilgileri bu alana girmelisiniz.",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontFamily: 'Roboto',
                                         fontSize: 16.0),
                                   ),
@@ -203,7 +204,7 @@ class _ReservationState extends State<Reservation> {
                                     " * Rezerve kişi sayısı, işletmenin, rezervasyonun kaç kişi adına yapılacağını bilmesine olanak sağlar.",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontFamily: 'Roboto',
                                         fontSize: 16.0),
                                   ),
@@ -226,7 +227,7 @@ class _ReservationState extends State<Reservation> {
                                     " * Rezerve isim soyisim alanı, rezervasyonun hangi isim ve soyisim üzerine yapılacağını iletmek içindir.",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontFamily: 'Roboto',
                                         fontSize: 16.0),
                                   ),
@@ -249,7 +250,7 @@ class _ReservationState extends State<Reservation> {
                                     " * Rezervasyon telefonu, işletmenin önemli bir durumda size hangi numaradan ulaşacağını bilmesini sağlamak içindir.",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontFamily: 'Roboto',
                                         fontSize: 16.0),
                                   ),
@@ -273,7 +274,7 @@ class _ReservationState extends State<Reservation> {
                                     " * Rezervasyon tarihi, rezervasyonunuz hangi tarih ve saat için olduğunu anlatır",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontFamily: 'Roboto',
                                         fontSize: 16.0),
                                   ),
@@ -356,12 +357,7 @@ class _ReservationState extends State<Reservation> {
                   ),
                 ),
               ),
-            )
-          : Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            ),
-    );
+            ))
+        : ProgressWidget();
   }
 }

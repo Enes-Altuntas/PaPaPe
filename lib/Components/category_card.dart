@@ -2,7 +2,7 @@ import 'package:bulb/Components/not_found.dart';
 import 'package:bulb/Components/product_card.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
-import 'package:bulb/Services/firestore_service.dart';
+import 'package:bulb/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -132,7 +132,7 @@ class _CategoryCardState extends State<CategoryCard> {
                     default:
                       return Center(
                           child: CircularProgressIndicator(
-                        backgroundColor: Colors.white,
+                        color: Colors.amber[900],
                       ));
                   }
                 }),

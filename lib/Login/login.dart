@@ -1,8 +1,9 @@
 import 'package:bulb/Components/gradient_button.dart';
+import 'package:bulb/Components/progress.dart';
 import 'package:bulb/Login/sign.dart';
 import 'package:bulb/Map/Map.dart';
-import 'package:bulb/Services/authentication_service.dart';
-import 'package:bulb/Services/toast_service.dart';
+import 'package:bulb/services/authentication_service.dart';
+import 'package:bulb/services/toast_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -131,156 +132,142 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return (FirebaseAuth.instance.currentUser != null &&
-            FirebaseAuth.instance.currentUser.emailVerified)
-        ? Map()
-        : Scaffold(
+    return (isLoading != true)
+        ? Scaffold(
             resizeToAvoidBottomInset: false,
-            body: (isLoading == false)
-                ? Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/images/logo.png"),
-                        fit: BoxFit.fill,
-                      ),
+            body: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/logo.png"),
+                  fit: BoxFit.fill,
+                ),
+              ),
+              child: Form(
+                key: formkey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: Text('bulb',
+                          style: TextStyle(
+                              color: Colors.amber[900],
+                              fontFamily: 'Armatic',
+                              fontSize:
+                                  MediaQuery.of(context).size.height / 10)),
                     ),
-                    child: Form(
-                      key: formkey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 20.0),
-                            child: Text('bulb',
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontFamily: 'Armatic',
-                                    fontSize:
-                                        MediaQuery.of(context).size.height /
-                                            10)),
-                          ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            decoration: BoxDecoration(
-                                color: Colors.amber[200],
-                                borderRadius: BorderRadius.circular(50.0)),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  right: 30.0,
-                                  left: 30.0,
-                                  bottom: 20.0,
-                                  top: 30.0),
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                      controller: emailController,
-                                      keyboardType: TextInputType.emailAddress,
-                                      decoration: InputDecoration(
-                                          icon: Icon(
-                                              Icons.account_circle_outlined),
-                                          labelText: 'E-posta'),
-                                      validator: validateMail),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: TextFormField(
-                                      obscureText:
-                                          (isVisible == false) ? true : false,
-                                      controller: passwordController,
-                                      decoration: InputDecoration(
-                                          icon: Icon(Icons.vpn_key_outlined),
-                                          labelText: 'Parola',
-                                          suffixIcon: IconButton(
-                                            icon: (isVisible == false)
-                                                ? Icon(Icons.visibility_off)
-                                                : Icon(Icons.visibility),
-                                            onPressed: () {
-                                              if (isVisible == true) {
-                                                setState(() {
-                                                  isVisible = false;
-                                                });
-                                              } else {
-                                                setState(() {
-                                                  isVisible = true;
-                                                });
-                                              }
-                                            },
-                                          )),
-                                      validator: validatePass,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      TextButton(
-                                          onPressed: rememberPass,
-                                          child: Text(
-                                            'Parolamı Unuttum !',
-                                            style: TextStyle(
-                                                fontFamily: 'Roboto',
-                                                fontWeight: FontWeight.bold,
-                                                color: Theme.of(context)
-                                                    .hintColor),
-                                          )),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: GradientButton(
-                                      buttonText: 'Giriş Yap',
-                                      icon: FontAwesomeIcons.signInAlt,
-                                      onPressed: signIn,
-                                      fontFamily: 'Roboto',
-                                      startColor: Theme.of(context).accentColor,
-                                      finishColor:
-                                          Theme.of(context).primaryColor,
-                                      fontColor: Colors.white,
-                                      iconColor: Colors.white,
-                                      fontSize: 15,
-                                      widthMultiplier: 0.9,
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: GradientButton(
-                                        buttonText: 'Google',
-                                        icon: FontAwesomeIcons.googlePlusG,
-                                        onPressed: googleSignIn,
-                                        startColor:
-                                            Theme.of(context).accentColor,
-                                        finishColor:
-                                            Theme.of(context).primaryColor,
-                                        fontColor: Colors.white,
-                                        iconColor: Colors.white,
-                                        fontFamily: 'Roboto',
-                                        fontSize: 15,
-                                        widthMultiplier: 0.9,
-                                      )),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 30.0),
-                                    child: TextButton(
-                                      onPressed: signUp,
-                                      child: Text(
-                                        'Hesabınız yok mu ? Kayıt Olun !',
-                                        style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          color: Theme.of(context).hintColor,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      decoration: BoxDecoration(
+                          color: Colors.amber[200],
+                          borderRadius: BorderRadius.circular(50.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 30.0, left: 30.0, bottom: 20.0, top: 30.0),
+                        child: Column(
+                          children: [
+                            TextFormField(
+                                controller: emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.account_circle_outlined),
+                                    labelText: 'E-posta'),
+                                validator: validateMail),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                obscureText:
+                                    (isVisible == false) ? true : false,
+                                controller: passwordController,
+                                decoration: InputDecoration(
+                                    icon: Icon(Icons.vpn_key_outlined),
+                                    labelText: 'Parola',
+                                    suffixIcon: IconButton(
+                                      icon: (isVisible == false)
+                                          ? Icon(Icons.visibility_off)
+                                          : Icon(Icons.visibility),
+                                      onPressed: () {
+                                        if (isVisible == true) {
+                                          setState(() {
+                                            isVisible = false;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            isVisible = true;
+                                          });
+                                        }
+                                      },
+                                    )),
+                                validator: validatePass,
                               ),
                             ),
-                          ),
-                        ],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                    onPressed: rememberPass,
+                                    child: Text(
+                                      'Parolamı Unuttum !',
+                                      style: TextStyle(
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context).hintColor),
+                                    )),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: GradientButton(
+                                buttonText: 'Giriş Yap',
+                                icon: FontAwesomeIcons.signInAlt,
+                                onPressed: signIn,
+                                fontFamily: 'Roboto',
+                                startColor: Colors.amber[900],
+                                finishColor: Theme.of(context).primaryColor,
+                                fontColor: Colors.white,
+                                iconColor: Colors.white,
+                                fontSize: 15,
+                                widthMultiplier: 0.9,
+                              ),
+                            ),
+                            Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: GradientButton(
+                                  buttonText: 'Google',
+                                  icon: FontAwesomeIcons.googlePlusG,
+                                  onPressed: googleSignIn,
+                                  startColor: Colors.amber[900],
+                                  finishColor: Theme.of(context).primaryColor,
+                                  fontColor: Colors.white,
+                                  iconColor: Colors.white,
+                                  fontFamily: 'Roboto',
+                                  fontSize: 15,
+                                  widthMultiplier: 0.9,
+                                )),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30.0),
+                              child: TextButton(
+                                onPressed: signUp,
+                                child: Text(
+                                  'Hesabınız yok mu ? Kayıt Olun !',
+                                  style: TextStyle(
+                                    fontFamily: 'Roboto',
+                                    color: Theme.of(context).hintColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  )
-                : Center(
-                    child: CircularProgressIndicator(color: Colors.white),
-                  ));
+                  ],
+                ),
+              ),
+            ))
+        : ProgressWidget();
   }
 }

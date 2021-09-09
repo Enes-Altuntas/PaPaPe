@@ -6,7 +6,7 @@ import 'package:bulb/Models/store_category.dart';
 import 'package:bulb/Models/store_model.dart';
 import 'package:bulb/Models/user_model.dart';
 import 'package:bulb/Models/wishes_model.dart';
-import 'package:bulb/Services/authentication_service.dart';
+import 'package:bulb/services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:bulb/Models/markers_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';

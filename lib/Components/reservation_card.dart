@@ -57,6 +57,17 @@ class _ReservationCardState extends State<ReservationCard> {
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
+                    'İşletme İsmi: ${widget.reservation.reservationStoreName}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).hintColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
                     'Rezerve kişi sayısı: ${widget.reservation.reservationCount.toString()}',
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Theme.of(context).hintColor),

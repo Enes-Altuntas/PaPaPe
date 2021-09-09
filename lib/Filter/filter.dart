@@ -1,6 +1,7 @@
+import 'package:bulb/Components/title.dart';
 import 'package:bulb/Models/store_category.dart';
 import 'package:bulb/Providers/filter_provider.dart';
-import 'package:bulb/Services/firestore_service.dart';
+import 'package:bulb/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -66,13 +67,7 @@ class _FilterState extends State<Filter> {
             ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           elevation: 0,
-          title: Text('PaPaPe',
-              style: TextStyle(
-                fontSize: 45.0,
-                color: Colors.white,
-                fontFamily: 'Armatic',
-                fontWeight: FontWeight.bold,
-              )),
+          title: TitleApp(),
           centerTitle: true,
         ),
         body: Container(
@@ -232,7 +227,8 @@ class _FilterState extends State<Filter> {
                             )
                           : Center(
                               child: CircularProgressIndicator(
-                                  backgroundColor: Colors.white),
+                                color: Colors.amber[900],
+                              ),
                             );
                     }),
               ),

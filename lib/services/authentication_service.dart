@@ -1,5 +1,5 @@
 import 'package:bulb/Models/user_model.dart';
-import 'package:bulb/Services/firestore_service.dart';
+import 'package:bulb/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -124,14 +124,24 @@ class AuthService {
   // *************************************************************************** Kullanıcı İşlemleri
 
   Future<void> saveUser() async {
-    UserModel newUser = UserModel(
-        token: await FirebaseMessaging.instance.getToken(),
-        userId: _firebaseAuth.currentUser.uid,
-        favorites: []);
-
-    await _db
+    UserModel _user = await _db
         .collection('users')
         .doc(_firebaseAuth.currentUser.uid)
-        .set(newUser.toMap());
+        .get()
+        .then((value) {
+      return UserModel.fromFirestore(value.data());
+    });
+
+    if (_user == null) {
+      UserModel newUser = UserModel(
+          token: await FirebaseMessaging.instance.getToken(),
+          userId: _firebaseAuth.currentUser.uid,
+          favorites: []);
+
+      await _db
+          .collection('users')
+          .doc(_firebaseAuth.currentUser.uid)
+          .set(newUser.toMap());
+    }
   }
 }
