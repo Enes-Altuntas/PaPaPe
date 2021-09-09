@@ -66,7 +66,7 @@ class _FilterState extends State<Filter> {
             ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
           elevation: 0,
-          title: Text('bulb',
+          title: Text('PaPaPe',
               style: TextStyle(
                 fontSize: 45.0,
                 color: Colors.white,
@@ -123,11 +123,11 @@ class _FilterState extends State<Filter> {
                                       ),
                                       Switch(
                                           value: _filterProvider.getLive,
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
+                                          activeColor: Colors.amber[900],
                                           inactiveThumbColor:
                                               Theme.of(context).accentColor,
-                                          inactiveTrackColor: Colors.amber[200],
+                                          inactiveTrackColor:
+                                              Theme.of(context).accentColor,
                                           onChanged: (value) {
                                             _filterProvider.changeLive(value);
                                           })
@@ -180,8 +180,7 @@ class _FilterState extends State<Filter> {
                                           min: 1,
                                           max: 16,
                                           divisions: 5,
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
+                                          activeColor: Colors.amber[900],
                                           inactiveColor:
                                               Theme.of(context).accentColor,
                                           label:
@@ -217,11 +216,11 @@ class _FilterState extends State<Filter> {
                                       ),
                                       Switch(
                                           value: _filterProvider.getMode,
-                                          activeColor:
-                                              Theme.of(context).primaryColor,
+                                          activeColor: Colors.amber[900],
                                           inactiveThumbColor:
                                               Theme.of(context).accentColor,
-                                          inactiveTrackColor: Colors.amber[200],
+                                          inactiveTrackColor:
+                                              Theme.of(context).accentColor,
                                           onChanged: (value) {
                                             _filterProvider.changeMode(value);
                                             preferences.setBool('dark', value);

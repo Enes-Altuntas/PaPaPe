@@ -14,6 +14,7 @@ class ReservationsModel {
 
   ReservationsModel(
       {this.reservationDesc,
+      // approved, rejected, canceled
       this.reservationStatus,
       this.reservationCount,
       this.reservationName,

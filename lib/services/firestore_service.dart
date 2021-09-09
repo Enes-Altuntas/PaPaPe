@@ -1,5 +1,4 @@
 import 'package:bulb/Models/campaign_model.dart';
-import 'package:bulb/Models/favorite_model.dart';
 import 'package:bulb/Models/product_category_model.dart';
 import 'package:bulb/Models/product_model.dart';
 import 'package:bulb/Models/reservations_model.dart';
@@ -16,6 +15,10 @@ import 'package:geoflutterfire/geoflutterfire.dart';
 class FirestoreService {
   FirebaseFirestore _db = FirebaseFirestore.instance;
   Geoflutterfire geo = Geoflutterfire();
+
+  // *************************************************************************** Harita İşlemleri
+  // *************************************************************************** Harita İşlemleri
+  // *************************************************************************** Harita İşlemleri
 
   Stream<List<MarkerModel>> getMapData(
       bool active, String cat, double distance, double lat, double long) {
@@ -45,18 +48,9 @@ class FirestoreService {
             .toList());
   }
 
-  Stream<List<CampaignModel>> getStoreCampaigns(docId) {
-    return _db
-        .collection('stores')
-        .doc(docId)
-        .collection('campaigns')
-        .where('delInd', isEqualTo: false)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => CampaignModel.fromFirestore(doc.data()))
-            .toList());
-  }
+  // *************************************************************************** Ürün İşlemleri
+  // *************************************************************************** Ürün İşlemleri
+  // *************************************************************************** Ürün İşlemleri
 
   Stream<List<ProductModel>> getProducts(String storeId, String categoryId) {
     return _db
@@ -83,6 +77,65 @@ class FirestoreService {
             .toList());
   }
 
+  // *************************************************************************** Kullanıcı İşlemleri
+  // *************************************************************************** Kullanıcı İşlemleri
+  // *************************************************************************** Kullanıcı İşlemleri
+
+  Stream<UserModel> getUserDetail() {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+    return _db
+        .collection('users')
+        .doc(_uuid)
+        .snapshots()
+        .map((doc) => UserModel.fromFirestore(doc.data()));
+  }
+
+  // *************************************************************************** İşletme İşlemleri
+  // *************************************************************************** İşletme İşlemleri
+  // *************************************************************************** İşletme İşlemleri
+
+  Future<DocumentSnapshot> getStore(String storeId) async {
+    return await _db.collection('stores').doc(storeId).get();
+  }
+
+  Future<StoreModel> getStoreData(String storeId) async {
+    return await _db.collection('stores').doc(storeId).get().then((value) {
+      return StoreModel.fromFirestore(value.data());
+    });
+  }
+
+  // *************************************************************************** Kategori İşlemleri
+  // *************************************************************************** Kategori İşlemleri
+  // *************************************************************************** Kategori İşlemleri
+
+  Future getCategoryPic(String categoryName) async {
+    return await _db
+        .collection('categories')
+        .where('storeCatName', isEqualTo: categoryName)
+        .get();
+  }
+
+  Future<List<StoreCategory>> getStoreCategories() {
+    return _db
+        .collection('categories')
+        .orderBy('storeCatRow', descending: false)
+        .get()
+        .then((snapshot) => snapshot.docs
+            .map((doc) => StoreCategory.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Future getStoreCat() async {
+    return await _db
+        .collection('categories')
+        .orderBy('storeCatRow', descending: false)
+        .get();
+  }
+
+  // *************************************************************************** Dilek Şikayet İşlemleri
+  // *************************************************************************** Dilek Şikayet İşlemleri
+  // *************************************************************************** Dilek Şikayet İşlemleri
+
   Stream<List<WishesModel>> getReports(String storeId) {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
     return _db
@@ -94,6 +147,30 @@ class FirestoreService {
             .map((doc) => WishesModel.fromFirestore(doc.data()))
             .toList());
   }
+
+  Stream<List<WishesModel>> getMyWishes() {
+    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
+    return _db
+        .collection('wishes')
+        .where('wishUser', isEqualTo: _uuid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => WishesModel.fromFirestore(doc.data()))
+            .toList());
+  }
+
+  Future<String> saveWish(WishesModel wish) async {
+    try {
+      await _db.collection('wishes').doc(wish.wishId).set(wish.toMap());
+      return 'Dilek & Şikayetiniz başarıyla iletilmiştir!';
+    } catch (e) {
+      throw 'Dilek & Şikayetiniz iletilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+    }
+  }
+
+  // *************************************************************************** Rezervasyon İşlemleri
+  // *************************************************************************** Rezervasyon İşlemleri
+  // *************************************************************************** Rezervasyon İşlemleri
 
   Stream<List<ReservationsModel>> getReservations(String storeId) {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();
@@ -116,69 +193,6 @@ class FirestoreService {
         .map((snapshot) => snapshot.docs
             .map((doc) => ReservationsModel.fromFirestore(doc.data()))
             .toList());
-  }
-
-  Stream<List<WishesModel>> getMyWishes() {
-    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
-    return _db
-        .collection('wishes')
-        .where('wishUser', isEqualTo: _uuid)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => WishesModel.fromFirestore(doc.data()))
-            .toList());
-  }
-
-  Stream<UserModel> getUserDetail() {
-    String _uuid = AuthService(FirebaseAuth.instance).getUserId();
-    return _db
-        .collection('users')
-        .doc(_uuid)
-        .snapshots()
-        .map((doc) => UserModel.fromFirestore(doc.data()));
-  }
-
-  Future<List<StoreCategory>> getStoreCategories() {
-    return _db
-        .collection('categories')
-        .orderBy('storeCatRow', descending: false)
-        .get()
-        .then((snapshot) => snapshot.docs
-            .map((doc) => StoreCategory.fromFirestore(doc.data()))
-            .toList());
-  }
-
-  Future<DocumentSnapshot> getStore(String storeId) async {
-    return await _db.collection('stores').doc(storeId).get();
-  }
-
-  Future<StoreModel> getStoreData(String storeId) async {
-    return await _db.collection('stores').doc(storeId).get().then((value) {
-      return StoreModel.fromFirestore(value.data());
-    });
-  }
-
-  Future getStoreCat() async {
-    return await _db
-        .collection('categories')
-        .orderBy('storeCatRow', descending: false)
-        .get();
-  }
-
-  Future getCategoryPic(String categoryName) async {
-    return await _db
-        .collection('categories')
-        .where('storeCatName', isEqualTo: categoryName)
-        .get();
-  }
-
-  Future<String> saveWish(WishesModel wish) async {
-    try {
-      await _db.collection('wishes').doc(wish.wishId).set(wish.toMap());
-      return 'Dilek & Şikayetiniz başarıyla iletilmiştir!';
-    } catch (e) {
-      throw 'Dilek & Şikayetiniz iletilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
-    }
   }
 
   Future<String> saveReservation(ReservationsModel reservation) async {
@@ -205,6 +219,23 @@ class FirestoreService {
     }
   }
 
+  // *************************************************************************** Kampanya İşlemleri
+  // *************************************************************************** Kampanya İşlemleri
+  // *************************************************************************** Kampanya İşlemleri
+
+  Stream<List<CampaignModel>> getStoreCampaigns(docId) {
+    return _db
+        .collection('stores')
+        .doc(docId)
+        .collection('campaigns')
+        .where('delInd', isEqualTo: false)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => CampaignModel.fromFirestore(doc.data()))
+            .toList());
+  }
+
   Future<String> updateCounter(String docId, String campaignId,
       int campaignCounter, String campaignCode) async {
     try {
@@ -220,6 +251,10 @@ class FirestoreService {
       throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
     }
   }
+
+  // *************************************************************************** Favori İşlemleri
+  // *************************************************************************** Favori İşlemleri
+  // *************************************************************************** Favori İşlemleri
 
   Future<bool> manageFavorites(String storeId, UserModel user) async {
     String _uuid = AuthService(FirebaseAuth.instance).getUserId();

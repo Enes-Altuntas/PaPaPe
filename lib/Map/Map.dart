@@ -263,7 +263,7 @@ class _Map extends State<Map> {
               ),
             )
           ],
-          title: Text('bulb',
+          title: Text('PaPaPe',
               style: TextStyle(
                 fontSize: 45.0,
                 fontFamily: 'Armatic',
@@ -317,7 +317,7 @@ class _Map extends State<Map> {
                                                 (_filterProvider.getCat ==
                                                         snapshot.data[index]
                                                             .storeCatName)
-                                                    ? Colors.greenAccent[400]
+                                                    ? Colors.blue[900]
                                                     : Colors.white,
                                             maxRadius: 30.0,
                                           ),
@@ -679,13 +679,7 @@ class _Map extends State<Map> {
                               Container(
                                 padding: EdgeInsets.only(left: 12),
                                 decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          Theme.of(context).accentColor,
-                                          Theme.of(context).primaryColor
-                                        ],
-                                        begin: Alignment.centerRight,
-                                        end: Alignment.centerLeft),
+                                    color: Theme.of(context).primaryColor,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
                                 child: Row(
@@ -696,11 +690,10 @@ class _Map extends State<Map> {
                                     ),
                                     Switch(
                                       value: _filterProvider.getLive,
-                                      activeColor:
-                                          Theme.of(context).primaryColor,
+                                      activeColor: Colors.amber[900],
                                       inactiveThumbColor:
                                           Theme.of(context).accentColor,
-                                      inactiveTrackColor: Colors.amber[200],
+                                      inactiveTrackColor: Colors.white,
                                       onChanged: (bool value) {
                                         changeLive(value);
                                       },

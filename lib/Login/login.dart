@@ -232,6 +232,11 @@ class _LoginState extends State<Login> {
                                       icon: FontAwesomeIcons.signInAlt,
                                       onPressed: signIn,
                                       fontFamily: 'Roboto',
+                                      startColor: Theme.of(context).accentColor,
+                                      finishColor:
+                                          Theme.of(context).primaryColor,
+                                      fontColor: Colors.white,
+                                      iconColor: Colors.white,
                                       fontSize: 15,
                                       widthMultiplier: 0.9,
                                     ),
@@ -242,6 +247,12 @@ class _LoginState extends State<Login> {
                                         buttonText: 'Google',
                                         icon: FontAwesomeIcons.googlePlusG,
                                         onPressed: googleSignIn,
+                                        startColor:
+                                            Theme.of(context).accentColor,
+                                        finishColor:
+                                            Theme.of(context).primaryColor,
+                                        fontColor: Colors.white,
+                                        iconColor: Colors.white,
                                         fontFamily: 'Roboto',
                                         fontSize: 15,
                                         widthMultiplier: 0.9,

@@ -162,6 +162,7 @@ class _CommentState extends State<Wish> {
                                   child: TextFormField(
                                     validator: _validateComDesc,
                                     controller: _reportDesc,
+                                    keyboardType: TextInputType.text,
                                     maxLength: 255,
                                     maxLines: 3,
                                     decoration: InputDecoration(

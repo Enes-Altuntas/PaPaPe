@@ -204,6 +204,11 @@ class _SignState extends State<Sign> {
                                       buttonText: 'Kayıt Ol',
                                       fontFamily: 'Roboto',
                                       fontSize: 15,
+                                      startColor: Theme.of(context).accentColor,
+                                      finishColor:
+                                          Theme.of(context).primaryColor,
+                                      fontColor: Colors.white,
+                                      iconColor: Colors.white,
                                       onPressed: signUp,
                                       icon: FontAwesomeIcons.save,
                                       widthMultiplier: 0.9,

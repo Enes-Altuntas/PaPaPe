@@ -26,7 +26,7 @@ class StoreCards extends StatelessWidget {
                   child: Text(
                     this.store.storeName,
                     style: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.amber[900],
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
                         fontFamily: 'Roboto'),
@@ -39,7 +39,7 @@ class StoreCards extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
+                  color: Colors.amber[900],
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
               child: (this.store.storePicRef != null)
                   ? Image.network(

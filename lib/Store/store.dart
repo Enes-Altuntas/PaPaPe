@@ -80,7 +80,7 @@ class _StoreState extends State<Store> {
             ],
           ),
           centerTitle: true,
-          title: Text('Bulb',
+          title: Text('PaPaPe',
               style: TextStyle(
                   fontSize: 45.0,
                   fontFamily: 'Armatic',

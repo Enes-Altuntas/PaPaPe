@@ -26,7 +26,7 @@ class FavoriteButton extends StatelessWidget {
                         snapshot.data.favorites != null &&
                         snapshot.data.favorites.length > 0 &&
                         snapshot.data.favorites.contains(storeId)
-                    ? Colors.green
+                    ? Colors.amber[900]
                     : Colors.white),
               ));
         });

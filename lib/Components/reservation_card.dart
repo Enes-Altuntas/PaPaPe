@@ -45,7 +45,7 @@ class _ReservationCardState extends State<ReservationCard> {
               'İsim-Soyisim: ${widget.reservation.reservationName}',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Colors.amber[900],
                 fontWeight: FontWeight.bold,
               ),
             ),

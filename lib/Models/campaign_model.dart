@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CampaignModel {
+  // inactive , wait, active
   final String campaignStatus;
   String campaignPicRef;
   final bool automatedStart;

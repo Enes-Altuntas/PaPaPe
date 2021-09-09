@@ -19,7 +19,10 @@ class AuthService {
     return _firebaseAuth.currentUser.uid;
   }
 
-  // Giriş
+  // *************************************************************************** Giriş İşlemleri
+  // *************************************************************************** Giriş İşlemleri
+  // *************************************************************************** Giriş İşlemleri
+
   Future<String> signIn({String email, String password}) async {
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
@@ -50,16 +53,19 @@ class AuthService {
         final credential = GoogleAuthProvider.credential(
             accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-        await saveUser();
-
         await _firebaseAuth.signInWithCredential(credential);
+
+        await saveUser();
       }
     } catch (e) {
       throw 'Sistemde bir hata meydana geldi !';
     }
   }
 
-  // Kayıt
+  // *************************************************************************** Kayıt İşlemleri
+  // *************************************************************************** Kayıt İşlemleri
+  // *************************************************************************** Kayıt İşlemleri
+
   Future<String> signUp({String email, String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
@@ -85,6 +91,10 @@ class AuthService {
     }
   }
 
+  // *************************************************************************** Parola İşlemleri
+  // *************************************************************************** Parola İşlemleri
+  // *************************************************************************** Parola İşlemleri
+
   Future<String> rememberPass({String email}) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
@@ -94,7 +104,10 @@ class AuthService {
     }
   }
 
-  // Çıkış
+  // *************************************************************************** Çıkış İşlemleri
+  // *************************************************************************** Çıkış İşlemleri
+  // *************************************************************************** Çıkış İşlemleri
+
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
@@ -105,6 +118,10 @@ class AuthService {
       return e.message;
     }
   }
+
+  // *************************************************************************** Kullanıcı İşlemleri
+  // *************************************************************************** Kullanıcı İşlemleri
+  // *************************************************************************** Kullanıcı İşlemleri
 
   Future<void> saveUser() async {
     UserModel newUser = UserModel(

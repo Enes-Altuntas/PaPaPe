@@ -121,11 +121,11 @@ class _CategoryCardState extends State<CategoryCard> {
                           return NotFound(
                             notFoundIcon: FontAwesomeIcons.sadTear,
                             notFoundIconColor: Theme.of(context).primaryColor,
-                            notFoundIconSize: 75,
+                            notFoundIconSize: 30,
                             notFoundText:
                                 "'${widget.category.categoryName}' kategorisinde hiçbir ürün bulunamamıştır !",
                             notFoundTextColor: Theme.of(context).primaryColor,
-                            notFoundTextSize: 30.0,
+                            notFoundTextSize: 20.0,
                           );
                       }
                       break;
