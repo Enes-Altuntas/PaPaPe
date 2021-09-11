@@ -58,14 +58,19 @@ class _CommentCardState extends State<CommentCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                      'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
+                  child: Text('İşletme İsmi: ${widget.wish.wishStoreName}',
                       style: TextStyle(
                           color: Theme.of(context).hintColor,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0)),
                 ),
+                Text('Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
+                    style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15.0)),
               ],
             ),
           ),
