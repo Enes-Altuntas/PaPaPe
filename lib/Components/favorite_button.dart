@@ -1,6 +1,6 @@
-import 'package:bulb/Models/user_model.dart';
-import 'package:bulb/services/firestore_service.dart';
-import 'package:bulb/services/toast_service.dart';
+import 'package:papape/Models/user_model.dart';
+import 'package:papape/services/firestore_service.dart';
+import 'package:papape/services/toast_service.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteButton extends StatelessWidget {

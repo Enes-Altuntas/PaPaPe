@@ -1,14 +1,14 @@
-import 'package:bulb/Components/bottom_sheet.dart';
-import 'package:bulb/Components/category_brand.dart';
-import 'package:bulb/Components/not_found.dart';
-import 'package:bulb/Components/popup_menu.dart';
-import 'package:bulb/Components/title.dart';
-import 'package:bulb/Filter/filter.dart';
-import 'package:bulb/Models/markers_model.dart';
-import 'package:bulb/Models/store_category.dart';
-import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/Providers/filter_provider.dart';
-import 'package:bulb/services/firestore_service.dart';
+import 'package:papape/Components/bottom_sheet.dart';
+import 'package:papape/Components/category_brand.dart';
+import 'package:papape/Components/not_found.dart';
+import 'package:papape/Components/popup_menu.dart';
+import 'package:papape/Components/title.dart';
+import 'package:papape/Filter/filter.dart';
+import 'package:papape/Models/markers_model.dart';
+import 'package:papape/Models/store_category.dart';
+import 'package:papape/Models/store_model.dart';
+import 'package:papape/Providers/filter_provider.dart';
+import 'package:papape/services/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -150,13 +150,9 @@ class _Map extends State<Map> {
   }
 
   showStoreBottomSheet(MarkerModel element) async {
-    StoreModel store;
-    String id;
-    await firestoreService.getStore(element.storeId).then((value) {
-      if (value.data() != null) {
-        store = StoreModel.fromFirestore(value.data());
-        id = value.id;
-      }
+    StoreModel store =
+        await firestoreService.getStore(element.storeId).then((value) {
+      return StoreModel.fromFirestore(value.data());
     });
     showModalBottomSheet(
         context: context,
@@ -167,7 +163,6 @@ class _Map extends State<Map> {
         ),
         builder: (context) {
           return BottomSheetMap(
-            id: id,
             store: store,
           );
         });
@@ -177,14 +172,7 @@ class _Map extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 5,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Theme.of(context).accentColor,
-              Theme.of(context).primaryColor
-            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-          ),
+          elevation: 0,
           leading: GestureDetector(
               onTap: () {
                 Navigator.of(context)
@@ -218,8 +206,8 @@ class _Map extends State<Map> {
                             Theme.of(context).accentColor,
                             Theme.of(context).primaryColor
                           ],
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft),
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter),
                     ),
                     child: FutureBuilder<List<StoreCategory>>(
                         future: _getStoreCategories(),
@@ -320,16 +308,16 @@ class _Map extends State<Map> {
                                                 : NotFound(
                                                     notFoundIcon:
                                                         FontAwesomeIcons
-                                                            .sadTear,
+                                                            .exclamationTriangle,
                                                     notFoundIconColor:
                                                         Colors.amber[900],
-                                                    notFoundIconSize: 100.0,
+                                                    notFoundIconSize: 60.0,
                                                     notFoundText:
                                                         "Aradığınız kategoride işletme bulunmuyor !",
                                                     notFoundTextColor:
                                                         Theme.of(context)
                                                             .primaryColor,
-                                                    notFoundTextSize: 30.0,
+                                                    notFoundTextSize: 40.0,
                                                   )
                                             : Center(
                                                 child:

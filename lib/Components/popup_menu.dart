@@ -1,8 +1,8 @@
-import 'package:bulb/Login/login.dart';
-import 'package:bulb/Profile/MyFavorites.dart';
-import 'package:bulb/Profile/MyReservations.dart';
-import 'package:bulb/Profile/MyWishes.dart';
-import 'package:bulb/services/authentication_service.dart';
+import 'package:papape/Login/login.dart';
+import 'package:papape/Profile/MyFavorites.dart';
+import 'package:papape/Profile/MyReservations.dart';
+import 'package:papape/Profile/MyWishes.dart';
+import 'package:papape/services/authentication_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';

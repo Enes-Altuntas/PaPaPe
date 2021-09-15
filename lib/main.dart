@@ -1,7 +1,7 @@
-import 'package:bulb/Login/login.dart';
-import 'package:bulb/Map/Map.dart';
-import 'package:bulb/Providers/filter_provider.dart';
-import 'package:bulb/services/authentication_service.dart';
+import 'package:papape/Login/login.dart';
+import 'package:papape/Map/Map.dart';
+import 'package:papape/Providers/filter_provider.dart';
+import 'package:papape/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
               create: (context) => context.read<AuthService>().authStateChanges)
         ],
         child: MaterialApp(
-            title: 'BULB',
+            title: 'PaPaPe',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primaryColor: Colors.lightBlue[800],

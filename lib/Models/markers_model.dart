@@ -1,4 +1,4 @@
-import 'package:bulb/Models/position_model.dart';
+import 'package:papape/Models/position_model.dart';
 
 class MarkerModel {
   //inactive , wait , active

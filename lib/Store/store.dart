@@ -1,8 +1,9 @@
-import 'package:bulb/Campaigns/campaigns.dart';
-import 'package:bulb/Components/favorite_button.dart';
-import 'package:bulb/Components/title.dart';
-import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/Products/products.dart';
+import 'package:papape/Campaigns/campaigns.dart';
+import 'package:papape/Components/favorite_button.dart';
+import 'package:papape/Components/title.dart';
+import 'package:papape/Models/store_model.dart';
+import 'package:papape/Products/products.dart';
+import 'package:papape/Store/store_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,9 +12,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class Store extends StatefulWidget {
   final StoreModel storeData;
-  final String docId;
 
-  Store({Key key, this.storeData, this.docId}) : super(key: key);
+  Store({Key key, this.storeData}) : super(key: key);
 
   @override
   _StoreState createState() => _StoreState();
@@ -46,13 +46,13 @@ class _StoreState extends State<Store> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           flexibleSpace: Container(
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
-              Theme.of(context).accentColor,
+              Theme.of(context).primaryColor,
               Theme.of(context).primaryColor
             ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
           ),
@@ -74,6 +74,7 @@ class _StoreState extends State<Store> {
             tabs: [
               Tab(icon: FaIcon(FontAwesomeIcons.tags, color: Colors.white)),
               Tab(icon: FaIcon(FontAwesomeIcons.bookOpen, color: Colors.white)),
+              Tab(icon: FaIcon(FontAwesomeIcons.store, color: Colors.white)),
             ],
           ),
           centerTitle: true,
@@ -85,13 +86,13 @@ class _StoreState extends State<Store> {
                     gradient: LinearGradient(colors: [
                   Theme.of(context).accentColor,
                   Theme.of(context).primaryColor
-                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 20.0),
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).accentColor,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(50.0),
                             topRight: Radius.circular(50.0))),
@@ -101,6 +102,9 @@ class _StoreState extends State<Store> {
                           storeData: widget.storeData,
                         ),
                         Menu(
+                          storeData: widget.storeData,
+                        ),
+                        StoreInfo(
                           storeData: widget.storeData,
                         ),
                       ],

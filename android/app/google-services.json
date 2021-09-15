@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:641494071867:android:b8411a6ffb5a5e4a097a1e",
+        "mobilesdk_app_id": "1:641494071867:android:90b40bce38d02c98097a1e",
         "android_client_info": {
-          "package_name": "com.blv.bulovva"
+          "package_name": "com.papape.papape"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "641494071867-s1vmet6illl0raqj0p6ikfcq8uh51v0m.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.blv.bulovva",
-            "certificate_hash": "cffe4583c2b24eb9db422494aa113680dd6c512c"
-          }
-        },
         {
           "client_id": "641494071867-qt6fqsui6mv6nds200e97o37rdibfms8.apps.googleusercontent.com",
           "client_type": 3
@@ -39,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "641494071867-itg07jl2f30uksegv982or5ehf1tplk2.apps.googleusercontent.com",
+              "client_id": "641494071867-i7o3k064oepg0mu8ht1kla7kucn3ljn9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.blv.bulovvaStore"
+                "bundle_id": "com.blv.bulovva"
               }
             }
           ]
@@ -51,41 +43,41 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:641494071867:android:f034ae53bcd04f0c097a1e",
+        "mobilesdk_app_id": "1:641494071867:android:f213283611528800097a1e",
         "android_client_info": {
-          "package_name": "com.blv.bulovva_store"
+          "package_name": "com.papape.papape_store"
         }
       },
       "oauth_client": [
         {
-          "client_id": "641494071867-00ff59d8adm5j6f7ah5m9npjemsue7dd.apps.googleusercontent.com",
+          "client_id": "641494071867-a7pok14onlmvjb307h92q4v0t1vnd7bf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blv.bulovva_store",
+            "package_name": "com.papape.papape_store",
             "certificate_hash": "743d9e67d6a5766d7e9d3ae329f6fd74c2a15623"
           }
         },
         {
-          "client_id": "641494071867-bcedem4h5spoot34j7vm63j3ot5v8jtp.apps.googleusercontent.com",
+          "client_id": "641494071867-aae5f41uhqhck49ovfsvvo6jf15ocei4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blv.bulovva_store",
+            "package_name": "com.papape.papape_store",
             "certificate_hash": "30406aa1496cb201c80ff775f1bf1c86b9e3b226"
           }
         },
         {
-          "client_id": "641494071867-pqiolcj2g82fe92pbug0vfprabsbp19h.apps.googleusercontent.com",
+          "client_id": "641494071867-sg51fad8m54rr6ofuube8oeppngn9a7h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blv.bulovva_store",
+            "package_name": "com.papape.papape_store",
             "certificate_hash": "d8b243228cde3521b95030ee33dd470b0bf2ebb6"
           }
         },
         {
-          "client_id": "641494071867-sdltdkl6hr19vd8js32rbl6jaktqt14f.apps.googleusercontent.com",
+          "client_id": "641494071867-sv50oa759mc0jm0o14dbk1342ipgnkp4.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.blv.bulovva_store",
+            "package_name": "com.papape.papape_store",
             "certificate_hash": "cffe4583c2b24eb9db422494aa113680dd6c512c"
           }
         },
@@ -107,10 +99,10 @@
               "client_type": 3
             },
             {
-              "client_id": "641494071867-itg07jl2f30uksegv982or5ehf1tplk2.apps.googleusercontent.com",
+              "client_id": "641494071867-i7o3k064oepg0mu8ht1kla7kucn3ljn9.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.blv.bulovvaStore"
+                "bundle_id": "com.blv.bulovva"
               }
             }
           ]

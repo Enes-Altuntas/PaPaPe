@@ -1,9 +1,9 @@
-import 'package:bulb/Components/campaign_card.dart';
-import 'package:bulb/Components/not_found.dart';
-import 'package:bulb/Models/campaign_model.dart';
-import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/services/firestore_service.dart';
-import 'package:bulb/services/toast_service.dart';
+import 'package:papape/Components/campaign_card.dart';
+import 'package:papape/Components/not_found.dart';
+import 'package:papape/Models/campaign_model.dart';
+import 'package:papape/Models/store_model.dart';
+import 'package:papape/services/firestore_service.dart';
+import 'package:papape/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,65 +43,81 @@ class _CampaignsState extends State<Campaigns> {
     return (isLoading == false)
         ? Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Text(
-                  'Kampanyalar',
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 30.0,
-                      fontFamily: 'Armatic',
-                      fontWeight: FontWeight.bold),
+              SizedBox(
+                height: 60.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Kampanyalar',
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 30.0,
+                          fontFamily: 'Armatic',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
               ),
               Flexible(
-                child: StreamBuilder<List<CampaignModel>>(
-                  stream: FirestoreService()
-                      .getStoreCampaigns(widget.storeData.storeId),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.active:
-                        switch (snapshot.hasData && snapshot.data.length > 0) {
-                          case true:
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: ListView.builder(
-                                  itemCount: snapshot.data.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 20.0),
-                                      child: CampaignCard(
-                                        campaign: snapshot.data[index],
-                                        onPressed: () {
-                                          getCampaignKey(snapshot.data[index]);
-                                        },
-                                      ),
-                                    );
-                                  }),
-                            );
-                            break;
-                          default:
-                            return NotFound(
-                              notFoundIcon: FontAwesomeIcons.sadTear,
-                              notFoundIconColor: Theme.of(context).primaryColor,
-                              notFoundIconSize: 75,
-                              notFoundText:
-                                  'Şu an yayınlamış olduğunuz hiçbir kampanya bulunmamaktadır.',
-                              notFoundTextColor: Theme.of(context).primaryColor,
-                              notFoundTextSize: 30.0,
-                            );
-                        }
-                        break;
-                      default:
-                        return Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.amber[900],
-                          ),
-                        );
-                    }
-                  },
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(50.0),
+                          topRight: Radius.circular(50.0))),
+                  child: StreamBuilder<List<CampaignModel>>(
+                    stream: FirestoreService()
+                        .getStoreCampaigns(widget.storeData.storeId),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.active:
+                          switch (
+                              snapshot.hasData && snapshot.data.length > 0) {
+                            case true:
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10.0),
+                                child: ListView.builder(
+                                    itemCount: snapshot.data.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20.0),
+                                        child: CampaignCard(
+                                          campaign: snapshot.data[index],
+                                          onPressed: () {
+                                            getCampaignKey(
+                                                snapshot.data[index]);
+                                          },
+                                        ),
+                                      );
+                                    }),
+                              );
+                              break;
+                            default:
+                              return NotFound(
+                                notFoundIcon:
+                                    FontAwesomeIcons.exclamationTriangle,
+                                notFoundIconColor: Colors.amber[900],
+                                notFoundIconSize: 60,
+                                notFoundText:
+                                    'Üzgünüz, şu anda işletmenin yayınlamış olduğu bir kampanya bulunmamaktadır.',
+                                notFoundTextColor:
+                                    Theme.of(context).primaryColor,
+                                notFoundTextSize: 40.0,
+                              );
+                          }
+                          break;
+                        default:
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.amber[900],
+                            ),
+                          );
+                      }
+                    },
+                  ),
                 ),
               ),
             ],

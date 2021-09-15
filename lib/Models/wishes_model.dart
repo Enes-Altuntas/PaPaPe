@@ -5,6 +5,7 @@ class WishesModel {
   final String wishTitle;
   final String wishId;
   final String wishUser;
+  final String wishUserPhone;
   final Timestamp createdAt;
   final String wishStore;
   final String wishStoreName;
@@ -14,6 +15,7 @@ class WishesModel {
       this.wishTitle,
       this.wishId,
       this.wishUser,
+      this.wishUserPhone,
       this.createdAt,
       this.wishStore,
       this.wishStoreName});
@@ -23,6 +25,7 @@ class WishesModel {
         wishTitle = data['wishTitle'],
         wishId = data['wishId'],
         wishUser = data['wishUser'],
+        wishUserPhone = data['wishUserPhone'],
         createdAt = data['createdAt'],
         wishStore = data['wishStore'],
         wishStoreName = data['wishStoreName'];
@@ -33,6 +36,7 @@ class WishesModel {
       'wishTitle': wishTitle,
       'wishId': wishId,
       'wishUser': wishUser,
+      'wishUserPhone': wishUserPhone,
       'createdAt': createdAt,
       'wishStore': wishStore,
       'wishStoreName': wishStoreName,

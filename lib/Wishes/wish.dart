@@ -1,9 +1,10 @@
-import 'package:bulb/Components/progress.dart';
-import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/Models/wishes_model.dart';
-import 'package:bulb/services/authentication_service.dart';
-import 'package:bulb/services/firestore_service.dart';
-import 'package:bulb/services/toast_service.dart';
+import 'package:papape/Components/progress.dart';
+import 'package:papape/Components/title.dart';
+import 'package:papape/Models/store_model.dart';
+import 'package:papape/Models/wishes_model.dart';
+import 'package:papape/services/authentication_service.dart';
+import 'package:papape/services/firestore_service.dart';
+import 'package:papape/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class Wish extends StatefulWidget {
 class _CommentState extends State<Wish> {
   final TextEditingController _reportTitle = TextEditingController();
   final TextEditingController _reportDesc = TextEditingController();
+  final TextEditingController _reportPhone = TextEditingController();
   GlobalKey<FormState> formKeyComment = GlobalKey<FormState>();
   bool _isLoading = false;
 
@@ -47,6 +49,14 @@ class _CommentState extends State<Wish> {
     return null;
   }
 
+  String _validatePhone(String value) {
+    if (value.contains(RegExp(r'[^\d]')) == true) {
+      return '* Sadece rakam içermelidir !';
+    }
+
+    return null;
+  }
+
   saveComment() {
     if (formKeyComment.currentState.validate()) {
       setState(() {
@@ -59,6 +69,7 @@ class _CommentState extends State<Wish> {
           wishDesc: _reportDesc.text,
           wishStore: widget.store.storeId,
           wishStoreName: widget.store.storeName,
+          wishUserPhone: _reportPhone.text,
           wishUser: AuthService(FirebaseAuth.instance).getUserId(),
           createdAt: Timestamp.now());
 
@@ -82,29 +93,13 @@ class _CommentState extends State<Wish> {
     return (_isLoading != true)
         ? Scaffold(
             resizeToAvoidBottomInset: true,
-            appBar: AppBar(
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Theme.of(context).accentColor,
-                  Theme.of(context).primaryColor
-                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-              ),
-              elevation: 0,
-              centerTitle: true,
-              title: Text('bulb',
-                  style: TextStyle(
-                      fontSize: 45.0,
-                      color: Colors.white,
-                      fontFamily: 'Armatic',
-                      fontWeight: FontWeight.bold)),
-            ),
+            appBar: AppBar(elevation: 0, centerTitle: true, title: TitleApp()),
             body: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Theme.of(context).accentColor,
                 Theme.of(context).primaryColor
-              ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
               child: Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: Container(
@@ -172,6 +167,30 @@ class _CommentState extends State<Wish> {
                                   ),
                                 ),
                                 Padding(
+                                  padding: const EdgeInsets.only(top: 40.0),
+                                  child: Text(
+                                    " * İletişim numarası doldurması zorunlu bir alan değildir. İşletmenin sizinle iletişime geçmesini istiyorsanız doldurabilirsiniz.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Colors.amber[900],
+                                        fontFamily: 'Roboto',
+                                        fontSize: 16.0),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: TextFormField(
+                                    validator: _validatePhone,
+                                    controller: _reportPhone,
+                                    keyboardType: TextInputType.phone,
+                                    maxLength: 10,
+                                    decoration: InputDecoration(
+                                        prefix: Text('+90'),
+                                        labelText: 'İletişin Numarası',
+                                        border: OutlineInputBorder()),
+                                  ),
+                                ),
+                                Padding(
                                   padding: const EdgeInsets.only(
                                       top: 20.0, bottom: 60.0),
                                   child: Container(
@@ -182,7 +201,7 @@ class _CommentState extends State<Wish> {
                                             BorderRadius.circular(50.0),
                                         gradient: LinearGradient(
                                             colors: [
-                                              Theme.of(context).accentColor,
+                                              Theme.of(context).primaryColor,
                                               Theme.of(context).primaryColor
                                             ],
                                             begin: Alignment.centerRight,

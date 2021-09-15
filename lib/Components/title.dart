@@ -5,12 +5,17 @@ class TitleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('PaPaPe',
-        style: TextStyle(
-          fontSize: 45.0,
-          fontFamily: 'Armatic',
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ));
+    return RichText(
+        text: TextSpan(
+            style: TextStyle(
+                fontSize: 45.0,
+                color: Colors.white,
+                fontFamily: 'Armatic',
+                fontWeight: FontWeight.bold),
+            children: [
+          TextSpan(text: 'Pa', style: TextStyle(color: Colors.red)),
+          TextSpan(text: 'Pa', style: TextStyle(color: Colors.amber[600])),
+          TextSpan(text: 'Pe', style: TextStyle(color: Colors.green[300]))
+        ]));
   }
 }

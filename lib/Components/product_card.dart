@@ -1,4 +1,4 @@
-import 'package:bulb/Models/product_model.dart';
+import 'package:papape/Models/product_model.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatefulWidget {
@@ -48,7 +48,8 @@ class _ProductCardState extends State<ProductCard> {
               decoration: BoxDecoration(
                   color: Colors.amber[900],
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              child: (widget.product.productPicRef != null)
+              child: (widget.product.productPicRef != null &&
+                      widget.product.productPicRef.isNotEmpty)
                   ? Image.network(
                       widget.product.productPicRef,
                       fit: BoxFit.fill,

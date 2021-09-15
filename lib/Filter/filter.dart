@@ -1,7 +1,7 @@
-import 'package:bulb/Components/title.dart';
-import 'package:bulb/Models/store_category.dart';
-import 'package:bulb/Providers/filter_provider.dart';
-import 'package:bulb/services/firestore_service.dart';
+import 'package:papape/Components/title.dart';
+import 'package:papape/Models/store_category.dart';
+import 'package:papape/Providers/filter_provider.dart';
+import 'package:papape/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -59,13 +59,6 @@ class _FilterState extends State<Filter> {
           iconTheme: IconThemeData(
             color: Colors.white, //change your color here
           ),
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Theme.of(context).accentColor,
-              Theme.of(context).primaryColor
-            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-          ),
           elevation: 0,
           title: TitleApp(),
           centerTitle: true,
@@ -76,7 +69,7 @@ class _FilterState extends State<Filter> {
               gradient: LinearGradient(colors: [
             Theme.of(context).accentColor,
             Theme.of(context).primaryColor
-          ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+          ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
@@ -103,7 +96,7 @@ class _FilterState extends State<Filter> {
                                     'Arama Seçenekleri',
                                     style: TextStyle(
                                         fontFamily: 'Bebas',
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontSize: 25.0),
                                   ),
                                 ),
@@ -196,7 +189,7 @@ class _FilterState extends State<Filter> {
                                     'Görüntü Seçenekleri',
                                     style: TextStyle(
                                         fontFamily: 'Bebas',
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.amber[900],
                                         fontSize: 25.0),
                                   ),
                                 ),

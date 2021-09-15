@@ -1,17 +1,18 @@
-import 'package:bulb/Models/store_model.dart';
+import 'package:papape/Models/store_model.dart';
 import 'package:flutter/material.dart';
 
 class StoreCards extends StatelessWidget {
   final StoreModel store;
+  final Function onTap;
 
-  const StoreCards({Key key, this.store}) : super(key: key);
+  const StoreCards({Key key, this.store, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
+        borderRadius: BorderRadius.circular(30.0),
       ),
       clipBehavior: Clip.antiAlias,
       color: Colors.white,
@@ -20,6 +21,7 @@ class StoreCards extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(15.0),
           child: ListTile(
+            onTap: onTap,
             title: Row(
               children: [
                 Flexible(
@@ -41,7 +43,8 @@ class StoreCards extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.amber[900],
                   borderRadius: BorderRadius.all(Radius.circular(15.0))),
-              child: (this.store.storePicRef != null)
+              child: (this.store.storePicRef != null &&
+                      this.store.storePicRef.isNotEmpty)
                   ? Image.network(
                       this.store.storePicRef,
                       fit: BoxFit.fill,

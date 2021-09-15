@@ -1,14 +1,14 @@
-import 'package:bulb/Models/campaign_model.dart';
-import 'package:bulb/Models/product_category_model.dart';
-import 'package:bulb/Models/product_model.dart';
-import 'package:bulb/Models/reservations_model.dart';
-import 'package:bulb/Models/store_category.dart';
-import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/Models/user_model.dart';
-import 'package:bulb/Models/wishes_model.dart';
-import 'package:bulb/services/authentication_service.dart';
+import 'package:papape/Models/campaign_model.dart';
+import 'package:papape/Models/product_category_model.dart';
+import 'package:papape/Models/product_model.dart';
+import 'package:papape/Models/reservations_model.dart';
+import 'package:papape/Models/store_category.dart';
+import 'package:papape/Models/store_model.dart';
+import 'package:papape/Models/user_model.dart';
+import 'package:papape/Models/wishes_model.dart';
+import 'package:papape/services/authentication_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bulb/Models/markers_model.dart';
+import 'package:papape/Models/markers_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geoflutterfire/geoflutterfire.dart';
 

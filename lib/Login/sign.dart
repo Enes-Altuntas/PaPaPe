@@ -1,8 +1,8 @@
-import 'package:bulb/Components/gradient_button.dart';
-import 'package:bulb/Components/progress.dart';
-import 'package:bulb/Login/login.dart';
-import 'package:bulb/services/authentication_service.dart';
-import 'package:bulb/services/toast_service.dart';
+import 'package:papape/Components/gradient_button.dart';
+import 'package:papape/Components/progress.dart';
+import 'package:papape/Login/login.dart';
+import 'package:papape/services/authentication_service.dart';
+import 'package:papape/services/toast_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -102,31 +102,39 @@ class _SignState extends State<Sign> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/logo.png"),
-                  fit: BoxFit.fill,
-                ),
-              ),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               child: Form(
                 key: formkey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Text('bulb',
-                          style: TextStyle(
-                              color: Colors.amber[900],
-                              fontFamily: 'Armatic',
-                              fontSize:
-                                  MediaQuery.of(context).size.height / 10)),
-                    ),
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                    fontSize: 70.0,
+                                    color: Colors.white,
+                                    fontFamily: 'Armatic',
+                                    fontWeight: FontWeight.bold),
+                                children: [
+                              TextSpan(
+                                  text: 'Pa',
+                                  style: TextStyle(color: Colors.red)),
+                              TextSpan(
+                                  text: 'Pa',
+                                  style: TextStyle(color: Colors.amber[600])),
+                              TextSpan(
+                                  text: 'Pe',
+                                  style: TextStyle(color: Colors.green[300]))
+                            ]))),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.7,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.0),
-                        color: Colors.amber[200],
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(50.0),
+                            topRight: Radius.circular(50.0)),
+                        color: Colors.white,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -202,7 +210,7 @@ class _SignState extends State<Sign> {
                                   buttonText: 'Kayıt Ol',
                                   fontFamily: 'Roboto',
                                   fontSize: 15,
-                                  startColor: Colors.amber[900],
+                                  startColor: Theme.of(context).primaryColor,
                                   finishColor: Theme.of(context).primaryColor,
                                   fontColor: Colors.white,
                                   iconColor: Colors.white,
@@ -216,8 +224,8 @@ class _SignState extends State<Sign> {
                                   buttonText: 'Geri',
                                   fontFamily: 'Roboto',
                                   fontSize: 15,
-                                  startColor: Colors.amber[900],
-                                  finishColor: Theme.of(context).primaryColor,
+                                  startColor: Colors.amber[800],
+                                  finishColor: Colors.amber[800],
                                   fontColor: Colors.white,
                                   iconColor: Colors.white,
                                   onPressed: () {

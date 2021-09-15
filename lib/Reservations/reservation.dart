@@ -1,9 +1,10 @@
-import 'package:bulb/Components/progress.dart';
-import 'package:bulb/Models/reservations_model.dart';
-import 'package:bulb/Models/store_model.dart';
-import 'package:bulb/services/authentication_service.dart';
-import 'package:bulb/services/firestore_service.dart';
-import 'package:bulb/services/toast_service.dart';
+import 'package:papape/Components/progress.dart';
+import 'package:papape/Components/title.dart';
+import 'package:papape/Models/reservations_model.dart';
+import 'package:papape/Models/store_model.dart';
+import 'package:papape/services/authentication_service.dart';
+import 'package:papape/services/firestore_service.dart';
+import 'package:papape/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -132,29 +133,13 @@ class _ReservationState extends State<Reservation> {
     return (_isLoading != true)
         ? Scaffold(
             resizeToAvoidBottomInset: true,
-            appBar: AppBar(
-              flexibleSpace: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Theme.of(context).accentColor,
-                  Theme.of(context).primaryColor
-                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-              ),
-              elevation: 0,
-              centerTitle: true,
-              title: Text('bulb',
-                  style: TextStyle(
-                      fontSize: 45.0,
-                      color: Colors.white,
-                      fontFamily: 'Armatic',
-                      fontWeight: FontWeight.bold)),
-            ),
+            appBar: AppBar(elevation: 0, centerTitle: true, title: TitleApp()),
             body: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Theme.of(context).accentColor,
                 Theme.of(context).primaryColor
-              ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
               child: Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: Container(
@@ -318,7 +303,7 @@ class _ReservationState extends State<Reservation> {
                                             BorderRadius.circular(50.0),
                                         gradient: LinearGradient(
                                             colors: [
-                                              Theme.of(context).accentColor,
+                                              Theme.of(context).primaryColor,
                                               Theme.of(context).primaryColor
                                             ],
                                             begin: Alignment.centerRight,

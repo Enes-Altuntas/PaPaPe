@@ -1,5 +1,5 @@
-import 'package:bulb/Models/user_model.dart';
-import 'package:bulb/services/firestore_service.dart';
+import 'package:papape/Models/user_model.dart';
+import 'package:papape/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -124,13 +124,16 @@ class AuthService {
   // *************************************************************************** Kullanıcı İşlemleri
 
   Future<void> saveUser() async {
-    UserModel _user = await _db
-        .collection('users')
-        .doc(_firebaseAuth.currentUser.uid)
-        .get()
-        .then((value) {
-      return UserModel.fromFirestore(value.data());
-    });
+    UserModel _user;
+    try {
+      _user = await _db
+          .collection('users')
+          .doc(_firebaseAuth.currentUser.uid)
+          .get()
+          .then((value) {
+        return UserModel.fromFirestore(value.data());
+      });
+    } catch (e) {}
 
     if (_user == null) {
       UserModel newUser = UserModel(

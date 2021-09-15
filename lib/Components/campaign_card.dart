@@ -1,6 +1,6 @@
 import 'dart:ui';
-import 'package:bulb/Components/gradient_button.dart';
-import 'package:bulb/Models/campaign_model.dart';
+import 'package:papape/Components/gradient_button.dart';
+import 'package:papape/Models/campaign_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -48,7 +48,8 @@ class _CampaignCardState extends State<CampaignCard> {
                     Theme.of(context).accentColor,
                     Theme.of(context).primaryColor
                   ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-                  child: (widget.campaign.campaignPicRef != null)
+                  child: (widget.campaign.campaignPicRef != null &&
+                          widget.campaign.campaignPicRef.isNotEmpty)
                       ? Image.network(widget.campaign.campaignPicRef,
                           loadingBuilder: (context, child, loadingProgress) {
                           return loadingProgress == null
@@ -115,7 +116,7 @@ class _CampaignCardState extends State<CampaignCard> {
                   style: TextStyle(
                       fontSize: 18.0,
                       fontFamily: 'Roboto',
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.amber[900],
                       fontWeight: FontWeight.bold)),
             ),
             Padding(

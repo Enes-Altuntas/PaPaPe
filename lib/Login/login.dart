@@ -1,9 +1,9 @@
-import 'package:bulb/Components/gradient_button.dart';
-import 'package:bulb/Components/progress.dart';
-import 'package:bulb/Login/sign.dart';
-import 'package:bulb/Map/Map.dart';
-import 'package:bulb/services/authentication_service.dart';
-import 'package:bulb/services/toast_service.dart';
+import 'package:papape/Components/gradient_button.dart';
+import 'package:papape/Components/progress.dart';
+import 'package:papape/Login/sign.dart';
+import 'package:papape/Map/Map.dart';
+import 'package:papape/services/authentication_service.dart';
+import 'package:papape/services/toast_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -85,18 +85,13 @@ class _LoginState extends State<Login> {
     setState(() {
       isLoading = true;
     });
-    context
-        .read<AuthService>()
-        .googleLogin()
-        .then((value) {
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (context) => Map()));
-        })
-        .onError(
-            (error, stackTrace) => ToastService().showError(error, context))
-        .whenComplete(() => setState(() {
-              isLoading = false;
-            }));
+    context.read<AuthService>().googleLogin().then((value) {
+      setState(() {
+        isLoading = false;
+      });
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (context) => Map()));
+    }).onError((error, stackTrace) => ToastService().showError(error, context));
   }
 
   String validateMail(value) {
@@ -138,43 +133,96 @@ class _LoginState extends State<Login> {
             body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/images/logo.png"),
-                  fit: BoxFit.fill,
-                ),
-              ),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               child: Form(
                 key: formkey,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Text('bulb',
-                          style: TextStyle(
-                              color: Colors.amber[900],
-                              fontFamily: 'Armatic',
-                              fontSize:
-                                  MediaQuery.of(context).size.height / 10)),
-                    ),
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: RichText(
+                            text: TextSpan(
+                                style: TextStyle(
+                                    fontSize: 70.0,
+                                    color: Colors.white,
+                                    fontFamily: 'Armatic',
+                                    fontWeight: FontWeight.bold),
+                                children: [
+                              TextSpan(
+                                  text: 'Pa',
+                                  style: TextStyle(color: Colors.red)),
+                              TextSpan(
+                                  text: 'Pa',
+                                  style: TextStyle(color: Colors.amber[600])),
+                              TextSpan(
+                                  text: 'Pe',
+                                  style: TextStyle(color: Colors.green[300]))
+                            ]))),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.7,
                       decoration: BoxDecoration(
-                          color: Colors.amber[200],
-                          borderRadius: BorderRadius.circular(50.0)),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(50.0),
+                              topRight: Radius.circular(50.0))),
                       child: Padding(
                         padding: const EdgeInsets.only(
                             right: 30.0, left: 30.0, bottom: 20.0, top: 30.0),
                         child: Column(
                           children: [
-                            TextFormField(
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                    icon: Icon(Icons.account_circle_outlined),
-                                    labelText: 'E-posta'),
-                                validator: validateMail),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  child: IconButton(
+                                      onPressed: googleSignIn,
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.google,
+                                        color: Colors.white,
+                                      )),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.amber[600],
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  child: IconButton(
+                                      onPressed: googleSignIn,
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.facebookF,
+                                        color: Colors.white,
+                                      )),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius:
+                                          BorderRadius.circular(50.0)),
+                                  child: IconButton(
+                                      onPressed: googleSignIn,
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.twitter,
+                                        color: Colors.white,
+                                      )),
+                                )
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 40.0),
+                              child: TextFormField(
+                                  controller: emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      icon: Icon(Icons.account_circle_outlined),
+                                      labelText: 'E-posta'),
+                                  validator: validateMail),
+                            ),
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
@@ -182,6 +230,7 @@ class _LoginState extends State<Login> {
                                     (isVisible == false) ? true : false,
                                 controller: passwordController,
                                 decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
                                     icon: Icon(Icons.vpn_key_outlined),
                                     labelText: 'Parola',
                                     suffixIcon: IconButton(
@@ -213,18 +262,18 @@ class _LoginState extends State<Login> {
                                       style: TextStyle(
                                           fontFamily: 'Roboto',
                                           fontWeight: FontWeight.bold,
-                                          color: Theme.of(context).hintColor),
+                                          color: Colors.amber[900]),
                                     )),
                               ],
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 10.0),
+                              padding: const EdgeInsets.only(top: 50.0),
                               child: GradientButton(
                                 buttonText: 'Giriş Yap',
                                 icon: FontAwesomeIcons.signInAlt,
                                 onPressed: signIn,
                                 fontFamily: 'Roboto',
-                                startColor: Colors.amber[900],
+                                startColor: Theme.of(context).primaryColor,
                                 finishColor: Theme.of(context).primaryColor,
                                 fontColor: Colors.white,
                                 iconColor: Colors.white,
@@ -233,30 +282,23 @@ class _LoginState extends State<Login> {
                               ),
                             ),
                             Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: GradientButton(
-                                  buttonText: 'Google',
-                                  icon: FontAwesomeIcons.googlePlusG,
-                                  onPressed: googleSignIn,
-                                  startColor: Colors.amber[900],
-                                  finishColor: Theme.of(context).primaryColor,
-                                  fontColor: Colors.white,
-                                  iconColor: Colors.white,
-                                  fontFamily: 'Roboto',
-                                  fontSize: 15,
-                                  widthMultiplier: 0.9,
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
+                              padding: const EdgeInsets.only(top: 10.0),
                               child: TextButton(
                                 onPressed: signUp,
-                                child: Text(
-                                  'Hesabınız yok mu ? Kayıt Olun !',
-                                  style: TextStyle(
-                                    fontFamily: 'Roboto',
-                                    color: Theme.of(context).hintColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                child: RichText(
+                                  text: TextSpan(
+                                      style: TextStyle(
+                                        fontFamily: 'Roboto',
+                                        color: Theme.of(context).hintColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      children: [
+                                        TextSpan(text: 'Hesabınız yok mu? '),
+                                        TextSpan(
+                                            text: 'Kayıt Olun!',
+                                            style: TextStyle(
+                                                color: Colors.amber[900]))
+                                      ]),
                                 ),
                               ),
                             ),

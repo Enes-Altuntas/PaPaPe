@@ -1,4 +1,4 @@
-import 'package:bulb/Models/wishes_model.dart';
+import 'package:papape/Models/wishes_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,7 +25,7 @@ class _CommentCardState extends State<CommentCard> {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
+        borderRadius: BorderRadius.circular(25.0),
       ),
       clipBehavior: Clip.antiAlias,
       color: Colors.white,
@@ -65,12 +65,28 @@ class _CommentCardState extends State<CommentCard> {
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0)),
                 ),
-                Text('Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
-                    style: TextStyle(
-                        color: Theme.of(context).hintColor,
-                        fontFamily: 'Roboto',
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Text(
+                      'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
+                      style: TextStyle(
+                          color: Theme.of(context).hintColor,
+                          fontFamily: 'Roboto',
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0)),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: Text(
+                        (widget.wish.wishUserPhone == null ||
+                                widget.wish.wishUserPhone.isEmpty)
+                            ? 'İletişim No: Belirtilmemiş'
+                            : 'İletişim No: ${widget.wish.wishUserPhone}',
+                        style: TextStyle(
+                            color: Theme.of(context).hintColor,
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15.0))),
               ],
             ),
           ),

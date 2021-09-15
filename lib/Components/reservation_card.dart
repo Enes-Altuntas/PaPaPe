@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:bulb/Models/reservations_model.dart';
+import 'package:papape/Models/reservations_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,7 +30,7 @@ class _ReservationCardState extends State<ReservationCard> {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
+        borderRadius: BorderRadius.circular(25.0),
       ),
       clipBehavior: Clip.antiAlias,
       color: Colors.white,

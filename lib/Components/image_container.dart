@@ -47,7 +47,8 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                 ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
             child: (this.widget.localImage != null)
                 ? Image.file(this.widget.localImage, fit: BoxFit.fitWidth)
-                : (this.widget.urlImage != null)
+                : (this.widget.urlImage != null &&
+                        this.widget.urlImage.isNotEmpty)
                     ? Image.network(
                         this.widget.urlImage,
                         fit: BoxFit.fill,
@@ -88,7 +89,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 20.0),
                                 child: FaIcon(
-                                  FontAwesomeIcons.sadTear,
+                                  FontAwesomeIcons.exclamationTriangle,
                                   color: Colors.white,
                                   size: 50.0,
                                 ),
