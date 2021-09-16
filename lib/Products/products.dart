@@ -81,52 +81,55 @@ class _MenuState extends State<Menu> {
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(50.0),
                           topRight: Radius.circular(50.0))),
-                  child: StreamBuilder<List<ProductCategory>>(
-                    stream: FirestoreService()
-                        .getProductCategories(widget.storeData.storeId),
-                    builder: (context, snapshot) {
-                      category = snapshot.data;
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.active:
-                          switch (
-                              snapshot.hasData && snapshot.data.length > 0) {
-                            case true:
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 20.0),
-                                      child: CategoryCard(
-                                        category: snapshot.data[index],
-                                        storeId: widget.storeData.storeId,
-                                      ));
-                                },
-                              );
-                              break;
-                            default:
-                              return NotFound(
-                                notFoundIcon:
-                                    FontAwesomeIcons.exclamationTriangle,
-                                notFoundIconColor: Colors.amber[900],
-                                notFoundIconSize: 60,
-                                notFoundText:
-                                    'Üzgünüz, menüde ürün bulunmamaktadır.',
-                                notFoundTextColor:
-                                    Theme.of(context).primaryColor,
-                                notFoundTextSize: 40.0,
-                              );
-                          }
-                          break;
-                        default:
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.amber[900],
-                            ),
-                          );
-                      }
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: StreamBuilder<List<ProductCategory>>(
+                      stream: FirestoreService()
+                          .getProductCategories(widget.storeData.storeId),
+                      builder: (context, snapshot) {
+                        category = snapshot.data;
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.active:
+                            switch (
+                                snapshot.hasData && snapshot.data.length > 0) {
+                              case true:
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 20.0),
+                                        child: CategoryCard(
+                                          category: snapshot.data[index],
+                                          storeId: widget.storeData.storeId,
+                                        ));
+                                  },
+                                );
+                                break;
+                              default:
+                                return NotFound(
+                                  notFoundIcon:
+                                      FontAwesomeIcons.exclamationTriangle,
+                                  notFoundIconColor: Colors.amber[900],
+                                  notFoundIconSize: 60,
+                                  notFoundText:
+                                      'Üzgünüz, menüde ürün bulunmamaktadır.',
+                                  notFoundTextColor:
+                                      Theme.of(context).primaryColor,
+                                  notFoundTextSize: 40.0,
+                                );
+                            }
+                            break;
+                          default:
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.amber[900],
+                              ),
+                            );
+                        }
+                      },
+                    ),
                   ),
                 ),
               ),

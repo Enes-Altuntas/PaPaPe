@@ -119,8 +119,8 @@ class _CategoryCardState extends State<CategoryCard> {
                           break;
                         default:
                           return NotFound(
-                            notFoundIcon: FontAwesomeIcons.sadTear,
-                            notFoundIconColor: Theme.of(context).primaryColor,
+                            notFoundIcon: FontAwesomeIcons.exclamationTriangle,
+                            notFoundIconColor: Colors.amber[900],
                             notFoundIconSize: 30,
                             notFoundText:
                                 "'${widget.category.categoryName}' kategorisinde hiçbir ürün bulunamamıştır !",
