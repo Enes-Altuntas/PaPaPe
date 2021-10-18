@@ -1,6 +1,6 @@
-import 'package:papape/Components/gradient_button.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/Store/store.dart';
+import 'package:bulovva/Components/gradient_button.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/Store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -26,7 +26,7 @@ class BottomSheetMap extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-        Theme.of(context).accentColor,
+        Theme.of(context).colorScheme.secondary,
         Theme.of(context).primaryColor
       ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
       child: SingleChildScrollView(

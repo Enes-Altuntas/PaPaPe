@@ -1,9 +1,9 @@
-import 'package:papape/Components/campaign_card.dart';
-import 'package:papape/Components/not_found.dart';
-import 'package:papape/Models/campaign_model.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/services/firestore_service.dart';
-import 'package:papape/services/toast_service.dart';
+import 'package:bulovva/Components/campaign_card.dart';
+import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Models/campaign_model.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/services/firestore_service.dart';
+import 'package:bulovva/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

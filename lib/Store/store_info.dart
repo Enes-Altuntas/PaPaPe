@@ -1,10 +1,8 @@
-import 'dart:developer';
-
-import 'package:papape/Components/gradient_button.dart';
-import 'package:papape/Components/image_container.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/Reservations/reservation.dart';
-import 'package:papape/Wishes/wish.dart';
+import 'package:bulovva/Components/gradient_button.dart';
+import 'package:bulovva/Components/image_container.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/Reservations/reservation.dart';
+import 'package:bulovva/Wishes/wish.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';

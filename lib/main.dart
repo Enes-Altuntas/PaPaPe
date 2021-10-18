@@ -1,10 +1,10 @@
-import 'package:papape/Login/login.dart';
-import 'package:papape/Map/Map.dart';
-import 'package:papape/Providers/filter_provider.dart';
-import 'package:papape/services/authentication_service.dart';
+import 'package:bulovva/Login/login.dart';
+import 'package:bulovva/Map/Map.dart';
+import 'package:bulovva/Providers/filter_provider.dart';
+import 'package:bulovva/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,18 +13,18 @@ void main() async {
   runApp(MyApp());
 }
 
-FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+// FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
 Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  handleNotifications();
+  // handleNotifications();
 }
 
-handleNotifications() async {
-  await firebaseMessaging.requestPermission(sound: true);
-  await firebaseMessaging.subscribeToTopic("users");
-}
+// handleNotifications() async {
+//   await firebaseMessaging.requestPermission(sound: true);
+//   await firebaseMessaging.subscribeToTopic("users");
+// }
 
 class MyApp extends StatelessWidget {
   @override
@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
           Provider<AuthService>(
               create: (context) => AuthService(FirebaseAuth.instance)),
           StreamProvider(
+              initialData: null,
               create: (context) => context.read<AuthService>().authStateChanges)
         ],
         child: MaterialApp(
@@ -43,8 +44,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primaryColor: Colors.lightBlue[800],
               primaryColorDark: Colors.black,
-              accentColor: Colors.lightBlue[200],
               hintColor: Colors.grey.shade800,
+              colorScheme: ColorScheme.fromSwatch()
+                  .copyWith(secondary: Colors.lightBlue[200]),
             ),
             home: AuthWrapper()));
   }

@@ -1,9 +1,9 @@
-import 'package:papape/Campaigns/campaigns.dart';
-import 'package:papape/Components/favorite_button.dart';
-import 'package:papape/Components/title.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/Products/products.dart';
-import 'package:papape/Store/store_info.dart';
+import 'package:bulovva/Campaigns/campaigns.dart';
+import 'package:bulovva/Components/favorite_button.dart';
+import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/Products/products.dart';
+import 'package:bulovva/Store/store_info.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -84,7 +84,7 @@ class _StoreState extends State<Store> {
             ? Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(colors: [
-                  Theme.of(context).accentColor,
+                  Theme.of(context).colorScheme.secondary,
                   Theme.of(context).primaryColor
                 ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
                 child: Padding(
@@ -92,7 +92,7 @@ class _StoreState extends State<Store> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(50.0),
                             topRight: Radius.circular(50.0))),

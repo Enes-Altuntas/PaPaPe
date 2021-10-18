@@ -1,4 +1,4 @@
-import 'package:papape/Models/product_model.dart';
+import 'package:bulovva/Models/product_model.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatefulWidget {

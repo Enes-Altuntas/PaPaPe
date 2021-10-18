@@ -1,8 +1,8 @@
-import 'package:papape/Components/gradient_button.dart';
-import 'package:papape/Components/progress.dart';
-import 'package:papape/Login/login.dart';
-import 'package:papape/services/authentication_service.dart';
-import 'package:papape/services/toast_service.dart';
+import 'package:bulovva/Components/gradient_button.dart';
+import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Login/login.dart';
+import 'package:bulovva/services/authentication_service.dart';
+import 'package:bulovva/services/toast_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';

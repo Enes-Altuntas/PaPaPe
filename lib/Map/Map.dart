@@ -1,14 +1,14 @@
-import 'package:papape/Components/bottom_sheet.dart';
-import 'package:papape/Components/category_brand.dart';
-import 'package:papape/Components/not_found.dart';
-import 'package:papape/Components/popup_menu.dart';
-import 'package:papape/Components/title.dart';
-import 'package:papape/Filter/filter.dart';
-import 'package:papape/Models/markers_model.dart';
-import 'package:papape/Models/store_category.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/Providers/filter_provider.dart';
-import 'package:papape/services/firestore_service.dart';
+import 'package:bulovva/Components/bottom_sheet.dart';
+import 'package:bulovva/Components/category_brand.dart';
+import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/popup_menu.dart';
+import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Filter/filter.dart';
+import 'package:bulovva/Models/markers_model.dart';
+import 'package:bulovva/Models/store_category.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/Providers/filter_provider.dart';
+import 'package:bulovva/services/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -102,7 +102,7 @@ class _Map extends State<Map> {
         fillColor: (_filterProvider.getMode == true)
             ? Theme.of(context).primaryColor.withOpacity(0.1)
             : Theme.of(context).primaryColor.withOpacity(0.2),
-        strokeColor: Theme.of(context).accentColor.withOpacity(0.1));
+        strokeColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1));
     circles.add(circle);
   }
 
@@ -203,7 +203,7 @@ class _Map extends State<Map> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           colors: [
-                            Theme.of(context).accentColor,
+                            Theme.of(context).colorScheme.secondary,
                             Theme.of(context).primaryColor
                           ],
                           begin: Alignment.bottomCenter,
@@ -362,8 +362,9 @@ class _Map extends State<Map> {
                                     Switch(
                                       value: _filterProvider.getLive,
                                       activeColor: Colors.amber[700],
-                                      inactiveThumbColor:
-                                          Theme.of(context).accentColor,
+                                      inactiveThumbColor: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       inactiveTrackColor: Colors.white,
                                       onChanged: (bool value) {
                                         changeLive(value);

@@ -1,8 +1,8 @@
-import 'package:papape/Components/not_found.dart';
-import 'package:papape/Components/product_card.dart';
-import 'package:papape/Models/product_category_model.dart';
-import 'package:papape/Models/product_model.dart';
-import 'package:papape/services/firestore_service.dart';
+import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/product_card.dart';
+import 'package:bulovva/Models/product_category_model.dart';
+import 'package:bulovva/Models/product_model.dart';
+import 'package:bulovva/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -35,7 +35,7 @@ class _CategoryCardState extends State<CategoryCard> {
               height: MediaQuery.of(context).size.height / 3.5,
               decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
-                  Theme.of(context).accentColor,
+                  Theme.of(context).colorScheme.secondary,
                   Theme.of(context).primaryColor
                 ], begin: Alignment.centerRight, end: Alignment.centerLeft),
               ),

@@ -1,6 +1,6 @@
 import 'dart:ui';
-import 'package:papape/Components/gradient_button.dart';
-import 'package:papape/Models/campaign_model.dart';
+import 'package:bulovva/Components/gradient_button.dart';
+import 'package:bulovva/Models/campaign_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -45,7 +45,7 @@ class _CampaignCardState extends State<CampaignCard> {
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                    Theme.of(context).accentColor,
+                    Theme.of(context).colorScheme.secondary,
                     Theme.of(context).primaryColor
                   ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
                   child: (widget.campaign.campaignPicRef != null &&

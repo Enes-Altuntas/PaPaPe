@@ -1,6 +1,6 @@
-import 'package:papape/Models/store_category.dart';
+import 'package:bulovva/Models/store_category.dart';
 import 'package:flutter/material.dart';
-import 'package:papape/Providers/filter_provider.dart';
+import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:provider/provider.dart';
 
 class BrandWidget extends StatefulWidget {

@@ -42,7 +42,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50.0),
                 gradient: LinearGradient(colors: [
-                  Theme.of(context).accentColor,
+                  Theme.of(context).colorScheme.secondary,
                   Theme.of(context).primaryColor
                 ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
             child: (this.widget.localImage != null)
@@ -118,7 +118,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                         borderRadius: BorderRadius.circular(50.0),
                         gradient: LinearGradient(
                             colors: [
-                              Theme.of(context).accentColor,
+                              Theme.of(context).colorScheme.secondary,
                               Theme.of(context).primaryColor
                             ],
                             begin: Alignment.centerRight,
@@ -141,7 +141,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                         borderRadius: BorderRadius.circular(50.0),
                         gradient: LinearGradient(
                             colors: [
-                              Theme.of(context).accentColor,
+                              Theme.of(context).colorScheme.secondary,
                               Theme.of(context).primaryColor
                             ],
                             begin: Alignment.centerRight,

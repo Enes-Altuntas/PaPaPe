@@ -1,10 +1,10 @@
-import 'package:papape/Components/progress.dart';
-import 'package:papape/Components/title.dart';
-import 'package:papape/Models/reservations_model.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/services/authentication_service.dart';
-import 'package:papape/services/firestore_service.dart';
-import 'package:papape/services/toast_service.dart';
+import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Models/reservations_model.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/services/authentication_service.dart';
+import 'package:bulovva/services/firestore_service.dart';
+import 'package:bulovva/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +137,7 @@ class _ReservationState extends State<Reservation> {
             body: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                Theme.of(context).accentColor,
+                Theme.of(context).colorScheme.secondary,
                 Theme.of(context).primaryColor
               ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
               child: Padding(

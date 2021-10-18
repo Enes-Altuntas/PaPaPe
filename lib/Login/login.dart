@@ -1,9 +1,9 @@
-import 'package:papape/Components/gradient_button.dart';
-import 'package:papape/Components/progress.dart';
-import 'package:papape/Login/sign.dart';
-import 'package:papape/Map/Map.dart';
-import 'package:papape/services/authentication_service.dart';
-import 'package:papape/services/toast_service.dart';
+import 'package:bulovva/Components/gradient_button.dart';
+import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Login/sign.dart';
+import 'package:bulovva/Map/Map.dart';
+import 'package:bulovva/services/authentication_service.dart';
+import 'package:bulovva/services/toast_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -85,13 +85,18 @@ class _LoginState extends State<Login> {
     setState(() {
       isLoading = true;
     });
-    context.read<AuthService>().googleLogin().then((value) {
-      setState(() {
-        isLoading = false;
-      });
-      Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => Map()));
-    }).onError((error, stackTrace) => ToastService().showError(error, context));
+    context
+        .read<AuthService>()
+        .googleLogin()
+        .then((value) {
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (context) => Map()));
+        })
+        .onError(
+            (error, stackTrace) => ToastService().showError(error, context))
+        .whenComplete(() => setState(() {
+              isLoading = false;
+            }));
   }
 
   String validateMail(value) {

@@ -1,4 +1,4 @@
-import 'package:papape/Models/store_model.dart';
+import 'package:bulovva/Models/store_model.dart';
 import 'package:flutter/material.dart';
 
 class StoreCards extends StatelessWidget {

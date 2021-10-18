@@ -1,10 +1,10 @@
-import 'package:papape/Components/favorite_store.dart';
-import 'package:papape/Components/not_found.dart';
-import 'package:papape/Components/title.dart';
-import 'package:papape/Models/store_model.dart';
-import 'package:papape/Models/user_model.dart';
-import 'package:papape/Store/store.dart';
-import 'package:papape/services/firestore_service.dart';
+import 'package:bulovva/Components/favorite_store.dart';
+import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/Models/user_model.dart';
+import 'package:bulovva/Store/store.dart';
+import 'package:bulovva/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -33,14 +33,14 @@ class MyFavorites extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-            Theme.of(context).accentColor,
+            Theme.of(context).colorScheme.secondary,
             Theme.of(context).primaryColor
           ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
               decoration: BoxDecoration(
-                  color: Theme.of(context).accentColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(50.0),
                       topRight: Radius.circular(50.0))),

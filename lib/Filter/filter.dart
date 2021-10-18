@@ -1,7 +1,7 @@
-import 'package:papape/Components/title.dart';
-import 'package:papape/Models/store_category.dart';
-import 'package:papape/Providers/filter_provider.dart';
-import 'package:papape/services/firestore_service.dart';
+import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Models/store_category.dart';
+import 'package:bulovva/Providers/filter_provider.dart';
+import 'package:bulovva/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +67,7 @@ class _FilterState extends State<Filter> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-            Theme.of(context).accentColor,
+            Theme.of(context).colorScheme.secondary,
             Theme.of(context).primaryColor
           ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
@@ -112,10 +112,12 @@ class _FilterState extends State<Filter> {
                                       Switch(
                                           value: _filterProvider.getLive,
                                           activeColor: Colors.amber[900],
-                                          inactiveThumbColor:
-                                              Theme.of(context).accentColor,
-                                          inactiveTrackColor:
-                                              Theme.of(context).accentColor,
+                                          inactiveThumbColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          inactiveTrackColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           onChanged: (value) {
                                             _filterProvider.changeLive(value);
                                           })
@@ -169,8 +171,9 @@ class _FilterState extends State<Filter> {
                                           max: 16,
                                           divisions: 5,
                                           activeColor: Colors.amber[900],
-                                          inactiveColor:
-                                              Theme.of(context).accentColor,
+                                          inactiveColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           label:
                                               '${_filterProvider.getDist} km',
                                           onChanged: (localValue) {
@@ -205,10 +208,12 @@ class _FilterState extends State<Filter> {
                                       Switch(
                                           value: _filterProvider.getMode,
                                           activeColor: Colors.amber[900],
-                                          inactiveThumbColor:
-                                              Theme.of(context).accentColor,
-                                          inactiveTrackColor:
-                                              Theme.of(context).accentColor,
+                                          inactiveThumbColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          inactiveTrackColor: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                           onChanged: (value) {
                                             _filterProvider.changeMode(value);
                                             preferences.setBool('dark', value);

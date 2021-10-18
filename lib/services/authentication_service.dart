@@ -1,8 +1,8 @@
-import 'package:papape/Models/user_model.dart';
-import 'package:papape/services/firestore_service.dart';
+import 'package:bulovva/Models/user_model.dart';
+import 'package:bulovva/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -137,7 +137,7 @@ class AuthService {
 
     if (_user == null) {
       UserModel newUser = UserModel(
-          token: await FirebaseMessaging.instance.getToken(),
+          // token: await FirebaseMessaging.instance.getToken(),
           userId: _firebaseAuth.currentUser.uid,
           favorites: []);
 
