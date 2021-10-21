@@ -68,7 +68,7 @@ class _FilterState extends State<Filter> {
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
             Theme.of(context).colorScheme.secondary,
-            Theme.of(context).primaryColor
+            Theme.of(context).colorScheme.primary
           ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
@@ -96,7 +96,9 @@ class _FilterState extends State<Filter> {
                                     'Arama Seçenekleri',
                                     style: TextStyle(
                                         fontFamily: 'Bebas',
-                                        color: Colors.amber[900],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontSize: 25.0),
                                   ),
                                 ),
@@ -111,10 +113,13 @@ class _FilterState extends State<Filter> {
                                       ),
                                       Switch(
                                           value: _filterProvider.getLive,
-                                          activeColor: Colors.amber[900],
+                                          activeTrackColor: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary,
+                                          activeColor: Colors.green,
                                           inactiveThumbColor: Theme.of(context)
                                               .colorScheme
-                                              .secondary,
+                                              .primary,
                                           inactiveTrackColor: Theme.of(context)
                                               .colorScheme
                                               .secondary,
@@ -164,13 +169,16 @@ class _FilterState extends State<Filter> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                          'Arama Uzaklığı : ${_filterProvider.getDist} km'),
+                                        'Arama Uzaklığı : ${_filterProvider.getDist} km',
+                                      ),
                                       Slider(
                                           value: _filterProvider.getDist,
                                           min: 1,
                                           max: 16,
                                           divisions: 5,
-                                          activeColor: Colors.amber[900],
+                                          activeColor: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                           inactiveColor: Theme.of(context)
                                               .colorScheme
                                               .secondary,
@@ -192,7 +200,9 @@ class _FilterState extends State<Filter> {
                                     'Görüntü Seçenekleri',
                                     style: TextStyle(
                                         fontFamily: 'Bebas',
-                                        color: Colors.amber[900],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         fontSize: 25.0),
                                   ),
                                 ),
@@ -207,10 +217,13 @@ class _FilterState extends State<Filter> {
                                       ),
                                       Switch(
                                           value: _filterProvider.getMode,
-                                          activeColor: Colors.amber[900],
+                                          activeColor: Colors.green,
+                                          activeTrackColor: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondary,
                                           inactiveThumbColor: Theme.of(context)
                                               .colorScheme
-                                              .secondary,
+                                              .primary,
                                           inactiveTrackColor: Theme.of(context)
                                               .colorScheme
                                               .secondary,

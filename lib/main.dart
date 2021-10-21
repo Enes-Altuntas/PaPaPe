@@ -4,7 +4,7 @@ import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,18 +13,18 @@ void main() async {
   runApp(MyApp());
 }
 
-// FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
 Future<void> init() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // handleNotifications();
+  handleNotifications();
 }
 
-// handleNotifications() async {
-//   await firebaseMessaging.requestPermission(sound: true);
-//   await firebaseMessaging.subscribeToTopic("users");
-// }
+handleNotifications() async {
+  await firebaseMessaging.requestPermission(sound: true);
+  await firebaseMessaging.subscribeToTopic("users");
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -42,11 +42,22 @@ class MyApp extends StatelessWidget {
             title: 'PaPaPe',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              primaryColor: Colors.lightBlue[800],
-              primaryColorDark: Colors.black,
-              hintColor: Colors.grey.shade800,
-              colorScheme: ColorScheme.fromSwatch()
-                  .copyWith(secondary: Colors.lightBlue[200]),
+              cardTheme: CardTheme(
+                  clipBehavior: Clip.antiAlias,
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                    side: BorderSide(
+                      color: Colors.red[700],
+                      width: 2.0,
+                    ),
+                  ),
+                  color: Colors.white),
+              colorScheme: ColorScheme.fromSwatch().copyWith(
+                  primary: Colors.red,
+                  secondary: Colors.red[700],
+                  onPrimary: Colors.white,
+                  onSecondary: Colors.green[700]),
             ),
             home: AuthWrapper()));
   }

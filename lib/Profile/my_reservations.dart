@@ -47,7 +47,7 @@ class _MyReservationsState extends State<MyReservations> {
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
             Theme.of(context).colorScheme.secondary,
-            Theme.of(context).primaryColor
+            Theme.of(context).colorScheme.primary
           ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),

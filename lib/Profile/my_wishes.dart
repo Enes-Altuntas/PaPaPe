@@ -45,7 +45,7 @@ class MyWishes extends StatelessWidget {
                         Text(
                           'Dilek ve Şikayetlerim',
                           style: TextStyle(
-                              color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).colorScheme.primary,
                               fontSize: 30.0,
                               fontFamily: 'Armatic',
                               fontWeight: FontWeight.bold),
@@ -101,7 +101,8 @@ class MyWishes extends StatelessWidget {
                                                     'Üzgünüz, belirtmiş olduğunuz bir dilek veya şikayet bulunmamaktadır.',
                                                 notFoundTextColor:
                                                     Theme.of(context)
-                                                        .primaryColor,
+                                                        .colorScheme
+                                                        .primary,
                                                 notFoundTextSize: 40.0,
                                               );
                                           }

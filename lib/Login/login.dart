@@ -138,7 +138,8 @@ class _LoginState extends State<Login> {
             body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              decoration:
+                  BoxDecoration(color: Theme.of(context).colorScheme.primary),
               child: Form(
                 key: formkey,
                 child: Column(
@@ -278,8 +279,10 @@ class _LoginState extends State<Login> {
                                 icon: FontAwesomeIcons.signInAlt,
                                 onPressed: signIn,
                                 fontFamily: 'Roboto',
-                                startColor: Theme.of(context).primaryColor,
-                                finishColor: Theme.of(context).primaryColor,
+                                startColor:
+                                    Theme.of(context).colorScheme.primary,
+                                finishColor:
+                                    Theme.of(context).colorScheme.primary,
                                 fontColor: Colors.white,
                                 iconColor: Colors.white,
                                 fontSize: 15,

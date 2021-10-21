@@ -3,11 +3,12 @@ import 'package:bulovva/Components/favorite_button.dart';
 import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Products/products.dart';
+import 'package:bulovva/Reservations/reservation.dart';
 import 'package:bulovva/Store/store_info.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:bulovva/Wishes/wish.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Store extends StatefulWidget {
@@ -19,19 +20,24 @@ class Store extends StatefulWidget {
   _StoreState createState() => _StoreState();
 }
 
-class _StoreState extends State<Store> {
-  final DateFormat dateFormat = DateFormat("dd/MM/yyyy HH:mm:ss");
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController commentTitle = TextEditingController();
-  final TextEditingController commentDesc = TextEditingController();
-  double rating;
+class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
+  PageController pageController = PageController();
+  int _selectedIndex = 0;
+  List<Icon> items = [
+    Icon(
+      Icons.add_alert,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.menu_book,
+      color: Colors.white,
+    ),
+    Icon(
+      Icons.store,
+      color: Colors.white,
+    )
+  ];
   bool isLoading = false;
-
-  String formatDate(Timestamp date) {
-    var _date = DateTime.fromMillisecondsSinceEpoch(date.millisecondsSinceEpoch)
-        .toLocal();
-    return dateFormat.format(_date);
-  }
 
   makePhoneCall() async {
     await launch("tel:${widget.storeData.storePhone}");
@@ -43,18 +49,27 @@ class _StoreState extends State<Store> {
     await launch(googleMapslocationUrl);
   }
 
+  double getRadiansFromDegree(double degree) {
+    double unitRadian = 57.295779513;
+    return degree / unitRadian;
+  }
+
+  void onTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    pageController.jumpToPage(index);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
+    return Scaffold(
+        extendBody: true,
         appBar: AppBar(
+          toolbarHeight: 70.0,
           flexibleSpace: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor
-            ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.primary),
           ),
           iconTheme: IconThemeData(
             color: Colors.white,
@@ -67,57 +82,96 @@ class _StoreState extends State<Store> {
               ),
             )
           ],
-          backgroundColor: Colors.white,
-          elevation: 0,
-          bottom: TabBar(
-            indicatorColor: Colors.white,
-            tabs: [
-              Tab(icon: FaIcon(FontAwesomeIcons.tags, color: Colors.white)),
-              Tab(icon: FaIcon(FontAwesomeIcons.bookOpen, color: Colors.white)),
-              Tab(icon: FaIcon(FontAwesomeIcons.store, color: Colors.white)),
-            ],
-          ),
+          elevation: 5,
           centerTitle: true,
           title: TitleApp(),
         ),
         body: (isLoading == false)
-            ? Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).primaryColor
-                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(50.0),
-                            topRight: Radius.circular(50.0))),
-                    child: TabBarView(
-                      children: [
-                        Campaigns(
-                          storeData: widget.storeData,
-                        ),
-                        Menu(
-                          storeData: widget.storeData,
-                        ),
-                        StoreInfo(
-                          storeData: widget.storeData,
-                        ),
-                      ],
-                    ),
+            ? PageView(
+                controller: pageController,
+                children: [
+                  Campaigns(
+                    storeData: widget.storeData,
                   ),
-                ),
+                  Menu(
+                    storeData: widget.storeData,
+                  ),
+                  StoreInfo(
+                    storeData: widget.storeData,
+                  ),
+                ],
               )
             : Center(
                 child: CircularProgressIndicator(
                   color: Colors.amber[900],
                 ),
               ),
-      ),
-    );
+        floatingActionButton: SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          animatedIconTheme: IconThemeData(color: Colors.white),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.8,
+          children: [
+            SpeedDialChild(
+                child: Icon(
+                  Icons.call,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                backgroundColor: Colors.white,
+                onTap: () {
+                  makePhoneCall();
+                },
+                label: 'İşletmeyi Ara'),
+            SpeedDialChild(
+                child: Icon(
+                  Icons.location_on,
+                  color: Colors.white,
+                ),
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                onTap: () {
+                  findPlace();
+                },
+                label: 'İşletmeyi Bul'),
+            SpeedDialChild(
+                child: Icon(
+                  Icons.menu_book,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Reservation(
+                            store: widget.storeData,
+                          )));
+                },
+                backgroundColor: Colors.white,
+                label: 'Rezervasyon Yaptır'),
+            SpeedDialChild(
+                child: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Wish(
+                            store: widget.storeData,
+                          )));
+                },
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                label: 'Dilek & Şikayet Yaz'),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        bottomNavigationBar: CurvedNavigationBar(
+          items: items,
+          height: 60.0,
+          backgroundColor: Colors.transparent,
+          animationCurve: Curves.easeIn,
+          animationDuration: Duration(milliseconds: 500),
+          onTap: onTapped,
+          index: _selectedIndex,
+          color: Theme.of(context).colorScheme.secondary,
+          buttonBackgroundColor: Theme.of(context).colorScheme.secondary,
+        ));
   }
 }

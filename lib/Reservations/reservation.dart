@@ -138,7 +138,7 @@ class _ReservationState extends State<Reservation> {
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                 Theme.of(context).colorScheme.secondary,
-                Theme.of(context).primaryColor
+                Theme.of(context).colorScheme.primary
               ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
               child: Padding(
                 padding: const EdgeInsets.only(top: 20.0),
@@ -303,8 +303,12 @@ class _ReservationState extends State<Reservation> {
                                             BorderRadius.circular(50.0),
                                         gradient: LinearGradient(
                                             colors: [
-                                              Theme.of(context).primaryColor,
-                                              Theme.of(context).primaryColor
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
                                             ],
                                             begin: Alignment.centerRight,
                                             end: Alignment.centerLeft)),

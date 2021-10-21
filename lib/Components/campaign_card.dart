@@ -46,7 +46,7 @@ class _CampaignCardState extends State<CampaignCard> {
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
                     Theme.of(context).colorScheme.secondary,
-                    Theme.of(context).primaryColor
+                    Theme.of(context).colorScheme.primary
                   ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
                   child: (widget.campaign.campaignPicRef != null &&
                           widget.campaign.campaignPicRef.isNotEmpty)

@@ -1,13 +1,12 @@
-import 'package:bulovva/Components/bottom_sheet.dart';
 import 'package:bulovva/Components/category_brand.dart';
+import 'package:bulovva/Components/custom_drawer.dart';
 import 'package:bulovva/Components/not_found.dart';
-import 'package:bulovva/Components/popup_menu.dart';
 import 'package:bulovva/Components/title.dart';
-import 'package:bulovva/Filter/filter.dart';
 import 'package:bulovva/Models/markers_model.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
+import 'package:bulovva/Store/store.dart';
 import 'package:bulovva/services/firestore_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -100,9 +99,9 @@ class _Map extends State<Map> {
         radius: _filterProvider.getDist * 1000,
         strokeWidth: 3,
         fillColor: (_filterProvider.getMode == true)
-            ? Theme.of(context).primaryColor.withOpacity(0.1)
-            : Theme.of(context).primaryColor.withOpacity(0.2),
-        strokeColor: Theme.of(context).colorScheme.secondary.withOpacity(0.1));
+            ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+            : Colors.lightBlue.withOpacity(0.2),
+        strokeColor: Colors.lightBlue[200].withOpacity(0.8));
     circles.add(circle);
   }
 
@@ -149,50 +148,25 @@ class _Map extends State<Map> {
     }
   }
 
-  showStoreBottomSheet(MarkerModel element) async {
-    StoreModel store =
-        await firestoreService.getStore(element.storeId).then((value) {
+  showStorePage(String storeId) async {
+    StoreModel store = await firestoreService.getStore(storeId).then((value) {
       return StoreModel.fromFirestore(value.data());
     });
-    showModalBottomSheet(
-        context: context,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(50.0), topRight: Radius.circular(50.0)),
-        ),
-        builder: (context) {
-          return BottomSheetMap(
-            store: store,
-          );
-        });
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => Store(
+              storeData: store,
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          leading: GestureDetector(
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Filter()));
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.filter_alt,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
-              )),
-          actions: [PopUpWidget()],
+          elevation: 5,
           title: TitleApp(),
           centerTitle: true,
         ),
+        drawer: CustomDrawer(),
         body: Container(
             decoration: BoxDecoration(color: Colors.white),
             child: Column(
@@ -204,7 +178,7 @@ class _Map extends State<Map> {
                       gradient: LinearGradient(
                           colors: [
                             Theme.of(context).colorScheme.secondary,
-                            Theme.of(context).primaryColor
+                            Theme.of(context).colorScheme.primary
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter),
@@ -249,6 +223,12 @@ class _Map extends State<Map> {
                                                 markerId:
                                                     MarkerId(element.storeId),
                                                 draggable: false,
+                                                infoWindow: InfoWindow(
+                                                    title: element.storeName,
+                                                    onTap: () {
+                                                      showStorePage(
+                                                          element.storeId);
+                                                    }),
                                                 icon: (element.campaignStatus ==
                                                         'active')
                                                     ? BitmapDescriptor
@@ -265,9 +245,6 @@ class _Map extends State<Map> {
                                                             .defaultMarkerWithHue(
                                                                 BitmapDescriptor
                                                                     .hueRed),
-                                                onTap: () {
-                                                  showStoreBottomSheet(element);
-                                                },
                                                 position: LatLng(
                                                     element.position.geopoint
                                                         .latitude,
@@ -316,7 +293,8 @@ class _Map extends State<Map> {
                                                         "Aradığınız kategoride işletme bulunmuyor !",
                                                     notFoundTextColor:
                                                         Theme.of(context)
-                                                            .primaryColor,
+                                                            .colorScheme
+                                                            .primary,
                                                     notFoundTextSize: 40.0,
                                                   )
                                             : Center(
@@ -331,7 +309,8 @@ class _Map extends State<Map> {
                                           style: TextStyle(
                                               fontFamily: 'Bebas',
                                               color: Theme.of(context)
-                                                  .primaryColor,
+                                                  .colorScheme
+                                                  .primary,
                                               fontSize: 25.0)),
                                     )
                               : Center(
@@ -350,7 +329,8 @@ class _Map extends State<Map> {
                               Container(
                                 padding: EdgeInsets.only(left: 12),
                                 decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
                                 child: Row(
@@ -361,10 +341,12 @@ class _Map extends State<Map> {
                                     ),
                                     Switch(
                                       value: _filterProvider.getLive,
-                                      activeColor: Colors.amber[700],
-                                      inactiveThumbColor: Theme.of(context)
+                                      activeColor: Theme.of(context)
                                           .colorScheme
-                                          .secondary,
+                                          .onSecondary,
+                                      activeTrackColor: Colors.white,
+                                      inactiveThumbColor:
+                                          Theme.of(context).colorScheme.primary,
                                       inactiveTrackColor: Colors.white,
                                       onChanged: (bool value) {
                                         changeLive(value);

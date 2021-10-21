@@ -47,8 +47,8 @@ class _SignState extends State<Sign> {
                 title: '',
                 text: value,
                 showCancelBtn: false,
-                backgroundColor: Theme.of(context).primaryColor,
-                confirmBtnColor: Theme.of(context).primaryColor,
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                confirmBtnColor: Theme.of(context).colorScheme.primary,
                 onConfirmBtnTap: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
@@ -102,7 +102,8 @@ class _SignState extends State<Sign> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              decoration:
+                  BoxDecoration(color: Theme.of(context).colorScheme.primary),
               child: Form(
                 key: formkey,
                 child: Column(
@@ -210,8 +211,10 @@ class _SignState extends State<Sign> {
                                   buttonText: 'Kayıt Ol',
                                   fontFamily: 'Roboto',
                                   fontSize: 15,
-                                  startColor: Theme.of(context).primaryColor,
-                                  finishColor: Theme.of(context).primaryColor,
+                                  startColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  finishColor:
+                                      Theme.of(context).colorScheme.primary,
                                   fontColor: Colors.white,
                                   iconColor: Colors.white,
                                   onPressed: signUp,

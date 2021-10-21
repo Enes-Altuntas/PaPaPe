@@ -13,9 +13,9 @@ class TitleApp extends StatelessWidget {
                 fontFamily: 'Armatic',
                 fontWeight: FontWeight.bold),
             children: [
-          TextSpan(text: 'Pa', style: TextStyle(color: Colors.red)),
-          TextSpan(text: 'Pa', style: TextStyle(color: Colors.amber[600])),
-          TextSpan(text: 'Pe', style: TextStyle(color: Colors.green[300]))
+          TextSpan(text: 'Pa', style: TextStyle(color: Colors.white)),
+          TextSpan(text: 'Pa', style: TextStyle(color: Colors.white)),
+          TextSpan(text: 'Pe', style: TextStyle(color: Colors.white))
         ]));
   }
 }
