@@ -34,9 +34,13 @@ class _ProductCardState extends State<ProductCard> {
                           loadingBuilder: (context, child, loadingProgress) {
                             return loadingProgress == null
                                 ? child
-                                : Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
+                                : Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 15.0, bottom: 15.0),
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   );
                           },

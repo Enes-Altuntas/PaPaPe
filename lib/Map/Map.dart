@@ -287,7 +287,9 @@ class _Map extends State<Map> {
                                                         FontAwesomeIcons
                                                             .exclamationTriangle,
                                                     notFoundIconColor:
-                                                        Colors.amber[900],
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .secondary,
                                                     notFoundIconSize: 60.0,
                                                     notFoundText:
                                                         "Aradığınız kategoride işletme bulunmuyor !",
@@ -300,7 +302,9 @@ class _Map extends State<Map> {
                                             : Center(
                                                 child:
                                                     CircularProgressIndicator(
-                                                  color: Colors.amber[900],
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                 ),
                                               );
                                       })
@@ -315,7 +319,8 @@ class _Map extends State<Map> {
                                     )
                               : Center(
                                   child: CircularProgressIndicator(
-                                    color: Colors.amber[900],
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 );
                         },
@@ -330,7 +335,7 @@ class _Map extends State<Map> {
                                 padding: EdgeInsets.only(left: 12),
                                 decoration: BoxDecoration(
                                     color:
-                                        Theme.of(context).colorScheme.secondary,
+                                        Theme.of(context).colorScheme.primary,
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(20))),
                                 child: Row(
@@ -341,13 +346,13 @@ class _Map extends State<Map> {
                                     ),
                                     Switch(
                                       value: _filterProvider.getLive,
-                                      activeColor: Theme.of(context)
+                                      activeColor: Colors.green,
+                                      activeTrackColor: Theme.of(context)
                                           .colorScheme
                                           .onSecondary,
-                                      activeTrackColor: Colors.white,
                                       inactiveThumbColor:
                                           Theme.of(context).colorScheme.primary,
-                                      inactiveTrackColor: Colors.white,
+                                      inactiveTrackColor: Colors.red[700],
                                       onChanged: (bool value) {
                                         changeLive(value);
                                       },

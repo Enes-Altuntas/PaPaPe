@@ -79,13 +79,13 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(
-              Icons.add,
+              Icons.star,
               color: Colors.red[900],
             ),
-            title: Text('Dilek & Şikayetlerim'),
+            title: Text('Favori İşletmelerim'),
             onTap: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyWishes()));
+                  .push(MaterialPageRoute(builder: (context) => MyFavorites()));
             },
           ),
           ListTile(
@@ -101,13 +101,13 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(
-              Icons.star,
+              Icons.add,
               color: Colors.red[900],
             ),
-            title: Text('Favori İşletmelerim'),
+            title: Text('Dilek & Şikayetlerim'),
             onTap: () {
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyFavorites()));
+                  .push(MaterialPageRoute(builder: (context) => MyWishes()));
             },
           ),
           Divider(

@@ -116,7 +116,7 @@ class _CampaignCardState extends State<CampaignCard> {
                   style: TextStyle(
                       fontSize: 18.0,
                       fontFamily: 'Roboto',
-                      color: Colors.amber[900],
+                      color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold)),
             ),
             Padding(

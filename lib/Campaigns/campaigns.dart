@@ -72,7 +72,8 @@ class _CampaignsState extends State<Campaigns> {
                       default:
                         return NotFound(
                           notFoundIcon: FontAwesomeIcons.exclamationTriangle,
-                          notFoundIconColor: Colors.amber[900],
+                          notFoundIconColor:
+                              Theme.of(context).colorScheme.secondary,
                           notFoundIconSize: 60,
                           notFoundText:
                               'Üzgünüz, şu anda işletmenin yayınlamış olduğu bir kampanya bulunmamaktadır.',
@@ -85,7 +86,7 @@ class _CampaignsState extends State<Campaigns> {
                   default:
                     return Center(
                       child: CircularProgressIndicator(
-                        color: Colors.amber[900],
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     );
                 }
@@ -94,7 +95,7 @@ class _CampaignsState extends State<Campaigns> {
           )
         : Center(
             child: CircularProgressIndicator(
-              color: Colors.amber[900],
+              color: Theme.of(context).colorScheme.primary,
             ),
           );
   }

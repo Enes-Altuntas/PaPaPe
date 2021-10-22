@@ -101,7 +101,9 @@ class MyFavorites extends StatelessWidget {
                                               return Center(
                                                   child:
                                                       CircularProgressIndicator(
-                                                color: Colors.amber[900],
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                               ));
                                           }
                                         });

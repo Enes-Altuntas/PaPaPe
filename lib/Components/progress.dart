@@ -8,7 +8,7 @@ class ProgressWidget extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: CircularProgressIndicator(
-          color: Colors.amber[900],
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );

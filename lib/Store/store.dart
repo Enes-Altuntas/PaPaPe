@@ -103,7 +103,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
               )
             : Center(
                 child: CircularProgressIndicator(
-                  color: Colors.amber[900],
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
         floatingActionButton: SpeedDial(

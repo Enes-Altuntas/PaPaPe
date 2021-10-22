@@ -148,7 +148,9 @@ class _MenuState extends State<Menu> {
                                     default:
                                       return Center(
                                           child: CircularProgressIndicator(
-                                        color: Colors.amber[900],
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                       ));
                                   }
                                 }),
@@ -172,7 +174,7 @@ class _MenuState extends State<Menu> {
                 default:
                   return Center(
                     child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   );
               }
@@ -180,7 +182,7 @@ class _MenuState extends State<Menu> {
           )
         : Center(
             child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.primary,
             ),
           );
   }

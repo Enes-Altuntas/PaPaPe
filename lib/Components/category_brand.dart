@@ -39,7 +39,7 @@ class _BrandWidgetState extends State<BrandWidget> {
                     NetworkImage(widget.storeCategory.storeCatPicRef),
                 backgroundColor: (_filterProvider.getCat ==
                         widget.storeCategory.storeCatName)
-                    ? Colors.blue[900]
+                    ? Colors.green[400]
                     : Colors.white,
                 maxRadius: 30.0,
               ),

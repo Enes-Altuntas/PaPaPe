@@ -225,7 +225,7 @@ class _StoreInfoState extends State<StoreInfo> {
           )
         : Center(
             child: CircularProgressIndicator(
-              color: Colors.amber[900],
+              color: Theme.of(context).colorScheme.primary,
             ),
           );
   }

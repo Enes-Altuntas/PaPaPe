@@ -24,71 +24,61 @@ class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25.0),
-      ),
-      clipBehavior: Clip.antiAlias,
-      color: Colors.white,
-      shadowColor: Colors.black,
-      elevation: 5.0,
-      child: Container(
-        decoration: BoxDecoration(color: Colors.amber[200]),
-        child: ListTile(
-          title: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              widget.wish.wishTitle,
-              style: TextStyle(
-                  color: Colors.amber[900],
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Roboto',
-                  fontSize: 17.0),
-              textAlign: TextAlign.center,
-            ),
+      child: ListTile(
+        title: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            widget.wish.wishTitle,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto',
+                fontSize: 17.0),
+            textAlign: TextAlign.center,
           ),
-          subtitle: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              children: [
-                Text(
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              Text('İşletme İsmi: ${widget.wish.wishStoreName}',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0)),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
                   widget.wish.wishDesc,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontFamily: 'Roboto', color: Theme.of(context).hintColor),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Text('İşletme İsmi: ${widget.wish.wishStoreName}',
-                      style: TextStyle(
-                          color: Theme.of(context).hintColor,
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                    'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
+                    style: TextStyle(
+                        color: Theme.of(context).hintColor,
+                        fontFamily: 'Roboto',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15.0)),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
-                      'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
+                      (widget.wish.wishUserPhone == null ||
+                              widget.wish.wishUserPhone.isEmpty)
+                          ? 'İletişim No: Belirtilmemiş'
+                          : 'İletişim No: ${widget.wish.wishUserPhone}',
                       style: TextStyle(
                           color: Theme.of(context).hintColor,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
-                          fontSize: 15.0)),
-                ),
-                Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Text(
-                        (widget.wish.wishUserPhone == null ||
-                                widget.wish.wishUserPhone.isEmpty)
-                            ? 'İletişim No: Belirtilmemiş'
-                            : 'İletişim No: ${widget.wish.wishUserPhone}',
-                        style: TextStyle(
-                            color: Theme.of(context).hintColor,
-                            fontFamily: 'Roboto',
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15.0))),
-              ],
-            ),
+                          fontSize: 15.0))),
+            ],
           ),
         ),
       ),

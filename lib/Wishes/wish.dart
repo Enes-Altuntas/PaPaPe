@@ -84,6 +84,7 @@ class _CommentState extends State<Wish> {
       setState(() {
         _reportTitle.text = '';
         _reportDesc.text = '';
+        _reportPhone.text = '';
       });
     }
   }
