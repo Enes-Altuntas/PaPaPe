@@ -46,8 +46,8 @@ class CustomDrawer extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: (firebaseUser.displayName != null)
-                ? Text(firebaseUser.displayName)
-                : const Text('İsimsiz Kullanıcı'),
+                ? Text('Hoşgeldiniz ${firebaseUser.displayName}')
+                : const Text('Hoşgeldiniz'),
             accountEmail: Text(firebaseUser.email),
             currentAccountPicture: Container(
               decoration: BoxDecoration(
@@ -121,7 +121,7 @@ class CustomDrawer extends StatelessWidget {
               Icons.assignment_late,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('KVK ve Gizlilik'),
+            title: const Text('KVKK ve Gizlilik'),
           ),
           ListTile(
             leading: Icon(
