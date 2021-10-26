@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/reservations_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class ReservationCard extends StatefulWidget {
   final ReservationsModel reservation;
   final Function onPressedCancel;
 
-  ReservationCard({Key key, this.reservation, this.onPressedCancel})
+  const ReservationCard({Key key, this.reservation, this.onPressedCancel})
       : super(key: key);
 
   @override
@@ -36,7 +37,7 @@ class _ReservationCardState extends State<ReservationCard> {
             'İsim-Soyisim: ${widget.reservation.reservationName}',
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
+              color: ColorConstants.instance.primaryColor,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -51,7 +52,7 @@ class _ReservationCardState extends State<ReservationCard> {
                   'İşletme İsmi: ${widget.reservation.reservationStoreName}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: ColorConstants.instance.primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -61,15 +62,18 @@ class _ReservationCardState extends State<ReservationCard> {
                 child: Text(
                   'Rezerve kişi sayısı: ${widget.reservation.reservationCount.toString()}',
                   textAlign: TextAlign.center,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: ColorConstants.instance.primaryColor,
+                  ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   'Rezervasyon Açıklaması: ${(widget.reservation.reservationDesc)}',
-                  style: TextStyle(color: Theme.of(context).hintColor),
+                  style: TextStyle(
+                    color: ColorConstants.instance.hintColor,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -78,7 +82,9 @@ class _ReservationCardState extends State<ReservationCard> {
                   child: Text(
                     'Rez. Telefon: +90${widget.reservation.reservationPhone}',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Theme.of(context).hintColor),
+                    style: TextStyle(
+                      color: ColorConstants.instance.hintColor,
+                    ),
                   )),
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
@@ -86,8 +92,9 @@ class _ReservationCardState extends State<ReservationCard> {
                   'Başvuru Durumu: ${(widget.reservation.reservationStatus == 'waiting') ? 'Beklemede' : (widget.reservation.reservationStatus == 'approved') ? 'Onaylanmış' : (widget.reservation.reservationStatus == 'canceled') ? 'İptal edilmiş' : 'Reddedilmiş'}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).hintColor),
+                    fontWeight: FontWeight.bold,
+                    color: ColorConstants.instance.hintColor,
+                  ),
                 ),
               ),
               Padding(
@@ -95,7 +102,7 @@ class _ReservationCardState extends State<ReservationCard> {
                 child: Text(
                     'Rezervasyon Tarihi: ${formatDate(widget.reservation.reservationTime)}',
                     style: TextStyle(
-                        color: Theme.of(context).hintColor,
+                        color: ColorConstants.instance.hintColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 15.0)),
               ),
@@ -110,24 +117,30 @@ class _ReservationCardState extends State<ReservationCard> {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                              color: Colors.red[400],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(50.0))),
+                              color: ColorConstants.instance.inactiveColor,
+                              borderRadius: const BorderRadius.all(
+                                  Radius.circular(50.0))),
                           child: TextButton(
                               onPressed: widget.onPressedCancel,
                               child: Row(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
-                                    child: FaIcon(FontAwesomeIcons.thumbsDown,
-                                        color: Colors.white),
+                                    child: FaIcon(
+                                      FontAwesomeIcons.thumbsDown,
+                                      color:
+                                          ColorConstants.instance.iconOnColor,
+                                    ),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(
                                         left: 10.0, right: 10.0),
                                     child: Text(
                                       'Rezervasyonu İptal Et',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color:
+                                            ColorConstants.instance.textOnColor,
+                                      ),
                                     ),
                                   )
                                 ],

@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 
 class ProgressWidget extends StatelessWidget {
@@ -7,8 +8,23 @@ class ProgressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(
-          color: Theme.of(context).colorScheme.primary,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              color: ColorConstants.instance.primaryColor,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Text(
+                'Lütfen Bekleyiniz...',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: ColorConstants.instance.primaryColor,
+                    fontSize: 17.0),
+              ),
+            )
+          ],
         ),
       ),
     );

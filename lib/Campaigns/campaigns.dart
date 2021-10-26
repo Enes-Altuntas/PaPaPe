@@ -1,5 +1,7 @@
 import 'package:bulovva/Components/campaign_card.dart';
 import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/services/firestore_service.dart';
@@ -12,7 +14,7 @@ import 'package:intl/intl.dart';
 class Campaigns extends StatefulWidget {
   final StoreModel storeData;
 
-  Campaigns({Key key, this.storeData}) : super(key: key);
+  const Campaigns({Key key, this.storeData}) : super(key: key);
 
   @override
   _CampaignsState createState() => _CampaignsState();
@@ -49,7 +51,7 @@ class _CampaignsState extends State<Campaigns> {
               builder: (context, snapshot) {
                 switch (snapshot.connectionState) {
                   case ConnectionState.active:
-                    switch (snapshot.hasData && snapshot.data.length > 0) {
+                    switch (snapshot.hasData && snapshot.data.isNotEmpty) {
                       case true:
                         return Padding(
                           padding:
@@ -73,30 +75,21 @@ class _CampaignsState extends State<Campaigns> {
                         return NotFound(
                           notFoundIcon: FontAwesomeIcons.exclamationTriangle,
                           notFoundIconColor:
-                              Theme.of(context).colorScheme.secondary,
-                          notFoundIconSize: 60,
+                              ColorConstants.instance.primaryColor,
+                          notFoundIconSize: 50,
                           notFoundText:
                               'Üzgünüz, şu anda işletmenin yayınlamış olduğu bir kampanya bulunmamaktadır.',
-                          notFoundTextColor:
-                              Theme.of(context).colorScheme.primary,
-                          notFoundTextSize: 40.0,
+                          notFoundTextColor: ColorConstants.instance.hintColor,
+                          notFoundTextSize: 30.0,
                         );
                     }
                     break;
                   default:
-                    return Center(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    );
+                    return const ProgressWidget();
                 }
               },
             ),
           )
-        : Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          );
+        : const ProgressWidget();
   }
 }

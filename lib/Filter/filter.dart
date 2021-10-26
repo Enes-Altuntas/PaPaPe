@@ -1,4 +1,6 @@
+import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/services/firestore_service.dart';
@@ -8,6 +10,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Filter extends StatefulWidget {
+  const Filter({Key key}) : super(key: key);
+
   @override
   _FilterState createState() => _FilterState();
 }
@@ -46,10 +50,10 @@ class _FilterState extends State<Filter> {
 
   Future getCategories() async {
     QuerySnapshot snapshots = await FirestoreService().getStoreCat();
-    snapshots.docs.forEach((element) {
+    for (var element in snapshots.docs) {
       StoreCategory catElement = StoreCategory.fromFirestore(element.data());
       storeCats.add(catElement);
-    });
+    }
   }
 
   @override
@@ -57,25 +61,28 @@ class _FilterState extends State<Filter> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
+            color: ColorConstants.instance.iconOnColor,
           ),
           elevation: 0,
-          title: TitleApp(),
+          title: const TitleApp(),
           centerTitle: true,
+          flexibleSpace: Container(
+            color: ColorConstants.instance.primaryColor,
+          ),
         ),
         body: Container(
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-            Theme.of(context).colorScheme.secondary,
-            Theme.of(context).colorScheme.primary
+            ColorConstants.instance.primaryColor,
+            ColorConstants.instance.primaryColor,
           ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                  color: ColorConstants.instance.whiteContainer,
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(50.0),
                       topRight: Radius.circular(50.0))),
               child: Padding(
@@ -96,9 +103,8 @@ class _FilterState extends State<Filter> {
                                     'Arama Seçenekleri',
                                     style: TextStyle(
                                         fontFamily: 'Bebas',
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: ColorConstants
+                                            .instance.primaryColor,
                                         fontSize: 25.0),
                                   ),
                                 ),
@@ -107,22 +113,16 @@ class _FilterState extends State<Filter> {
                                       top: 20.0, left: 10.0),
                                   child: Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Sadece Aktif Kampanyalar',
                                         style: TextStyle(fontSize: 15.0),
                                       ),
                                       Switch(
                                           value: _filterProvider.getLive,
-                                          activeTrackColor: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary,
-                                          activeColor: Colors.green,
-                                          inactiveThumbColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          inactiveTrackColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          activeColor: ColorConstants
+                                              .instance.activeColor,
+                                          inactiveThumbColor: ColorConstants
+                                              .instance.primaryColor,
                                           onChanged: (value) {
                                             _filterProvider.changeLive(value);
                                           })
@@ -133,25 +133,28 @@ class _FilterState extends State<Filter> {
                                   padding: const EdgeInsets.only(
                                       top: 20.0, left: 10.0, right: 10.0),
                                   child: Container(
-                                    padding:
-                                        EdgeInsets.only(left: 10, right: 10),
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 10),
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.grey),
+                                        border: Border.all(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                        ),
                                         borderRadius: BorderRadius.circular(5)),
                                     child: DropdownButton(
                                         value: _filterProvider.getCat,
                                         isExpanded: true,
-                                        underline: SizedBox(),
-                                        hint: Text("Kategori"),
+                                        underline: const SizedBox(),
+                                        hint: const Text("Kategori"),
                                         items: storeCats
                                             .map((StoreCategory storeCat) {
-                                          return new DropdownMenuItem<String>(
+                                          return DropdownMenuItem<String>(
                                             value: storeCat.storeCatName,
                                             onTap: () {
                                               _filterProvider.changeCat(
                                                   storeCat.storeCatName);
                                             },
-                                            child: new Text(
+                                            child: Text(
                                               storeCat.storeCatName,
                                             ),
                                           );
@@ -176,12 +179,10 @@ class _FilterState extends State<Filter> {
                                           min: 1,
                                           max: 16,
                                           divisions: 5,
-                                          activeColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          inactiveColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          activeColor: ColorConstants
+                                              .instance.primaryColor,
+                                          inactiveColor: ColorConstants
+                                              .instance.waitingColor,
                                           label:
                                               '${_filterProvider.getDist} km',
                                           onChanged: (localValue) {
@@ -200,9 +201,8 @@ class _FilterState extends State<Filter> {
                                     'Görüntü Seçenekleri',
                                     style: TextStyle(
                                         fontFamily: 'Bebas',
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: ColorConstants
+                                            .instance.primaryColor,
                                         fontSize: 25.0),
                                   ),
                                 ),
@@ -211,22 +211,16 @@ class _FilterState extends State<Filter> {
                                       top: 20.0, left: 10.0),
                                   child: Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Gece Modu',
                                         style: TextStyle(fontSize: 15.0),
                                       ),
                                       Switch(
                                           value: _filterProvider.getMode,
-                                          activeColor: Colors.green,
-                                          activeTrackColor: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary,
-                                          inactiveThumbColor: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          inactiveTrackColor: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
+                                          activeColor: ColorConstants
+                                              .instance.activeColor,
+                                          inactiveThumbColor: ColorConstants
+                                              .instance.primaryColor,
                                           onChanged: (value) {
                                             _filterProvider.changeMode(value);
                                             preferences.setBool('dark', value);
@@ -236,11 +230,7 @@ class _FilterState extends State<Filter> {
                                 ),
                               ],
                             )
-                          : Center(
-                              child: CircularProgressIndicator(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            );
+                          : const ProgressWidget();
                     }),
               ),
             ),

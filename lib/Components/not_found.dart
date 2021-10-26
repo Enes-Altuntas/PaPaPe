@@ -22,24 +22,24 @@ class NotFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(this.notFoundIcon,
-                size: this.notFoundIconSize, color: this.notFoundIconColor),
+            FaIcon(notFoundIcon,
+                size: notFoundIconSize, color: notFoundIconColor),
             Padding(
               padding:
                   const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
               child: Text(
-                this.notFoundText,
+                notFoundText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontFamily: 'Armatic',
-                    fontSize: this.notFoundTextSize,
+                    fontSize: notFoundTextSize,
                     fontWeight: FontWeight.bold,
-                    color: this.notFoundTextColor),
+                    color: notFoundTextColor),
               ),
             ),
           ],

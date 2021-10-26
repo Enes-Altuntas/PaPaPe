@@ -30,29 +30,29 @@ class GradientButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * this.widthMultiplier,
+      width: MediaQuery.of(context).size.width * widthMultiplier,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           gradient: LinearGradient(colors: [
-            this.startColor,
-            this.finishColor,
-          ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
+            startColor,
+            finishColor,
+          ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
       child: TextButton(
-        onPressed: this.onPressed,
+        onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FaIcon(
-              this.icon,
-              color: this.iconColor,
+              icon,
+              color: iconColor,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
-              child: Text(this.buttonText,
+              child: Text(buttonText,
                   style: TextStyle(
-                      fontFamily: this.fontFamily,
-                      fontSize: this.fontSize,
-                      color: this.fontColor)),
+                      fontFamily: fontFamily,
+                      fontSize: fontSize,
+                      color: fontColor)),
             ),
           ],
         ),

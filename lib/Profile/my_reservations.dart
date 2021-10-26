@@ -1,6 +1,8 @@
 import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/reservation_card.dart';
 import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/reservations_model.dart';
 import 'package:bulovva/services/firestore_service.dart';
 import 'package:bulovva/services/toast_service.dart';
@@ -36,25 +38,28 @@ class _MyReservationsState extends State<MyReservations> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
+            color: ColorConstants.instance.iconOnColor, //change your color here
           ),
           elevation: 0,
-          title: TitleApp(),
+          title: const TitleApp(),
           centerTitle: true,
+          flexibleSpace: Container(
+            color: ColorConstants.instance.primaryColor,
+          ),
         ),
         body: Container(
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               gradient: LinearGradient(colors: [
-            Theme.of(context).colorScheme.secondary,
-            Theme.of(context).colorScheme.primary
+            ColorConstants.instance.primaryColor,
+            ColorConstants.instance.primaryColor,
           ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                  color: ColorConstants.instance.whiteContainer,
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40.0),
                       topRight: Radius.circular(40.0))),
               child: Padding(
@@ -66,7 +71,7 @@ class _MyReservationsState extends State<MyReservations> {
                       switch (snapshot.connectionState) {
                         case ConnectionState.active:
                           switch (
-                              snapshot.hasData && snapshot.data.length > 0) {
+                              snapshot.hasData && snapshot.data.isNotEmpty) {
                             case true:
                               return ListView.builder(
                                 itemCount: snapshot.data.length,
@@ -88,21 +93,18 @@ class _MyReservationsState extends State<MyReservations> {
                                 notFoundIcon:
                                     FontAwesomeIcons.exclamationTriangle,
                                 notFoundIconColor:
-                                    Theme.of(context).colorScheme.secondary,
+                                    ColorConstants.instance.primaryColor,
                                 notFoundIconSize: 60,
                                 notFoundText:
                                     'Üzgünüz, yapmış olduğunuz bir rezrvasyon bulunmamaktadır.',
                                 notFoundTextColor:
-                                    Theme.of(context).primaryColor,
+                                    ColorConstants.instance.hintColor,
                                 notFoundTextSize: 40.0,
                               );
                           }
                           break;
                         default:
-                          return Center(
-                              child: CircularProgressIndicator(
-                            color: Theme.of(context).colorScheme.primary,
-                          ));
+                          return const ProgressWidget();
                       }
                     },
                   )),

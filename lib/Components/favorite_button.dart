@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/user_model.dart';
 import 'package:bulovva/services/firestore_service.dart';
 import 'package:bulovva/services/toast_service.dart';
@@ -24,10 +25,10 @@ class FavoriteButton extends StatelessWidget {
                 size: 30,
                 color: (snapshot.data != null &&
                         snapshot.data.favorites != null &&
-                        snapshot.data.favorites.length > 0 &&
+                        snapshot.data.favorites.isNotEmpty &&
                         snapshot.data.favorites.contains(storeId)
-                    ? Colors.amberAccent
-                    : Colors.white),
+                    ? ColorConstants.instance.waitingColor
+                    : ColorConstants.instance.whiteContainer),
               ));
         });
   }

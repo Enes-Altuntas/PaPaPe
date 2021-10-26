@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:flutter/material.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
@@ -31,7 +32,7 @@ class _BrandWidgetState extends State<BrandWidget> {
         },
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 60.0,
               width: 60.0,
               child: CircleAvatar(
@@ -39,8 +40,8 @@ class _BrandWidgetState extends State<BrandWidget> {
                     NetworkImage(widget.storeCategory.storeCatPicRef),
                 backgroundColor: (_filterProvider.getCat ==
                         widget.storeCategory.storeCatName)
-                    ? Colors.green[400]
-                    : Colors.white,
+                    ? ColorConstants.instance.inactiveColor
+                    : ColorConstants.instance.whiteContainer,
                 maxRadius: 30.0,
               ),
             ),
@@ -49,8 +50,10 @@ class _BrandWidgetState extends State<BrandWidget> {
               child: Text(
                 widget.storeCategory.storeShort,
                 textAlign: TextAlign.center,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: ColorConstants.instance.textOnColor,
+                ),
               ),
             )
           ],

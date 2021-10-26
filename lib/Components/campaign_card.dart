@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:bulovva/Components/gradient_button.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,8 @@ class CampaignCard extends StatefulWidget {
   final CampaignModel campaign;
   final Function onPressed;
 
-  CampaignCard({Key key, this.campaign, this.onPressed}) : super(key: key);
+  const CampaignCard({Key key, this.campaign, this.onPressed})
+      : super(key: key);
 
   @override
   _CampaignCardState createState() => _CampaignCardState();
@@ -32,8 +34,8 @@ class _CampaignCardState extends State<CampaignCard> {
         borderRadius: BorderRadius.circular(50.0),
       ),
       clipBehavior: Clip.antiAlias,
-      color: Colors.white,
-      shadowColor: Colors.black,
+      color: ColorConstants.instance.whiteContainer,
+      shadowColor: ColorConstants.instance.hintColor,
       elevation: 5.0,
       child: InkWell(
         child: Column(
@@ -45,9 +47,9 @@ class _CampaignCardState extends State<CampaignCard> {
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                       gradient: LinearGradient(colors: [
-                    Theme.of(context).colorScheme.secondary,
-                    Theme.of(context).colorScheme.primary
-                  ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
+                    ColorConstants.instance.secondaryColor,
+                    ColorConstants.instance.primaryColor,
+                  ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
                   child: (widget.campaign.campaignPicRef != null &&
                           widget.campaign.campaignPicRef.isNotEmpty)
                       ? Image.network(widget.campaign.campaignPicRef,
@@ -56,14 +58,14 @@ class _CampaignCardState extends State<CampaignCard> {
                               ? child
                               : Center(
                                   child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                    color: ColorConstants.instance.iconOnColor,
                                   ),
                                 );
                         }, fit: BoxFit.fill)
                       : Center(
                           child: Text('Kampanya Resmi Yok',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: ColorConstants.instance.textOnColor,
                                   fontFamily: 'Bebas',
                                   fontSize: 20.0)),
                         ),
@@ -76,11 +78,13 @@ class _CampaignCardState extends State<CampaignCard> {
                             height: 40.0,
                             width: 40.0,
                             decoration: BoxDecoration(
-                                color: Colors.green,
+                                color: ColorConstants.instance.activeColor,
                                 borderRadius: BorderRadius.circular(30.0)),
                             child: Center(
-                              child: FaIcon(FontAwesomeIcons.checkCircle,
-                                  color: Colors.white),
+                              child: FaIcon(
+                                FontAwesomeIcons.checkCircle,
+                                color: ColorConstants.instance.iconOnColor,
+                              ),
                             ),
                           )
                         : (widget.campaign.campaignStatus == 'inactive')
@@ -88,22 +92,27 @@ class _CampaignCardState extends State<CampaignCard> {
                                 height: 40.0,
                                 width: 40.0,
                                 decoration: BoxDecoration(
-                                    color: Colors.red[600],
+                                    color:
+                                        ColorConstants.instance.inactiveColor,
                                     borderRadius: BorderRadius.circular(30.0)),
                                 child: Center(
-                                  child: FaIcon(FontAwesomeIcons.ban,
-                                      color: Colors.white),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.ban,
+                                    color: ColorConstants.instance.iconOnColor,
+                                  ),
                                 ),
                               )
                             : Container(
                                 height: 40.0,
                                 width: 40.0,
                                 decoration: BoxDecoration(
-                                    color: Colors.amber[600],
+                                    color: ColorConstants.instance.waitingColor,
                                     borderRadius: BorderRadius.circular(30.0)),
                                 child: Center(
-                                  child: FaIcon(FontAwesomeIcons.hourglassHalf,
-                                      color: Colors.white),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.hourglassHalf,
+                                    color: ColorConstants.instance.iconOnColor,
+                                  ),
                                 ),
                               ))
               ],
@@ -116,13 +125,13 @@ class _CampaignCardState extends State<CampaignCard> {
                   style: TextStyle(
                       fontSize: 18.0,
                       fontFamily: 'Roboto',
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: ColorConstants.instance.primaryColor,
                       fontWeight: FontWeight.bold)),
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(widget.campaign.campaignDesc,
-                  style: TextStyle(fontFamily: 'Roboto'),
+                  style: const TextStyle(fontFamily: 'Roboto'),
                   textAlign: TextAlign.center),
             ),
             Padding(
@@ -131,13 +140,17 @@ class _CampaignCardState extends State<CampaignCard> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50.0),
-                  color: Colors.amber[200],
+                  color: (widget.campaign.campaignStatus == 'active')
+                      ? ColorConstants.instance.activeColor
+                      : (widget.campaign.campaignStatus == 'inactive')
+                          ? ColorConstants.instance.inactiveColor
+                          : ColorConstants.instance.waitingColor,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
+                      color: ColorConstants.instance.whiteContainer,
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
@@ -150,7 +163,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 14.0,
-                              color: Theme.of(context).hintColor,
+                              color: ColorConstants.instance.hintColor,
                               fontFamily: 'Roboto',
                               fontWeight: FontWeight.bold)),
                     ),
@@ -162,21 +175,21 @@ class _CampaignCardState extends State<CampaignCard> {
                           style: TextStyle(
                               fontSize: 14.0,
                               fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor,
+                              color: ColorConstants.instance.hintColor,
                               fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                         padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
                         child: GradientButton(
                           buttonText: 'Kampanya Kodu Al',
-                          finishColor: Colors.amber[900],
-                          startColor: Colors.amber[800],
+                          finishColor: ColorConstants.instance.secondaryColor,
+                          startColor: ColorConstants.instance.primaryColor,
                           fontFamily: 'Roboto',
                           fontSize: 15,
                           icon: FontAwesomeIcons.getPocket,
                           onPressed: widget.onPressed,
-                          fontColor: Colors.white,
-                          iconColor: Colors.white,
+                          fontColor: ColorConstants.instance.textOnColor,
+                          iconColor: ColorConstants.instance.iconOnColor,
                           widthMultiplier: 0.7,
                         )),
                   ],

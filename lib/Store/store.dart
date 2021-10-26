@@ -1,6 +1,7 @@
 import 'package:bulovva/Campaigns/campaigns.dart';
 import 'package:bulovva/Components/favorite_button.dart';
 import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Products/products.dart';
 import 'package:bulovva/Reservations/reservation.dart';
@@ -14,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 class Store extends StatefulWidget {
   final StoreModel storeData;
 
-  Store({Key key, this.storeData}) : super(key: key);
+  const Store({Key key, this.storeData}) : super(key: key);
 
   @override
   _StoreState createState() => _StoreState();
@@ -24,15 +25,15 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
   PageController pageController = PageController();
   int _selectedIndex = 0;
   List<Icon> items = [
-    Icon(
+    const Icon(
       Icons.add_alert,
       color: Colors.white,
     ),
-    Icon(
+    const Icon(
       Icons.menu_book,
       color: Colors.white,
     ),
-    Icon(
+    const Icon(
       Icons.store,
       color: Colors.white,
     )
@@ -68,11 +69,12 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
         appBar: AppBar(
           toolbarHeight: 70.0,
           flexibleSpace: Container(
-            decoration:
-                BoxDecoration(color: Theme.of(context).colorScheme.primary),
+            decoration: BoxDecoration(
+              color: ColorConstants.instance.primaryColor,
+            ),
           ),
           iconTheme: IconThemeData(
-            color: Colors.white,
+            color: ColorConstants.instance.iconOnColor,
           ),
           actions: [
             Padding(
@@ -84,7 +86,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
           ],
           elevation: 5,
           centerTitle: true,
-          title: TitleApp(),
+          title: const TitleApp(),
         ),
         body: (isLoading == false)
             ? PageView(
@@ -103,22 +105,24 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
               )
             : Center(
                 child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: ColorConstants.instance.primaryColor,
                 ),
               ),
         floatingActionButton: SpeedDial(
           animatedIcon: AnimatedIcons.menu_close,
-          animatedIconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          overlayColor: Colors.black,
+          animatedIconTheme: IconThemeData(
+            color: ColorConstants.instance.iconOnColor,
+          ),
+          backgroundColor: ColorConstants.instance.primaryColor,
+          overlayColor: ColorConstants.instance.hintColor,
           overlayOpacity: 0.8,
           children: [
             SpeedDialChild(
                 child: Icon(
                   Icons.call,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: ColorConstants.instance.primaryColor,
                 ),
-                backgroundColor: Colors.white,
+                backgroundColor: ColorConstants.instance.whiteContainer,
                 onTap: () {
                   makePhoneCall();
                 },
@@ -126,9 +130,9 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
             SpeedDialChild(
                 child: Icon(
                   Icons.location_on,
-                  color: Colors.white,
+                  color: ColorConstants.instance.whiteContainer,
                 ),
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor: ColorConstants.instance.primaryColor,
                 onTap: () {
                   findPlace();
                 },
@@ -136,7 +140,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
             SpeedDialChild(
                 child: Icon(
                   Icons.menu_book,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: ColorConstants.instance.primaryColor,
                 ),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -144,12 +148,12 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
                             store: widget.storeData,
                           )));
                 },
-                backgroundColor: Colors.white,
+                backgroundColor: ColorConstants.instance.whiteContainer,
                 label: 'Rezervasyon Yaptır'),
             SpeedDialChild(
                 child: Icon(
                   Icons.add,
-                  color: Colors.white,
+                  color: ColorConstants.instance.whiteContainer,
                 ),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
@@ -157,7 +161,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
                             store: widget.storeData,
                           )));
                 },
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor: ColorConstants.instance.primaryColor,
                 label: 'Dilek & Şikayet Yaz'),
           ],
         ),
@@ -167,11 +171,11 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
           height: 60.0,
           backgroundColor: Colors.transparent,
           animationCurve: Curves.easeIn,
-          animationDuration: Duration(milliseconds: 500),
+          animationDuration: const Duration(milliseconds: 500),
           onTap: onTapped,
           index: _selectedIndex,
-          color: Theme.of(context).colorScheme.secondary,
-          buttonBackgroundColor: Theme.of(context).colorScheme.secondary,
+          color: ColorConstants.instance.primaryColor,
+          buttonBackgroundColor: ColorConstants.instance.primaryColor,
         ));
   }
 }

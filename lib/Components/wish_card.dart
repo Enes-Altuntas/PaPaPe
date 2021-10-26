@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/wishes_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _CommentCardState extends State<CommentCard> {
           child: Text(
             widget.wish.wishTitle,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
+                color: ColorConstants.instance.primaryColor,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Roboto',
                 fontSize: 17.0),
@@ -43,7 +44,7 @@ class _CommentCardState extends State<CommentCard> {
             children: [
               Text('İşletme İsmi: ${widget.wish.wishStoreName}',
                   style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: ColorConstants.instance.primaryColor,
                       fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0)),
@@ -53,7 +54,9 @@ class _CommentCardState extends State<CommentCard> {
                   widget.wish.wishDesc,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontFamily: 'Roboto', color: Theme.of(context).hintColor),
+                    fontFamily: 'Roboto',
+                    color: ColorConstants.instance.hintColor,
+                  ),
                 ),
               ),
               Padding(
@@ -61,7 +64,7 @@ class _CommentCardState extends State<CommentCard> {
                 child: Text(
                     'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
                     style: TextStyle(
-                        color: Theme.of(context).hintColor,
+                        color: ColorConstants.instance.hintColor,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
                         fontSize: 15.0)),
@@ -74,7 +77,7 @@ class _CommentCardState extends State<CommentCard> {
                           ? 'İletişim No: Belirtilmemiş'
                           : 'İletişim No: ${widget.wish.wishUserPhone}',
                       style: TextStyle(
-                          color: Theme.of(context).hintColor,
+                          color: ColorConstants.instance.hintColor,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0))),

@@ -1,5 +1,7 @@
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/product_card.dart';
+import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/product_category_model.dart';
 import 'package:bulovva/Models/product_model.dart';
 import 'package:bulovva/Models/store_model.dart';
@@ -10,7 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class Menu extends StatefulWidget {
   final StoreModel storeData;
 
-  Menu({Key key, this.storeData}) : super(key: key);
+  const Menu({Key key, this.storeData}) : super(key: key);
 
   @override
   _MenuState createState() => _MenuState();
@@ -21,7 +23,7 @@ class _MenuState extends State<Menu> {
   List<ProductModel> products;
   String _selectedCategoryId;
   String _selectedCategoryName;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class _MenuState extends State<Menu> {
               category = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.active:
-                  switch (snapshot.hasData && snapshot.data.length > 0) {
+                  switch (snapshot.hasData && snapshot.data.isNotEmpty) {
                     case true:
                       if (_selectedCategoryId == null) {
                         _selectedCategoryId = snapshot.data[0].categoryId;
@@ -45,7 +47,7 @@ class _MenuState extends State<Menu> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                color: Colors.red,
+                                color: ColorConstants.instance.primaryColor,
                                 height: 60.0,
                                 width: MediaQuery.of(context).size.width,
                                 child: ListView.builder(
@@ -68,10 +70,11 @@ class _MenuState extends State<Menu> {
                                             },
                                             child: Container(
                                               decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                  color: Colors.white),
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
+                                                color: ColorConstants
+                                                    .instance.whiteContainer,
+                                              ),
                                               child: Padding(
                                                 padding:
                                                     const EdgeInsets.all(8.0),
@@ -79,7 +82,9 @@ class _MenuState extends State<Menu> {
                                                   snapshot
                                                       .data[index].categoryName,
                                                   style: TextStyle(
-                                                      color: Colors.red,
+                                                      color: ColorConstants
+                                                          .instance
+                                                          .primaryColor,
                                                       fontFamily: 'Bebas',
                                                       fontSize: 16.0),
                                                 ),
@@ -101,14 +106,14 @@ class _MenuState extends State<Menu> {
                                   switch (snapshot.connectionState) {
                                     case ConnectionState.active:
                                       switch (snapshot.hasData &&
-                                          snapshot.data.length > 0) {
+                                          snapshot.data.isNotEmpty) {
                                         case true:
                                           return Column(
                                             children: [
                                               ListView.builder(
                                                 shrinkWrap: true,
                                                 physics:
-                                                    ClampingScrollPhysics(),
+                                                    const ClampingScrollPhysics(),
                                                 itemCount: snapshot.data.length,
                                                 itemBuilder: (context, index) {
                                                   return Padding(
@@ -132,26 +137,19 @@ class _MenuState extends State<Menu> {
                                           return NotFound(
                                             notFoundIcon: FontAwesomeIcons
                                                 .exclamationTriangle,
-                                            notFoundIconColor: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
+                                            notFoundIconColor: ColorConstants
+                                                .instance.primaryColor,
                                             notFoundIconSize: 50,
                                             notFoundText:
                                                 "'$_selectedCategoryName' kategorisinde hiçbir ürün bulunamamıştır !",
-                                            notFoundTextColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                            notFoundTextColor: ColorConstants
+                                                .instance.hintColor,
                                             notFoundTextSize: 30.0,
                                           );
                                       }
                                       break;
                                     default:
-                                      return Center(
-                                          child: CircularProgressIndicator(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ));
+                                      return const ProgressWidget();
                                   }
                                 }),
                           ),
@@ -161,29 +159,19 @@ class _MenuState extends State<Menu> {
                     default:
                       return NotFound(
                         notFoundIcon: FontAwesomeIcons.exclamationTriangle,
-                        notFoundIconColor:
-                            Theme.of(context).colorScheme.secondary,
+                        notFoundIconColor: ColorConstants.instance.primaryColor,
                         notFoundIconSize: 50,
                         notFoundText: 'Üzgünüz, menüde ürün bulunmamaktadır.',
-                        notFoundTextColor:
-                            Theme.of(context).colorScheme.primary,
+                        notFoundTextColor: ColorConstants.instance.hintColor,
                         notFoundTextSize: 30.0,
                       );
                   }
                   break;
                 default:
-                  return Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  );
+                  return const ProgressWidget();
               }
             },
           )
-        : Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          );
+        : const ProgressWidget();
   }
 }

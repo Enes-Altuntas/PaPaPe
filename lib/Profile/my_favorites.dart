@@ -1,6 +1,7 @@
 import 'package:bulovva/Components/favorite_store.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Models/user_model.dart';
 import 'package:bulovva/Store/store.dart';
@@ -22,23 +23,27 @@ class MyFavorites extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          flexibleSpace: Container(
+            color: ColorConstants.instance.primaryColor,
+          ),
           iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
+            color: ColorConstants.instance.iconOnColor, //change your color here
           ),
           elevation: 0,
-          title: TitleApp(),
+          title: const TitleApp(),
           centerTitle: true,
         ),
         body: Container(
           width: MediaQuery.of(context).size.width,
-          decoration:
-              BoxDecoration(color: Theme.of(context).colorScheme.primary),
+          decoration: BoxDecoration(
+            color: ColorConstants.instance.primaryColor,
+          ),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                  color: ColorConstants.instance.whiteContainer,
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(40.0),
                       topRight: Radius.circular(40.0))),
               child: Padding(
@@ -51,7 +56,7 @@ class MyFavorites extends StatelessWidget {
                           case ConnectionState.active:
                             switch (snapshot.data != null &&
                                 snapshot.data.favorites != null &&
-                                snapshot.data.favorites.length > 0) {
+                                snapshot.data.favorites.isNotEmpty) {
                               case true:
                                 return ListView.builder(
                                   itemCount: snapshot.data.favorites.length,
@@ -83,17 +88,15 @@ class MyFavorites extends StatelessWidget {
                                                         FontAwesomeIcons
                                                             .exclamationCircle,
                                                     notFoundIconColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                    notFoundIconSize: 40,
+                                                        ColorConstants.instance
+                                                            .primaryColor,
+                                                    notFoundIconSize: 50,
                                                     notFoundText:
                                                         'İşletme bilgileri bulunamadı !',
                                                     notFoundTextColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                    notFoundTextSize: 40.0,
+                                                        ColorConstants
+                                                            .instance.hintColor,
+                                                    notFoundTextSize: 30.0,
                                                   );
                                               }
                                               break;
@@ -101,9 +104,8 @@ class MyFavorites extends StatelessWidget {
                                               return Center(
                                                   child:
                                                       CircularProgressIndicator(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .primary,
+                                                color: ColorConstants
+                                                    .instance.primaryColor,
                                               ));
                                           }
                                         });
@@ -115,12 +117,12 @@ class MyFavorites extends StatelessWidget {
                                   notFoundIcon:
                                       FontAwesomeIcons.exclamationTriangle,
                                   notFoundIconColor:
-                                      Theme.of(context).colorScheme.secondary,
+                                      ColorConstants.instance.primaryColor,
                                   notFoundIconSize: 50,
                                   notFoundText:
                                       'Üzgünüz, favorilerinizde işletme bulunmamaktadır.',
                                   notFoundTextColor:
-                                      Theme.of(context).colorScheme.secondary,
+                                      ColorConstants.instance.hintColor,
                                   notFoundTextSize: 30.0,
                                 );
                             }
@@ -128,7 +130,7 @@ class MyFavorites extends StatelessWidget {
                           default:
                             return Center(
                                 child: CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: ColorConstants.instance.primaryColor,
                             ));
                         }
                       })),

@@ -1,7 +1,11 @@
+// ignore_for_file: file_names
+
 import 'package:bulovva/Components/category_brand.dart';
 import 'package:bulovva/Components/custom_drawer.dart';
 import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/markers_model.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Models/store_model.dart';
@@ -18,7 +22,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Map extends StatefulWidget {
-  Map({Key key}) : super(key: key);
+  const Map({Key key}) : super(key: key);
 
   @override
   _Map createState() => _Map();
@@ -94,14 +98,14 @@ class _Map extends State<Map> {
   getSearchCircle(Position position) {
     circles.clear();
     Circle circle = Circle(
-        circleId: CircleId('search'),
+        circleId: const CircleId('search'),
         center: LatLng(position.latitude, position.longitude),
         radius: _filterProvider.getDist * 1000,
         strokeWidth: 3,
         fillColor: (_filterProvider.getMode == true)
-            ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
-            : Colors.lightBlue.withOpacity(0.2),
-        strokeColor: Colors.lightBlue[200].withOpacity(0.8));
+            ? ColorConstants.instance.primaryColor.withOpacity(0.1)
+            : ColorConstants.instance.primaryColor.withOpacity(0.2),
+        strokeColor: ColorConstants.instance.primaryColor.withOpacity(0.8));
     circles.add(circle);
   }
 
@@ -163,12 +167,17 @@ class _Map extends State<Map> {
     return Scaffold(
         appBar: AppBar(
           elevation: 5,
-          title: TitleApp(),
+          title: const TitleApp(),
           centerTitle: true,
+          flexibleSpace: Container(
+            color: ColorConstants.instance.primaryColor,
+          ),
         ),
-        drawer: CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Container(
-            decoration: BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration(
+              color: ColorConstants.instance.whiteContainer,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -177,8 +186,8 @@ class _Map extends State<Map> {
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                           colors: [
-                            Theme.of(context).colorScheme.secondary,
-                            Theme.of(context).colorScheme.primary
+                            ColorConstants.instance.secondaryColor,
+                            ColorConstants.instance.primaryColor,
                           ],
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter),
@@ -217,8 +226,8 @@ class _Map extends State<Map> {
                                         if (snapshot.connectionState ==
                                                 ConnectionState.active &&
                                             snapshot.hasData == true &&
-                                            snapshot.data.length != 0) {
-                                          snapshot.data.forEach((element) {
+                                            snapshot.data.isNotEmpty) {
+                                          for (var element in snapshot.data) {
                                             markers.add(Marker(
                                                 markerId:
                                                     MarkerId(element.storeId),
@@ -249,14 +258,14 @@ class _Map extends State<Map> {
                                                     element.position.geopoint
                                                         .latitude,
                                                     element.position.geopoint.longitude)));
-                                          });
+                                          }
                                         }
                                         getSearchCircle(snapshotPosition.data);
                                         return (snapshot.connectionState ==
                                                 ConnectionState.active)
                                             ? (snapshot.hasData &&
                                                     snapshot.data != null &&
-                                                    snapshot.data.length != 0)
+                                                    snapshot.data.isNotEmpty)
                                                 ? GoogleMap(
                                                     onMapCreated:
                                                         (GoogleMapController
@@ -287,42 +296,27 @@ class _Map extends State<Map> {
                                                         FontAwesomeIcons
                                                             .exclamationTriangle,
                                                     notFoundIconColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .secondary,
-                                                    notFoundIconSize: 60.0,
+                                                        ColorConstants.instance
+                                                            .primaryColor,
+                                                    notFoundIconSize: 50.0,
                                                     notFoundText:
                                                         "Aradığınız kategoride işletme bulunmuyor !",
                                                     notFoundTextColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                    notFoundTextSize: 40.0,
+                                                        ColorConstants
+                                                            .instance.hintColor,
+                                                    notFoundTextSize: 30.0,
                                                   )
-                                            : Center(
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                ),
-                                              );
+                                            : const ProgressWidget();
                                       })
                                   : Center(
                                       child: Text('Konumunuz bulunamadı !',
                                           style: TextStyle(
                                               fontFamily: 'Bebas',
-                                              color: Theme.of(context)
-                                                  .colorScheme
-                                                  .primary,
-                                              fontSize: 25.0)),
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                              fontSize: 30.0)),
                                     )
-                              : Center(
-                                  child: CircularProgressIndicator(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                );
+                              : const ProgressWidget();
                         },
                       ),
                       Positioned(
@@ -332,27 +326,26 @@ class _Map extends State<Map> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: EdgeInsets.only(left: 12),
+                                padding: const EdgeInsets.only(left: 12),
                                 decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
+                                    color: ColorConstants.instance.primaryColor,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20))),
                                 child: Row(
                                   children: [
                                     Text(
                                       'Aktif Kampanyalar',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(
+                                        color:
+                                            ColorConstants.instance.textOnColor,
+                                      ),
                                     ),
                                     Switch(
                                       value: _filterProvider.getLive,
-                                      activeColor: Colors.green,
-                                      activeTrackColor: Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary,
-                                      inactiveThumbColor:
-                                          Theme.of(context).colorScheme.primary,
-                                      inactiveTrackColor: Colors.red[700],
+                                      activeColor:
+                                          ColorConstants.instance.activeColor,
+                                      inactiveThumbColor: ColorConstants
+                                          .instance.secondaryColor,
                                       onChanged: (bool value) {
                                         changeLive(value);
                                       },

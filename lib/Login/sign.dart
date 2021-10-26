@@ -1,5 +1,6 @@
 import 'package:bulovva/Components/gradient_button.dart';
 import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Login/login.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:bulovva/services/toast_service.dart';
@@ -9,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class Sign extends StatefulWidget {
-  Sign({Key key}) : super(key: key);
+  const Sign({Key key}) : super(key: key);
 
   @override
   _SignState createState() => _SignState();
@@ -47,8 +48,8 @@ class _SignState extends State<Sign> {
                 title: '',
                 text: value,
                 showCancelBtn: false,
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                confirmBtnColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: ColorConstants.instance.primaryColor,
+                confirmBtnColor: ColorConstants.instance.primaryColor,
                 onConfirmBtnTap: () {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
@@ -102,8 +103,9 @@ class _SignState extends State<Sign> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration:
-                  BoxDecoration(color: Theme.of(context).colorScheme.primary),
+              decoration: BoxDecoration(
+                color: ColorConstants.instance.primaryColor,
+              ),
               child: Form(
                 key: formkey,
                 child: Column(
@@ -115,27 +117,33 @@ class _SignState extends State<Sign> {
                             text: TextSpan(
                                 style: TextStyle(
                                     fontSize: 70.0,
-                                    color: Colors.white,
+                                    color: ColorConstants.instance.textOnColor,
                                     fontFamily: 'Armatic',
                                     fontWeight: FontWeight.bold),
                                 children: [
                               TextSpan(
                                   text: 'Pa',
-                                  style: TextStyle(color: Colors.red)),
+                                  style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                  )),
                               TextSpan(
                                   text: 'Pa',
-                                  style: TextStyle(color: Colors.amber[600])),
+                                  style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                  )),
                               TextSpan(
                                   text: 'Pe',
-                                  style: TextStyle(color: Colors.green[300]))
+                                  style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                  ))
                             ]))),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(50.0),
                             topRight: Radius.circular(50.0)),
-                        color: Colors.white,
+                        color: ColorConstants.instance.whiteContainer,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(
@@ -145,7 +153,7 @@ class _SignState extends State<Sign> {
                             TextFormField(
                                 controller: emailController,
                                 keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     icon: Icon(Icons.account_circle_outlined),
                                     labelText: 'E-Posta'),
                                 validator: validateMail),
@@ -156,12 +164,20 @@ class _SignState extends State<Sign> {
                                     (isVisible == false) ? true : false,
                                 controller: passwordController,
                                 decoration: InputDecoration(
-                                    icon: Icon(Icons.vpn_key_outlined),
+                                    icon: const Icon(Icons.vpn_key_outlined),
                                     labelText: 'Yeni Parola',
                                     suffixIcon: IconButton(
                                       icon: (isVisible == false)
-                                          ? Icon(Icons.visibility_off)
-                                          : Icon(Icons.visibility),
+                                          ? Icon(
+                                              Icons.visibility_off,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            )
+                                          : Icon(
+                                              Icons.visibility,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            ),
                                       onPressed: () {
                                         if (isVisible == true) {
                                           setState(() {
@@ -184,12 +200,20 @@ class _SignState extends State<Sign> {
                                     (isVisible == false) ? true : false,
                                 controller: passwordVerifyController,
                                 decoration: InputDecoration(
-                                    icon: Icon(Icons.vpn_key_outlined),
+                                    icon: const Icon(Icons.vpn_key_outlined),
                                     labelText: 'Yeni Parola (Tekrar)',
                                     suffixIcon: IconButton(
                                       icon: (isVisible == false)
-                                          ? Icon(Icons.visibility_off)
-                                          : Icon(Icons.visibility),
+                                          ? Icon(
+                                              Icons.visibility_off,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            )
+                                          : Icon(
+                                              Icons.visibility,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            ),
                                       onPressed: () {
                                         if (isVisible == true) {
                                           setState(() {
@@ -212,11 +236,13 @@ class _SignState extends State<Sign> {
                                   fontFamily: 'Roboto',
                                   fontSize: 15,
                                   startColor:
-                                      Theme.of(context).colorScheme.primary,
+                                      ColorConstants.instance.primaryColor,
                                   finishColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  fontColor: Colors.white,
-                                  iconColor: Colors.white,
+                                      ColorConstants.instance.secondaryColor,
+                                  fontColor:
+                                      ColorConstants.instance.textOnColor,
+                                  iconColor:
+                                      ColorConstants.instance.iconOnColor,
                                   onPressed: signUp,
                                   icon: FontAwesomeIcons.save,
                                   widthMultiplier: 0.9,
@@ -227,14 +253,19 @@ class _SignState extends State<Sign> {
                                   buttonText: 'Geri',
                                   fontFamily: 'Roboto',
                                   fontSize: 15,
-                                  startColor: Colors.amber[800],
-                                  finishColor: Colors.amber[800],
-                                  fontColor: Colors.white,
-                                  iconColor: Colors.white,
+                                  startColor: ColorConstants
+                                      .instance.signBackButtonSecondary,
+                                  finishColor: ColorConstants
+                                      .instance.signBackButtonPrimary,
+                                  fontColor:
+                                      ColorConstants.instance.textOnColor,
+                                  iconColor:
+                                      ColorConstants.instance.iconOnColor,
                                   onPressed: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (context) => Login()));
+                                            builder: (context) =>
+                                                const Login()));
                                   },
                                   icon: FontAwesomeIcons.arrowLeft,
                                   widthMultiplier: 0.9,
@@ -248,6 +279,6 @@ class _SignState extends State<Sign> {
               ),
             ),
           ))
-        : ProgressWidget();
+        : const ProgressWidget();
   }
 }

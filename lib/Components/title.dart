@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 
 class TitleApp extends StatelessWidget {
@@ -9,13 +10,25 @@ class TitleApp extends StatelessWidget {
         text: TextSpan(
             style: TextStyle(
                 fontSize: 45.0,
-                color: Colors.white,
+                color: ColorConstants.instance.textOnColor,
                 fontFamily: 'Armatic',
                 fontWeight: FontWeight.bold),
             children: [
-          TextSpan(text: 'Pa', style: TextStyle(color: Colors.white)),
-          TextSpan(text: 'Pa', style: TextStyle(color: Colors.white)),
-          TextSpan(text: 'Pe', style: TextStyle(color: Colors.white))
+          TextSpan(
+              text: 'Pa',
+              style: TextStyle(
+                color: ColorConstants.instance.inactiveColor,
+              )),
+          TextSpan(
+              text: 'Pa',
+              style: TextStyle(
+                color: ColorConstants.instance.waitingColor,
+              )),
+          TextSpan(
+              text: 'Pe',
+              style: TextStyle(
+                color: ColorConstants.instance.activeColor,
+              ))
         ]));
   }
 }

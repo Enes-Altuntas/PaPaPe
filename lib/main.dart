@@ -1,16 +1,18 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Login/login.dart';
-import 'package:bulovva/Map/Map.dart';
+import 'package:bulovva/Map/map.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   await init();
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -27,6 +29,8 @@ handleNotifications() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -41,38 +45,40 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'PaPaPe',
             debugShowCheckedModeBanner: false,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate
+            ],
+            supportedLocales: const [Locale('en', 'EN'), Locale('tr', 'TR')],
             theme: ThemeData(
               cardTheme: CardTheme(
-                  clipBehavior: Clip.antiAlias,
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                    side: BorderSide(
-                      color: Colors.red[700],
-                      width: 2.0,
-                    ),
+                clipBehavior: Clip.antiAlias,
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  side: BorderSide(
+                    color: ColorConstants.instance.primaryColor,
+                    width: 2.0,
                   ),
-                  color: Colors.white),
-              colorScheme: ColorScheme.fromSwatch().copyWith(
-                  primary: Colors.red,
-                  secondary: Colors.red[700],
-                  onPrimary: Colors.white,
-                  onSecondary: Colors.green[700]),
+                ),
+                color: ColorConstants.instance.whiteContainer,
+              ),
             ),
-            home: AuthWrapper()));
+            home: const AuthWrapper()));
   }
 }
 
 class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final User firebaseUser = context.watch<User>();
     switch (firebaseUser != null && firebaseUser.emailVerified) {
       case true:
-        return Map();
+        return const Map();
         break;
       default:
-        return Login();
+        return const Login();
     }
   }
 }

@@ -1,7 +1,8 @@
 import 'package:bulovva/Components/gradient_button.dart';
 import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Login/sign.dart';
-import 'package:bulovva/Map/Map.dart';
+import 'package:bulovva/Map/map.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:bulovva/services/toast_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatefulWidget {
-  Login({Key key}) : super(key: key);
+  const Login({Key key}) : super(key: key);
 
   @override
   _LoginState createState() => _LoginState();
@@ -38,7 +39,7 @@ class _LoginState extends State<Login> {
             if (FirebaseAuth.instance.currentUser != null &&
                 FirebaseAuth.instance.currentUser.emailVerified) {
               Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => Map()));
+                  MaterialPageRoute(builder: (context) => const Map()));
             } else {
               ToastService().showError(value, context);
             }
@@ -78,7 +79,8 @@ class _LoginState extends State<Login> {
   }
 
   void signUp() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => Sign()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const Sign()));
   }
 
   void googleSignIn() {
@@ -89,8 +91,8 @@ class _LoginState extends State<Login> {
         .read<AuthService>()
         .googleLogin()
         .then((value) {
-          Navigator.of(context)
-              .pushReplacement(MaterialPageRoute(builder: (context) => Map()));
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const Map()));
         })
         .onError(
             (error, stackTrace) => ToastService().showError(error, context))
@@ -138,8 +140,9 @@ class _LoginState extends State<Login> {
             body: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration:
-                  BoxDecoration(color: Theme.of(context).colorScheme.primary),
+              decoration: BoxDecoration(
+                color: ColorConstants.instance.primaryColor,
+              ),
               child: Form(
                 key: formkey,
                 child: Column(
@@ -151,25 +154,31 @@ class _LoginState extends State<Login> {
                             text: TextSpan(
                                 style: TextStyle(
                                     fontSize: 70.0,
-                                    color: Colors.white,
+                                    color: ColorConstants.instance.textOnColor,
                                     fontFamily: 'Armatic',
                                     fontWeight: FontWeight.bold),
                                 children: [
                               TextSpan(
                                   text: 'Pa',
-                                  style: TextStyle(color: Colors.red)),
+                                  style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                  )),
                               TextSpan(
                                   text: 'Pa',
-                                  style: TextStyle(color: Colors.amber[600])),
+                                  style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                  )),
                               TextSpan(
                                   text: 'Pe',
-                                  style: TextStyle(color: Colors.green[300]))
+                                  style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                  ))
                             ]))),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
+                          color: ColorConstants.instance.whiteContainer,
+                          borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(50.0),
                               topRight: Radius.circular(50.0))),
                       child: Padding(
@@ -182,38 +191,44 @@ class _LoginState extends State<Login> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.red,
+                                      color: ColorConstants
+                                          .instance.googleRedColor,
                                       borderRadius:
                                           BorderRadius.circular(50.0)),
                                   child: IconButton(
                                       onPressed: googleSignIn,
                                       icon: FaIcon(
                                         FontAwesomeIcons.google,
-                                        color: Colors.white,
+                                        color:
+                                            ColorConstants.instance.iconOnColor,
                                       )),
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.amber[600],
+                                      color:
+                                          ColorConstants.instance.facebookColor,
                                       borderRadius:
                                           BorderRadius.circular(50.0)),
                                   child: IconButton(
                                       onPressed: googleSignIn,
                                       icon: FaIcon(
                                         FontAwesomeIcons.facebookF,
-                                        color: Colors.white,
+                                        color:
+                                            ColorConstants.instance.iconOnColor,
                                       )),
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.green,
+                                      color:
+                                          ColorConstants.instance.twitterColor,
                                       borderRadius:
                                           BorderRadius.circular(50.0)),
                                   child: IconButton(
                                       onPressed: googleSignIn,
                                       icon: FaIcon(
                                         FontAwesomeIcons.twitter,
-                                        color: Colors.white,
+                                        color:
+                                            ColorConstants.instance.iconOnColor,
                                       )),
                                 )
                               ],
@@ -223,7 +238,7 @@ class _LoginState extends State<Login> {
                               child: TextFormField(
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                       border: OutlineInputBorder(),
                                       icon: Icon(Icons.account_circle_outlined),
                                       labelText: 'E-posta'),
@@ -236,13 +251,21 @@ class _LoginState extends State<Login> {
                                     (isVisible == false) ? true : false,
                                 controller: passwordController,
                                 decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    icon: Icon(Icons.vpn_key_outlined),
+                                    border: const OutlineInputBorder(),
+                                    icon: const Icon(Icons.vpn_key_outlined),
                                     labelText: 'Parola',
                                     suffixIcon: IconButton(
                                       icon: (isVisible == false)
-                                          ? Icon(Icons.visibility_off)
-                                          : Icon(Icons.visibility),
+                                          ? Icon(
+                                              Icons.visibility_off,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            )
+                                          : Icon(
+                                              Icons.visibility,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            ),
                                       onPressed: () {
                                         if (isVisible == true) {
                                           setState(() {
@@ -266,9 +289,11 @@ class _LoginState extends State<Login> {
                                     child: Text(
                                       'Parolamı Unuttum !',
                                       style: TextStyle(
-                                          fontFamily: 'Roboto',
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.amber[900]),
+                                        fontFamily: 'Roboto',
+                                        fontWeight: FontWeight.bold,
+                                        color: ColorConstants
+                                            .instance.primaryColor,
+                                      ),
                                     )),
                               ],
                             ),
@@ -280,11 +305,11 @@ class _LoginState extends State<Login> {
                                 onPressed: signIn,
                                 fontFamily: 'Roboto',
                                 startColor:
-                                    Theme.of(context).colorScheme.primary,
+                                    ColorConstants.instance.primaryColor,
                                 finishColor:
-                                    Theme.of(context).colorScheme.primary,
-                                fontColor: Colors.white,
-                                iconColor: Colors.white,
+                                    ColorConstants.instance.secondaryColor,
+                                fontColor: ColorConstants.instance.textOnColor,
+                                iconColor: ColorConstants.instance.iconOnColor,
                                 fontSize: 15,
                                 widthMultiplier: 0.9,
                               ),
@@ -297,15 +322,19 @@ class _LoginState extends State<Login> {
                                   text: TextSpan(
                                       style: TextStyle(
                                         fontFamily: 'Roboto',
-                                        color: Theme.of(context).hintColor,
+                                        color:
+                                            ColorConstants.instance.hintColor,
                                         fontWeight: FontWeight.bold,
                                       ),
                                       children: [
-                                        TextSpan(text: 'Hesabınız yok mu? '),
+                                        const TextSpan(
+                                            text: 'Hesabınız yok mu? '),
                                         TextSpan(
                                             text: 'Kayıt Olun!',
                                             style: TextStyle(
-                                                color: Colors.amber[900]))
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            ))
                                       ]),
                                 ),
                               ),
@@ -318,6 +347,6 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ))
-        : ProgressWidget();
+        : const ProgressWidget();
   }
 }

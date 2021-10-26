@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Filter/filter.dart';
 import 'package:bulovva/Login/login.dart';
 import 'package:bulovva/Profile/my_favorites.dart';
@@ -19,8 +20,8 @@ class CustomDrawer extends StatelessWidget {
         title: '',
         text: 'Çıkmak istediğinize emin misiniz ?',
         showCancelBtn: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        confirmBtnColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: ColorConstants.instance.primaryColor,
+        confirmBtnColor: ColorConstants.instance.primaryColor,
         cancelBtnText: 'Hayır',
         onCancelBtnTap: () {
           Navigator.of(context).pop();
@@ -29,7 +30,7 @@ class CustomDrawer extends StatelessWidget {
           Navigator.of(context).pop();
           context.read<AuthService>().signOut().then((value) {
             Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => Login()));
+                MaterialPageRoute(builder: (context) => const Login()));
           });
         },
         barrierDismissible: false,
@@ -46,86 +47,88 @@ class CustomDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: (firebaseUser.displayName != null)
                 ? Text(firebaseUser.displayName)
-                : Text('Kullanıcı'),
+                : const Text('İsimsiz Kullanıcı'),
             accountEmail: Text(firebaseUser.email),
             currentAccountPicture: Container(
-              decoration:
-                  BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ColorConstants.instance.whiteContainer,
+              ),
               child: Icon(
                 Icons.person,
                 size: 50.0,
-                color: Colors.red[900],
+                color: ColorConstants.instance.primaryColor,
               ),
             ),
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
-              Colors.red[900],
-              Colors.red,
+              ColorConstants.instance.primaryColor,
+              ColorConstants.instance.secondaryColor,
             ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
           ),
           ListTile(
             leading: Icon(
               Icons.filter_alt_sharp,
-              color: Colors.red[900],
+              color: ColorConstants.instance.primaryColor,
             ),
-            title: Text('Arama Filtrelerim'),
+            title: const Text('Arama Filtrelerim'),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Filter()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Filter()));
             },
           ),
-          Divider(
+          const Divider(
             thickness: 2,
           ),
           ListTile(
             leading: Icon(
               Icons.star,
-              color: Colors.red[900],
+              color: ColorConstants.instance.primaryColor,
             ),
-            title: Text('Favori İşletmelerim'),
+            title: const Text('Favori İşletmelerim'),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyFavorites()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MyFavorites()));
             },
           ),
           ListTile(
             leading: Icon(
               Icons.menu_book,
-              color: Colors.red[900],
+              color: ColorConstants.instance.primaryColor,
             ),
-            title: Text('Rezervasyonlarım'),
+            title: const Text('Rezervasyonlarım'),
             onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => MyReservations()));
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const MyReservations()));
             },
           ),
           ListTile(
             leading: Icon(
               Icons.add,
-              color: Colors.red[900],
+              color: ColorConstants.instance.primaryColor,
             ),
-            title: Text('Dilek & Şikayetlerim'),
+            title: const Text('Dilek & Şikayetlerim'),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => MyWishes()));
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MyWishes()));
             },
           ),
-          Divider(
+          const Divider(
             thickness: 2,
           ),
           ListTile(
             leading: Icon(
               Icons.assignment_late,
-              color: Colors.red[900],
+              color: ColorConstants.instance.primaryColor,
             ),
-            title: Text('KVK ve Gizlilik'),
+            title: const Text('KVK ve Gizlilik'),
           ),
           ListTile(
             leading: Icon(
               Icons.logout_outlined,
-              color: Colors.red[900],
+              color: ColorConstants.instance.primaryColor,
             ),
-            title: Text('Çıkış Yap'),
+            title: const Text('Çıkış Yap'),
             onTap: () {
               exitYesNo(context);
             },

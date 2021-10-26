@@ -1,10 +1,12 @@
+import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:flutter/material.dart';
 
 class StoreInfo extends StatefulWidget {
   final StoreModel storeData;
 
-  StoreInfo({Key key, this.storeData}) : super(key: key);
+  const StoreInfo({Key key, this.storeData}) : super(key: key);
 
   @override
   _StoreInfoState createState() => _StoreInfoState();
@@ -20,7 +22,7 @@ class _StoreInfoState extends State<StoreInfo> {
   final TextEditingController pers1Phone = TextEditingController();
   final TextEditingController pers2Phone = TextEditingController();
   final TextEditingController pers3Phone = TextEditingController();
-  bool _isLoading = false;
+  final bool _isLoading = false;
   bool isInit = true;
 
   @override
@@ -56,15 +58,15 @@ class _StoreInfoState extends State<StoreInfo> {
                         ? child
                         : Center(
                             child: CircularProgressIndicator(
-                              color: Colors.white,
+                              color: ColorConstants.instance.iconOnColor,
                             ),
                           );
                   }),
-                  color: Theme.of(context).colorScheme.primary,
+                  color: ColorConstants.instance.primaryColor,
                   height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width,
                 ),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: Column(
                     children: [
@@ -75,9 +77,10 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: name,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
-                          decoration: InputDecoration(
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
+                          decoration: const InputDecoration(
                               labelText: 'İşletme İsmi',
                               icon: Icon(Icons.announcement_sharp),
                               border: OutlineInputBorder()),
@@ -93,9 +96,10 @@ class _StoreInfoState extends State<StoreInfo> {
                           readOnly: true,
                           keyboardType: TextInputType.text,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
-                          decoration: InputDecoration(
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
+                          decoration: const InputDecoration(
                               labelText: 'İşletme Adresi',
                               icon: Icon(Icons.add_location_rounded),
                               border: OutlineInputBorder()),
@@ -107,11 +111,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: phone,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İşletme Telefon Numarası',
                               prefix: Text('+90'),
                               icon: Icon(Icons.phone),
@@ -124,11 +129,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: pers1,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.text,
                           maxLength: 50,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İlgili kişi isim-soyisim (1)',
                               icon: Icon(Icons.account_circle_outlined),
                               border: OutlineInputBorder()),
@@ -140,11 +146,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: pers1Phone,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İlgili kişi telefon (1)',
                               prefix: Text('+90'),
                               icon: Icon(Icons.phone),
@@ -157,11 +164,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: pers2,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.text,
                           maxLength: 50,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İlgili kişi isim-soyisim (2)',
                               icon: Icon(Icons.account_circle_outlined),
                               border: OutlineInputBorder()),
@@ -173,11 +181,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: pers2Phone,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İlgili kişi telefon (2)',
                               prefix: Text('+90'),
                               icon: Icon(Icons.phone),
@@ -190,11 +199,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           readOnly: true,
                           controller: pers3,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.text,
                           maxLength: 50,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İlgili kişi isim-soyisim (3)',
                               icon: Icon(Icons.account_circle_outlined),
                               border: OutlineInputBorder()),
@@ -206,11 +216,12 @@ class _StoreInfoState extends State<StoreInfo> {
                           controller: pers3,
                           readOnly: true,
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              color: Theme.of(context).hintColor),
+                            fontFamily: 'Roboto',
+                            color: ColorConstants.instance.hintColor,
+                          ),
                           keyboardType: TextInputType.phone,
                           maxLength: 10,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               labelText: 'İlgili kişi telefon (3)',
                               prefix: Text('+90'),
                               icon: Icon(Icons.phone),
@@ -223,10 +234,6 @@ class _StoreInfoState extends State<StoreInfo> {
               ],
             ),
           )
-        : Center(
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.primary,
-            ),
-          );
+        : const ProgressWidget();
   }
 }

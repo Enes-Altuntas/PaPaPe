@@ -1,6 +1,8 @@
 import 'package:bulovva/Components/not_found.dart';
+import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Components/wish_card.dart';
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/wishes_model.dart';
 import 'package:bulovva/services/firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -14,22 +16,27 @@ class MyWishes extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: Colors.white, //change your color here
+            color: ColorConstants.instance.iconOnColor, //change your color here
           ),
           elevation: 0,
-          title: TitleApp(),
+          title: const TitleApp(),
           centerTitle: true,
+          flexibleSpace: Container(
+            color: ColorConstants.instance.primaryColor,
+          ),
         ),
         body: Container(
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(color: Colors.red),
+          decoration: BoxDecoration(
+            color: ColorConstants.instance.primaryColor,
+          ),
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Builder(builder: (context) {
               return Container(
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
+                    color: ColorConstants.instance.whiteContainer,
+                    borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(40.0),
                         topRight: Radius.circular(40.0))),
                 child: Padding(
@@ -41,7 +48,7 @@ class MyWishes extends StatelessWidget {
                         switch (snapshot.connectionState) {
                           case ConnectionState.active:
                             switch (
-                                snapshot.hasData && snapshot.data.length > 0) {
+                                snapshot.hasData && snapshot.data.isNotEmpty) {
                               case true:
                                 return ListView.builder(
                                   itemCount: snapshot.data.length,
@@ -59,22 +66,18 @@ class MyWishes extends StatelessWidget {
                                   notFoundIcon:
                                       FontAwesomeIcons.exclamationTriangle,
                                   notFoundIconColor:
-                                      Theme.of(context).colorScheme.secondary,
-                                  notFoundIconSize: 60,
+                                      ColorConstants.instance.primaryColor,
+                                  notFoundIconSize: 50,
                                   notFoundText:
                                       'Üzgünüz, belirtmiş olduğunuz bir dilek veya şikayet bulunmamaktadır.',
                                   notFoundTextColor:
-                                      Theme.of(context).colorScheme.primary,
-                                  notFoundTextSize: 40.0,
+                                      ColorConstants.instance.hintColor,
+                                  notFoundTextSize: 30.0,
                                 );
                             }
                             break;
                           default:
-                            return Center(
-                              child: CircularProgressIndicator(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            );
+                            return const ProgressWidget();
                         }
                       },
                     )),

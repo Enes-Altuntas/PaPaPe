@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -42,27 +43,26 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50.0),
                 gradient: LinearGradient(colors: [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.primary
-                ], begin: Alignment.centerRight, end: Alignment.centerLeft)),
-            child: (this.widget.localImage != null)
-                ? Image.file(this.widget.localImage, fit: BoxFit.fitWidth)
-                : (this.widget.urlImage != null &&
-                        this.widget.urlImage.isNotEmpty)
+                  ColorConstants.instance.primaryColor,
+                  ColorConstants.instance.secondaryColor,
+                ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+            child: (widget.localImage != null)
+                ? Image.file(widget.localImage, fit: BoxFit.fitWidth)
+                : (widget.urlImage != null && widget.urlImage.isNotEmpty)
                     ? Image.network(
-                        this.widget.urlImage,
+                        widget.urlImage,
                         fit: BoxFit.fill,
                         loadingBuilder: (context, child, loadingProgress) {
                           return loadingProgress == null
                               ? child
                               : Center(
                                   child: CircularProgressIndicator(
-                                    color: Colors.white,
+                                    color: ColorConstants.instance.iconOnColor,
                                   ),
                                 );
                         },
                       )
-                    : (this.widget.addable)
+                    : (widget.addable)
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -70,14 +70,14 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                                 padding: const EdgeInsets.only(bottom: 20.0),
                                 child: Icon(
                                   Icons.upload_file,
-                                  color: Colors.white,
+                                  color: ColorConstants.instance.iconOnColor,
                                   size: 50.0,
                                 ),
                               ),
                               Text(
                                 widget.addText,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: ColorConstants.instance.textOnColor,
                                     fontFamily: 'Bebas',
                                     fontSize: 20.0),
                               ),
@@ -90,14 +90,14 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                                 padding: const EdgeInsets.only(bottom: 20.0),
                                 child: FaIcon(
                                   FontAwesomeIcons.exclamationTriangle,
-                                  color: Colors.white,
+                                  color: ColorConstants.instance.iconOnColor,
                                   size: 50.0,
                                 ),
                               ),
                               Text(
                                 'Resim Yok',
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: ColorConstants.instance.textOnColor,
                                     fontFamily: 'Bebas',
                                     fontSize: 20.0),
                               ),
@@ -118,15 +118,18 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                         borderRadius: BorderRadius.circular(50.0),
                         gradient: LinearGradient(
                             colors: [
-                              Theme.of(context).colorScheme.secondary,
-                              Theme.of(context).colorScheme.primary
+                              ColorConstants.instance.primaryColor,
+                              ColorConstants.instance.secondaryColor,
                             ],
-                            begin: Alignment.centerRight,
-                            end: Alignment.centerLeft)),
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.edit, color: Colors.white),
+                        Icon(
+                          Icons.edit,
+                          color: ColorConstants.instance.iconOnColor,
+                        ),
                       ],
                     ))),
           ),
@@ -141,15 +144,18 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                         borderRadius: BorderRadius.circular(50.0),
                         gradient: LinearGradient(
                             colors: [
-                              Theme.of(context).colorScheme.secondary,
-                              Theme.of(context).colorScheme.primary
+                              ColorConstants.instance.primaryColor,
+                              ColorConstants.instance.secondaryColor,
                             ],
-                            begin: Alignment.centerRight,
-                            end: Alignment.centerLeft)),
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.delete, color: Colors.white),
+                        Icon(
+                          Icons.delete,
+                          color: ColorConstants.instance.iconOnColor,
+                        ),
                       ],
                     ))),
           ),
