@@ -103,9 +103,9 @@ class _Map extends State<Map> {
         radius: _filterProvider.getDist * 1000,
         strokeWidth: 3,
         fillColor: (_filterProvider.getMode == true)
-            ? ColorConstants.instance.primaryColor.withOpacity(0.1)
-            : ColorConstants.instance.primaryColor.withOpacity(0.2),
-        strokeColor: ColorConstants.instance.primaryColor.withOpacity(0.8));
+            ? ColorConstants.instance.waitingColor.withOpacity(0.1)
+            : ColorConstants.instance.secondaryColor.withOpacity(0.2),
+        strokeColor: ColorConstants.instance.secondaryColor.withOpacity(0.8));
     circles.add(circle);
   }
 

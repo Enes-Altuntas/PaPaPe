@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/product_model.dart';
 import 'package:flutter/material.dart';
@@ -12,95 +13,133 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  bool isBack = false;
+  double angle = 0;
+
+  void _flip() {
+    setState(() {
+      angle = (angle + pi) % (2 * pi);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            ClipRRect(
+    return GestureDetector(
+      onTap: _flip,
+      child: TweenAnimationBuilder(
+          tween: Tween<double>(begin: 0, end: angle),
+          duration: const Duration(milliseconds: 400),
+          builder: (BuildContext context, double val, __) {
+            if (val >= (pi / 2)) {
+              isBack = true;
+            } else {
+              isBack = false;
+            }
+            return (Transform(
+              alignment: Alignment.center,
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.001)
+                ..rotateY(val),
               child: Container(
-                width: MediaQuery.of(context).size.width / 3,
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                    color: ColorConstants.instance.primaryColor,
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(15.0))),
-                child: (widget.product.productPicRef != null &&
-                        widget.product.productPicRef.isNotEmpty)
-                    ? Image.network(
-                        widget.product.productPicRef,
-                        fit: BoxFit.fill,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          return loadingProgress == null
-                              ? child
-                              : Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 15.0, bottom: 15.0),
-                                  child: Center(
-                                    child: CircularProgressIndicator(
-                                      color:
-                                          ColorConstants.instance.iconOnColor,
-                                    ),
+                  height: MediaQuery.of(context).size.height,
+                  clipBehavior: Clip.antiAlias,
+                  width: 300,
+                  decoration: BoxDecoration(
+                      color: ColorConstants.instance.primaryColor,
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: (isBack == false)
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            alignment: Alignment.center,
+                            children: [
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    Colors.black.withOpacity(0.4),
+                                    BlendMode.multiply),
+                                child: Image.network(
+                                  widget.product.productPicRef,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Center(
+                                  child: Text(
+                                widget.product.productName,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorConstants.instance.textOnColor,
+                                    fontWeight: FontWeight.bold,
+                                    shadows: const <Shadow>[
+                                      Shadow(
+                                        offset: Offset(2.0, 2.0),
+                                        blurRadius: 2.0,
+                                        color: Color.fromARGB(255, 0, 0, 0),
+                                      ),
+                                    ],
+                                    fontSize: 25.0),
+                              ))
+                            ],
+                          ),
+                        )
+                      : Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.identity()..rotateY(pi),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: SingleChildScrollView(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 40.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.product.productName,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: ColorConstants
+                                                .instance.waitingColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 10.0),
+                                        child: Text(
+                                          widget.product.productDesc,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: ColorConstants
+                                                  .instance.textOnColor,
+                                              fontSize: 14.0),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10.0, bottom: 10.0),
+                                        child: Text(
+                                          'TRY ${widget.product.productPrice.toDouble().toString()}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: ColorConstants
+                                                  .instance.waitingColor,
+                                              fontSize: 18.0),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                );
-                        },
-                      )
-                    : Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            'Resim Yok',
-                            style: TextStyle(
-                              color: ColorConstants.instance.textOnColor,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-              ),
-            ),
-            Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.product.productName,
-                    style: TextStyle(
-                        color: ColorConstants.instance.primaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17.0,
-                        fontFamily: 'Roboto'),
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      widget.product.productDesc,
-                      style: const TextStyle(fontFamily: 'Roboto'),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      'Fiyat: ${widget.product.productPrice} TRY',
-                      style: TextStyle(
-                          color: ColorConstants.instance.primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                          fontFamily: 'Roboto'),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ))
-          ],
-        ),
-      ),
+                        )),
+            ));
+          }),
     );
   }
 }

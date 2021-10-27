@@ -163,7 +163,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 14.0,
-                              color: ColorConstants.instance.hintColor,
+                              color: ColorConstants.instance.textOnColor,
                               fontFamily: 'Roboto',
                               fontWeight: FontWeight.bold)),
                     ),
@@ -175,7 +175,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           style: TextStyle(
                               fontSize: 14.0,
                               fontFamily: 'Roboto',
-                              color: ColorConstants.instance.hintColor,
+                              color: ColorConstants.instance.textOnColor,
                               fontWeight: FontWeight.bold)),
                     ),
                     Padding(
