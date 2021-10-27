@@ -42,7 +42,7 @@ class _BrandWidgetState extends State<BrandWidget> {
                         widget.storeCategory.storeCatName)
                     ? ColorConstants.instance.inactiveColor
                     : ColorConstants.instance.whiteContainer,
-                maxRadius: 30.0,
+                radius: 30.0,
               ),
             ),
             Padding(

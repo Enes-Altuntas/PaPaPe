@@ -28,9 +28,6 @@ class _StoreCardsState extends State<StoreCards> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _flip,
-      onHorizontalDragEnd: (details) {
-        widget.onTap();
-      },
       child: TweenAnimationBuilder(
           tween: Tween<double>(begin: 0, end: angle),
           duration: const Duration(milliseconds: 400),
@@ -60,15 +57,24 @@ class _StoreCardsState extends State<StoreCards> {
                             fit: StackFit.expand,
                             alignment: Alignment.center,
                             children: [
-                              ColorFiltered(
-                                colorFilter: ColorFilter.mode(
-                                    Colors.black.withOpacity(0.4),
-                                    BlendMode.multiply),
-                                child: Image.network(
-                                  widget.store.storePicRef,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              (widget.store != null &&
+                                      widget.store.storePicRef != null)
+                                  ? ColorFiltered(
+                                      colorFilter: ColorFilter.mode(
+                                          Colors.black.withOpacity(0.4),
+                                          BlendMode.multiply),
+                                      child: Image.network(
+                                        widget.store.storePicRef,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Container(
+                                      color:
+                                          ColorConstants.instance.primaryColor,
+                                      width: MediaQuery.of(context).size.width,
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                    ),
                               Center(
                                   child: Text(
                                 widget.store.storeName,
@@ -96,11 +102,30 @@ class _StoreCardsState extends State<StoreCards> {
                             height: MediaQuery.of(context).size.height,
                             child: Padding(
                               padding: const EdgeInsets.all(20.0),
-                              child: SingleChildScrollView(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 40.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: GestureDetector(
+                                        onTap: widget.onTap,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: ColorConstants
+                                                  .instance.waitingColor),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(
+                                              Icons.arrow_forward_ios_rounded,
+                                              color: ColorConstants
+                                                  .instance.primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      )),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         widget.store.storeName,
@@ -138,7 +163,7 @@ class _StoreCardsState extends State<StoreCards> {
                                       ),
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
