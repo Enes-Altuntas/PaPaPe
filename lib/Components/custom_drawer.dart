@@ -1,6 +1,7 @@
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Filter/filter.dart';
 import 'package:bulovva/Login/login.dart';
+import 'package:bulovva/Profile/my_campaigns.dart';
 import 'package:bulovva/Profile/my_favorites.dart';
 import 'package:bulovva/Profile/my_reservations.dart';
 import 'package:bulovva/Profile/my_wishes.dart';
@@ -46,8 +47,10 @@ class CustomDrawer extends StatelessWidget {
         children: [
           UserAccountsDrawerHeader(
             accountName: (firebaseUser.displayName != null)
-                ? Text('Hoşgeldiniz ${firebaseUser.displayName}')
-                : const Text('Hoşgeldiniz'),
+                ? Text('Hoşgeldiniz ${firebaseUser.displayName}',
+                    style: TextStyle(color: ColorConstants.instance.textGold))
+                : Text('Hoşgeldiniz',
+                    style: TextStyle(color: ColorConstants.instance.textGold)),
             accountEmail: Text(firebaseUser.email),
             currentAccountPicture: Container(
               decoration: BoxDecoration(
@@ -89,6 +92,17 @@ class CustomDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MyFavorites()));
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.qr_code,
+              color: ColorConstants.instance.primaryColor,
+            ),
+            title: const Text('QR Kodlarım'),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const MyCampaigns()));
             },
           ),
           ListTile(

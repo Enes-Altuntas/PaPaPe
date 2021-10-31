@@ -40,7 +40,7 @@ class _BrandWidgetState extends State<BrandWidget> {
                     NetworkImage(widget.storeCategory.storeCatPicRef),
                 backgroundColor: (_filterProvider.getCat ==
                         widget.storeCategory.storeCatName)
-                    ? ColorConstants.instance.inactiveColor
+                    ? ColorConstants.instance.primaryColor
                     : ColorConstants.instance.whiteContainer,
                 radius: 30.0,
               ),
@@ -52,7 +52,7 @@ class _BrandWidgetState extends State<BrandWidget> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: ColorConstants.instance.textOnColor,
+                  color: ColorConstants.instance.primaryColor,
                 ),
               ),
             )

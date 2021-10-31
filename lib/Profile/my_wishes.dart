@@ -1,3 +1,4 @@
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
@@ -19,7 +20,7 @@ class MyWishes extends StatelessWidget {
             color: ColorConstants.instance.iconOnColor, //change your color here
           ),
           elevation: 0,
-          title: const TitleApp(),
+          title: const TitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
             color: ColorConstants.instance.primaryColor,

@@ -1,5 +1,6 @@
 // ignore_for_file: file_names
 
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/category_brand.dart';
 import 'package:bulovva/Components/custom_drawer.dart';
 import 'package:bulovva/Components/not_found.dart';
@@ -166,12 +167,13 @@ class _Map extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          elevation: 5,
-          title: const TitleApp(),
+          elevation: 0,
+          title: const AppTitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
-            color: ColorConstants.instance.primaryColor,
+            color: ColorConstants.instance.whiteContainer,
           ),
+          iconTheme: IconThemeData(color: ColorConstants.instance.primaryColor),
         ),
         drawer: const CustomDrawer(),
         body: Container(
@@ -184,14 +186,7 @@ class _Map extends State<Map> {
                 Container(
                     height: 110.0,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [
-                            ColorConstants.instance.secondaryColor,
-                            ColorConstants.instance.primaryColor,
-                          ],
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter),
-                    ),
+                        color: ColorConstants.instance.whiteContainer),
                     child: FutureBuilder<List<StoreCategory>>(
                         future: _getStoreCategories(),
                         builder: (context, snapshot) {
@@ -343,9 +338,9 @@ class _Map extends State<Map> {
                                     Switch(
                                       value: _filterProvider.getLive,
                                       activeColor:
-                                          ColorConstants.instance.activeColor,
-                                      inactiveThumbColor: ColorConstants
-                                          .instance.secondaryColor,
+                                          ColorConstants.instance.textGold,
+                                      inactiveThumbColor:
+                                          ColorConstants.instance.primaryColor,
                                       onChanged: (bool value) {
                                         changeLive(value);
                                       },

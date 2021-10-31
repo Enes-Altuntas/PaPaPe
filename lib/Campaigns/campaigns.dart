@@ -33,8 +33,7 @@ class _CampaignsState extends State<Campaigns> {
 
   getCampaignKey(CampaignModel campaign) async {
     await firestoreService
-        .updateCounter(widget.storeData.storeId, campaign.campaignId,
-            campaign.campaignCounter, campaign.campaignKey)
+        .getCampaign(widget.storeData.storeId, campaign.campaignId)
         .then((value) => ToastService().showSuccess(value, context))
         .onError(
             (error, stackTrace) => ToastService().showError(error, context));

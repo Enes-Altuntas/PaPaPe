@@ -1,3 +1,4 @@
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/reservation_card.dart';
@@ -38,10 +39,10 @@ class _MyReservationsState extends State<MyReservations> {
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
-            color: ColorConstants.instance.iconOnColor, //change your color here
+            color: ColorConstants.instance.iconOnColor,
           ),
           elevation: 0,
-          title: const TitleApp(),
+          title: const TitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
             color: ColorConstants.instance.primaryColor,
@@ -94,12 +95,12 @@ class _MyReservationsState extends State<MyReservations> {
                                     FontAwesomeIcons.exclamationTriangle,
                                 notFoundIconColor:
                                     ColorConstants.instance.primaryColor,
-                                notFoundIconSize: 60,
+                                notFoundIconSize: 50,
                                 notFoundText:
                                     'Üzgünüz, yapmış olduğunuz bir rezrvasyon bulunmamaktadır.',
                                 notFoundTextColor:
                                     ColorConstants.instance.hintColor,
-                                notFoundTextSize: 40.0,
+                                notFoundTextSize: 30.0,
                               );
                           }
                           break;

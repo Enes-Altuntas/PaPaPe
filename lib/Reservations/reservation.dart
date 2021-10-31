@@ -1,3 +1,4 @@
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
@@ -192,218 +193,223 @@ class _ReservationState extends State<Reservation> {
                 ),
                 elevation: 0,
                 centerTitle: true,
-                title: const TitleApp()),
+                title: const TitleWidget()),
             body: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
                 ColorConstants.instance.primaryColor,
                 ColorConstants.instance.primaryColor,
               ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: ColorConstants.instance.whiteContainer,
-                    borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(50.0),
-                        topRight: Radius.circular(50.0))),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Form(
-                          key: formKeyRes,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Text(
-                                    " * Rezervasyonunuz ile ilgili işletmenin bilmesi gereken spesifik bilgileri bu alana girmelisiniz.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.hintColor,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: ColorConstants.instance.whiteContainer,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50.0),
+                          topRight: Radius.circular(50.0))),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Form(
+                            key: formKeyRes,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: Text(
+                                      " * Rezervasyonunuz ile ilgili işletmenin bilmesi gereken spesifik bilgileri bu alana girmelisiniz.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: TextFormField(
-                                    controller: _resDesc,
-                                    maxLength: 255,
-                                    maxLines: 3,
-                                    validator: _resDescCh,
-                                    keyboardType: TextInputType.text,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Rezervasyon Açıklaması',
-                                        border: OutlineInputBorder()),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: TextFormField(
+                                      controller: _resDesc,
+                                      maxLength: 255,
+                                      maxLines: 3,
+                                      validator: _resDescCh,
+                                      keyboardType: TextInputType.text,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Rezervasyon Açıklaması',
+                                          border: OutlineInputBorder()),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: Text(
-                                    " * Rezerve kişi sayısı, işletmenin, rezervasyonun kaç kişi adına yapılacağını bilmesine olanak sağlar.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.hintColor,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Text(
+                                      " * Rezerve kişi sayısı, işletmenin, rezervasyonun kaç kişi adına yapılacağını bilmesine olanak sağlar.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: TextFormField(
-                                    validator: _resPersCount,
-                                    controller: _resCount,
-                                    maxLength: 3,
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Rezerve Kişi Sayısı',
-                                        border: OutlineInputBorder()),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: TextFormField(
+                                      validator: _resPersCount,
+                                      controller: _resCount,
+                                      maxLength: 3,
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Rezerve Kişi Sayısı',
+                                          border: OutlineInputBorder()),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: Text(
-                                    " * Rezerve isim soyisim alanı, rezervasyonun hangi isim ve soyisim üzerine yapılacağını iletmek içindir.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.hintColor,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Text(
+                                      " * Rezerve isim soyisim alanı, rezervasyonun hangi isim ve soyisim üzerine yapılacağını iletmek içindir.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: TextFormField(
-                                    validator: _resFullName,
-                                    controller: _resName,
-                                    maxLength: 50,
-                                    keyboardType: TextInputType.text,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Rezerve İsim-Soyisim',
-                                        border: OutlineInputBorder()),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: TextFormField(
+                                      validator: _resFullName,
+                                      controller: _resName,
+                                      maxLength: 50,
+                                      keyboardType: TextInputType.text,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Rezerve İsim-Soyisim',
+                                          border: OutlineInputBorder()),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: Text(
-                                    " * Rezervasyon telefonu, işletmenin önemli bir durumda size hangi numaradan ulaşacağını bilmesini sağlamak içindir.",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.hintColor,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Text(
+                                      " * Rezervasyon telefonu, işletmenin önemli bir durumda size hangi numaradan ulaşacağını bilmesini sağlamak içindir.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: TextFormField(
-                                    validator: _resPhoneCh,
-                                    controller: _resPhone,
-                                    maxLength: 10,
-                                    keyboardType: TextInputType.phone,
-                                    decoration: const InputDecoration(
-                                        prefix: Text('+90'),
-                                        labelText: 'Rezervasyon Telefonu',
-                                        border: OutlineInputBorder()),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 10.0),
+                                    child: TextFormField(
+                                      validator: _resPhoneCh,
+                                      controller: _resPhone,
+                                      maxLength: 10,
+                                      keyboardType: TextInputType.phone,
+                                      decoration: const InputDecoration(
+                                          prefix: Text('+90'),
+                                          labelText: 'Rezervasyon Telefonu',
+                                          border: OutlineInputBorder()),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 20.0),
-                                  child: Text(
-                                    " * Rezervasyon tarihi, rezervasyonunuz hangi tarih ve saat için olduğunu anlatır",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.hintColor,
-                                        fontFamily: 'Roboto',
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 20.0),
+                                    child: Text(
+                                      " * Rezervasyon tarihi, rezervasyonunuz hangi tarih ve saat için olduğunu anlatır",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                          fontFamily: 'Roboto',
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16.0),
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 8.0, bottom: 8.0),
-                                  child: TextFormField(
-                                    controller: _resTime,
-                                    validator: _resDate,
-                                    readOnly: true,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Rezervasyon Tarihi',
-                                        border: OutlineInputBorder()),
-                                    onTap: () async {
-                                      Timestamp resDate = await pickDateTime();
-                                      if (resDate != null) {
-                                        setState(() {
-                                          resTime = resDate;
-                                          _resTime.text = formatDate(resTime);
-                                        });
-                                      }
-                                    },
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0, bottom: 8.0),
+                                    child: TextFormField(
+                                      controller: _resTime,
+                                      validator: _resDate,
+                                      readOnly: true,
+                                      decoration: const InputDecoration(
+                                          labelText: 'Rezervasyon Tarihi',
+                                          border: OutlineInputBorder()),
+                                      onTap: () async {
+                                        Timestamp resDate =
+                                            await pickDateTime();
+                                        if (resDate != null) {
+                                          setState(() {
+                                            resTime = resDate;
+                                            _resTime.text = formatDate(resTime);
+                                          });
+                                        }
+                                      },
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 20.0, bottom: 60.0),
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(50.0),
-                                        gradient: LinearGradient(
-                                            colors: [
-                                              ColorConstants
-                                                  .instance.primaryColor,
-                                              ColorConstants
-                                                  .instance.secondaryColor,
-                                            ],
-                                            begin: Alignment.bottomCenter,
-                                            end: Alignment.topCenter)),
-                                    child: TextButton(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 10.0),
-                                              child: Icon(
-                                                Icons.save,
-                                                color: ColorConstants
-                                                    .instance.iconOnColor,
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20.0, bottom: 60.0),
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.7,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50.0),
+                                          gradient: LinearGradient(
+                                              colors: [
+                                                ColorConstants
+                                                    .instance.primaryColor,
+                                                ColorConstants
+                                                    .instance.secondaryColor,
+                                              ],
+                                              begin: Alignment.bottomCenter,
+                                              end: Alignment.topCenter)),
+                                      child: TextButton(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10.0),
+                                                child: Icon(
+                                                  Icons.save,
+                                                  color: ColorConstants
+                                                      .instance.iconOnColor,
+                                                ),
                                               ),
-                                            ),
-                                            Text("Rezervasyon yaptır",
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: ColorConstants
-                                                        .instance.textOnColor,
-                                                    fontFamily: 'Bebas')),
-                                          ],
-                                        ),
-                                        onPressed: () {
-                                          saveReservation();
-                                        }),
+                                              Text("Rezervasyon yaptır",
+                                                  style: TextStyle(
+                                                      fontSize: 17,
+                                                      color: ColorConstants
+                                                          .instance.textOnColor,
+                                                      fontFamily: 'Bebas')),
+                                            ],
+                                          ),
+                                          onPressed: () {
+                                            saveReservation();
+                                          }),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

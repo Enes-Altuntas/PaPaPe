@@ -1,3 +1,4 @@
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
@@ -101,7 +102,7 @@ class _CommentState extends State<Wish> {
                 ),
                 elevation: 0,
                 centerTitle: true,
-                title: const TitleApp()),
+                title: const TitleWidget()),
             body: Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [

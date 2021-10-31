@@ -222,6 +222,21 @@ class FirestoreService {
   // *************************************************************************** Kampanya İşlemleri
   // *************************************************************************** Kampanya İşlemleri
   // *************************************************************************** Kampanya İşlemleri
+  Future<CampaignModel> getCampaignData(String qrText) async {
+    List<String> data = qrText.split('*');
+    String storeId = data[0];
+    String campaignId = data[1];
+
+    return await _db
+        .collection('stores')
+        .doc(storeId)
+        .collection('campaigns')
+        .doc(campaignId)
+        .get()
+        .then((value) {
+      return CampaignModel.fromFirestore(value.data());
+    });
+  }
 
   Stream<List<CampaignModel>> getStoreCampaigns(docId) {
     return _db
@@ -236,19 +251,34 @@ class FirestoreService {
             .toList());
   }
 
-  Future<String> updateCounter(String docId, String campaignId,
-      int campaignCounter, String campaignCode) async {
+  Future<String> getCampaign(String storeId, String campaignId) async {
+    UserModel user;
+    String userId = AuthService(FirebaseAuth.instance).getUserId();
+    String campaignCodeString = storeId + '*' + campaignId + '*' + userId;
+
+    try {
+      user = await _db.collection('users').doc(userId).get().then((value) {
+        return UserModel.fromFirestore(value.data());
+      });
+    } catch (e) {
+      return 'Müşteri kodu bulunamadı !';
+    }
+
+    if (user.campaignCodes.contains(campaignCodeString)) {
+      throw ('Üzgünüz zaten bu kampanyaya sahipsiniz, kampanyanızı işletmede kullanmadan aynı kampanyayı tekrar alamazsınız !');
+    } else {
+      user.campaignCodes.add(campaignCodeString);
+    }
+
     try {
       await _db
-          .collection('stores')
-          .doc(docId)
-          .collection('campaigns')
-          .doc(campaignId)
-          .update({'campaignCounter': campaignCounter + 1});
+          .collection('users')
+          .doc(userId)
+          .update({'campaignCodes': user.campaignCodes});
 
-      return "Kampanya kodunuz #$campaignCode'dir. Bu kampanya kodunu gittiğiniz işletmede ödemenizi yaparken kullanabilirsiniz!";
+      return 'Seçtiğiniz kampanya, başarıyla kampanyalarınıza eklenmiştir !';
     } catch (e) {
-      throw 'Görüşünüz bildirilirken bir hata ile karşılaşıldı! Lütfen daha sonra tekrar deneyeniz.';
+      throw 'Kampanyalarınız güncellenirken bir hata meydana geldi !';
     }
   }
 

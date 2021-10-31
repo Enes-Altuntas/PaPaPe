@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: const [Locale('en', 'EN'), Locale('tr', 'TR')],
             theme: ThemeData(
+              scaffoldBackgroundColor: ColorConstants.instance.whiteContainer,
               cardTheme: CardTheme(
                 clipBehavior: Clip.antiAlias,
                 elevation: 10,

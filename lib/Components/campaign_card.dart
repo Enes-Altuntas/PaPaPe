@@ -182,14 +182,25 @@ class _CampaignCardState extends State<CampaignCard> {
                         padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
                         child: GradientButton(
                           buttonText: 'Kampanya Kodu Al',
-                          finishColor: ColorConstants.instance.secondaryColor,
-                          startColor: ColorConstants.instance.primaryColor,
+                          finishColor: (widget.campaign.campaignStatus ==
+                                  'active')
+                              ? ColorConstants.instance.activeColor
+                              : (widget.campaign.campaignStatus == 'inactive')
+                                  ? ColorConstants.instance.inactiveColor
+                                  : ColorConstants.instance.waitingColor,
+                          startColor: (widget.campaign.campaignStatus ==
+                                  'active')
+                              ? ColorConstants.instance.activeColorDark
+                              : (widget.campaign.campaignStatus == 'inactive')
+                                  ? ColorConstants
+                                      .instance.signBackButtonSecondary
+                                  : ColorConstants.instance.waitingColorDark,
                           fontFamily: 'Roboto',
                           fontSize: 15,
                           icon: FontAwesomeIcons.getPocket,
                           onPressed: widget.onPressed,
                           fontColor: ColorConstants.instance.textOnColor,
-                          iconColor: ColorConstants.instance.iconOnColor,
+                          iconColor: ColorConstants.instance.textOnColor,
                           widthMultiplier: 0.7,
                         )),
                   ],

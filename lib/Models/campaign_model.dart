@@ -11,7 +11,6 @@ class CampaignModel {
   final String campaignDesc;
   final String campaignId;
   final String campaignTitle;
-  final String campaignKey;
   final int campaignCounter;
   final Timestamp campaignStart;
   final Timestamp campaignFinish;
@@ -26,7 +25,6 @@ class CampaignModel {
       this.delInd,
       this.campaignDesc,
       this.campaignId,
-      this.campaignKey,
       this.campaignTitle,
       this.campaignCounter,
       this.campaignStart,
@@ -41,7 +39,6 @@ class CampaignModel {
         delInd = data['delInd'],
         automatedStop = data['automatedStop'],
         campaignDesc = data['campaignDesc'],
-        campaignKey = data['campaignKey'],
         campaignTitle = data['campaignTitle'],
         campaignCounter = data['campaignCounter'],
         campaignId = data['campaignId'],
@@ -58,7 +55,6 @@ class CampaignModel {
       'automatedStop': automatedStop,
       'campaignDesc': campaignDesc,
       'campaignTitle': campaignTitle,
-      'campaignKey': campaignKey,
       'campaignStart': campaignStart,
       'campaignCounter': campaignCounter,
       'campaignFinish': campaignFinish,

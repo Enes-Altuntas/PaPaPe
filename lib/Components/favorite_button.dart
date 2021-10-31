@@ -21,14 +21,19 @@ class FavoriteButton extends StatelessWidget {
                         ToastService().showError(error, context));
               },
               icon: Icon(
-                Icons.star,
+                (snapshot.data != null &&
+                        snapshot.data.favorites != null &&
+                        snapshot.data.favorites.isNotEmpty &&
+                        snapshot.data.favorites.contains(storeId))
+                    ? Icons.star
+                    : Icons.star_border,
                 size: 30,
                 color: (snapshot.data != null &&
                         snapshot.data.favorites != null &&
                         snapshot.data.favorites.isNotEmpty &&
-                        snapshot.data.favorites.contains(storeId)
+                        snapshot.data.favorites.contains(storeId))
                     ? ColorConstants.instance.waitingColor
-                    : ColorConstants.instance.whiteContainer),
+                    : ColorConstants.instance.primaryColor,
               ));
         });
   }

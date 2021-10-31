@@ -1,3 +1,4 @@
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
@@ -64,7 +65,7 @@ class _FilterState extends State<Filter> {
             color: ColorConstants.instance.iconOnColor,
           ),
           elevation: 0,
-          title: const TitleApp(),
+          title: const TitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
             color: ColorConstants.instance.primaryColor,
@@ -119,8 +120,8 @@ class _FilterState extends State<Filter> {
                                       ),
                                       Switch(
                                           value: _filterProvider.getLive,
-                                          activeColor: ColorConstants
-                                              .instance.activeColor,
+                                          activeColor:
+                                              ColorConstants.instance.textGold,
                                           inactiveThumbColor: ColorConstants
                                               .instance.primaryColor,
                                           onChanged: (value) {
@@ -217,8 +218,8 @@ class _FilterState extends State<Filter> {
                                       ),
                                       Switch(
                                           value: _filterProvider.getMode,
-                                          activeColor: ColorConstants
-                                              .instance.activeColor,
+                                          activeColor:
+                                              ColorConstants.instance.textGold,
                                           inactiveThumbColor: ColorConstants
                                               .instance.primaryColor,
                                           onChanged: (value) {

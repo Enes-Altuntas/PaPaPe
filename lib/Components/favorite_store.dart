@@ -124,44 +124,47 @@ class _StoreCardsState extends State<StoreCards> {
                                           ),
                                         ),
                                       )),
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        widget.store.storeName,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: ColorConstants
-                                                .instance.waitingColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20.0),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 10.0),
-                                        child: Text(
-                                          widget.store.storeAddress,
+                                  Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          widget.store.storeName,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              color: ColorConstants
-                                                  .instance.textOnColor,
-                                              fontSize: 14.0),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10.0, bottom: 10.0),
-                                        child: Text(
-                                          'Tel: +90${widget.store.storePhone}',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
                                               color: ColorConstants
                                                   .instance.waitingColor,
-                                              fontSize: 18.0),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20.0),
                                         ),
-                                      ),
-                                    ],
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 10.0),
+                                          child: Text(
+                                            widget.store.storeAddress,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: ColorConstants
+                                                    .instance.textOnColor,
+                                                fontSize: 14.0),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 10.0, bottom: 10.0),
+                                          child: Text(
+                                            'Tel: +90${widget.store.storePhone}',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: ColorConstants
+                                                    .instance.waitingColor,
+                                                fontSize: 18.0),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),

@@ -1,6 +1,6 @@
 import 'package:bulovva/Campaigns/campaigns.dart';
+import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/favorite_button.dart';
-import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Products/products.dart';
@@ -70,11 +70,11 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
           toolbarHeight: 70.0,
           flexibleSpace: Container(
             decoration: BoxDecoration(
-              color: ColorConstants.instance.primaryColor,
+              color: ColorConstants.instance.whiteContainer,
             ),
           ),
           iconTheme: IconThemeData(
-            color: ColorConstants.instance.iconOnColor,
+            color: ColorConstants.instance.primaryColor,
           ),
           actions: [
             Padding(
@@ -84,9 +84,9 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
               ),
             )
           ],
-          elevation: 5,
+          elevation: 0,
           centerTitle: true,
-          title: const TitleApp(),
+          title: const AppTitleWidget(),
         ),
         body: (isLoading == false)
             ? PageView(
@@ -113,7 +113,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
           animatedIconTheme: IconThemeData(
             color: ColorConstants.instance.iconOnColor,
           ),
-          backgroundColor: ColorConstants.instance.primaryColor,
+          backgroundColor: ColorConstants.instance.textGold,
           overlayColor: ColorConstants.instance.hintColor,
           overlayOpacity: 0.8,
           children: [
@@ -175,7 +175,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
           onTap: onTapped,
           index: _selectedIndex,
           color: ColorConstants.instance.primaryColor,
-          buttonBackgroundColor: ColorConstants.instance.primaryColor,
+          buttonBackgroundColor: ColorConstants.instance.textGold,
         ));
   }
 }

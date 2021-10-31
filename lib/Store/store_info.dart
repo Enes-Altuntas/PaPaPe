@@ -51,17 +51,19 @@ class _StoreInfoState extends State<StoreInfo> {
             child: Column(
               children: [
                 Container(
-                  child: Image.network(widget.storeData.storePicRef,
-                      fit: BoxFit.fitWidth,
-                      loadingBuilder: (context, child, loadingProgress) {
-                    return loadingProgress == null
-                        ? child
-                        : Center(
-                            child: CircularProgressIndicator(
-                              color: ColorConstants.instance.iconOnColor,
-                            ),
-                          );
-                  }),
+                  child: (widget.storeData.storePicRef != null)
+                      ? Image.network(widget.storeData.storePicRef,
+                          fit: BoxFit.fitWidth,
+                          loadingBuilder: (context, child, loadingProgress) {
+                          return loadingProgress == null
+                              ? child
+                              : Center(
+                                  child: CircularProgressIndicator(
+                                    color: ColorConstants.instance.iconOnColor,
+                                  ),
+                                );
+                        })
+                      : null,
                   color: ColorConstants.instance.primaryColor,
                   height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width,
