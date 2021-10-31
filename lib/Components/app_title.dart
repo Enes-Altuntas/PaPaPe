@@ -1,6 +1,5 @@
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTitleWidget extends StatelessWidget {
   const AppTitleWidget({Key key}) : super(key: key);
@@ -13,17 +12,20 @@ class AppTitleWidget extends StatelessWidget {
             children: [
           TextSpan(
               text: 'My',
-              style: GoogleFonts.amaticSc(
+              style: TextStyle(
+                fontFamily: 'Amatic',
                 color: ColorConstants.instance.primaryColor,
               )),
           TextSpan(
               text: 'Rest',
-              style: GoogleFonts.amaticSc(
+              style: TextStyle(
+                fontFamily: 'Amatic',
                 color: ColorConstants.instance.primaryColor,
               )),
           TextSpan(
               text: 'App',
-              style: GoogleFonts.amaticSc(
+              style: TextStyle(
+                fontFamily: 'Amatic',
                 color: ColorConstants.instance.textGold,
               )),
         ]));

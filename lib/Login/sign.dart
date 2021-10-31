@@ -122,19 +122,19 @@ class _SignState extends State<Sign> {
                                     fontWeight: FontWeight.bold),
                                 children: [
                               TextSpan(
-                                  text: 'Pa',
+                                  text: 'My',
                                   style: TextStyle(
                                     color: ColorConstants.instance.textOnColor,
                                   )),
                               TextSpan(
-                                  text: 'Pa',
+                                  text: 'Rest',
                                   style: TextStyle(
                                     color: ColorConstants.instance.textOnColor,
                                   )),
                               TextSpan(
-                                  text: 'Pe',
+                                  text: 'App',
                                   style: TextStyle(
-                                    color: ColorConstants.instance.textOnColor,
+                                    color: ColorConstants.instance.textGold,
                                   ))
                             ]))),
                     Container(
