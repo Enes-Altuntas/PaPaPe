@@ -26,25 +26,6 @@ class _StoreInfoState extends State<StoreInfo> {
   bool isInit = true;
 
   @override
-  Future<void> didChangeDependencies() async {
-    super.didChangeDependencies();
-    if (isInit) {
-      name.text = widget.storeData.storeName;
-      address.text = widget.storeData.storeAddress;
-      phone.text = widget.storeData.storePhone;
-      pers1.text = widget.storeData.pers1;
-      pers2.text = widget.storeData.pers2;
-      pers3.text = widget.storeData.pers3;
-      pers1Phone.text = widget.storeData.pers1Phone;
-      pers2Phone.text = widget.storeData.pers2Phone;
-      pers3Phone.text = widget.storeData.pers3Phone;
-      setState(() {
-        isInit = false;
-      });
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     return (_isLoading == false)
         ? SingleChildScrollView(
@@ -71,165 +52,72 @@ class _StoreInfoState extends State<StoreInfo> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        child: Text(
+                          widget.storeData.storeName,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: ColorConstants.instance.primaryColor,
+                              fontFamily: 'Bebas',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12.0, right: 100.0),
+                        child: Text(
+                          widget.storeData.storeAddress,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: ColorConstants.instance.hintColor,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, right: 100.0),
+                        child: Text(
+                          "Tel: +90${widget.storeData.storePhone}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: ColorConstants.instance.primaryColor,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0),
+                        ),
+                      ),
+                      Padding(
                         padding: const EdgeInsets.only(top: 25.0),
-                        child: TextFormField(
-                          onTap: () {},
-                          controller: name,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          decoration: const InputDecoration(
-                              labelText: 'İşletme İsmi',
-                              icon: Icon(Icons.announcement_sharp),
-                              border: OutlineInputBorder()),
-                          maxLength: 50,
+                        child: Column(
+                          children: [
+                            for (var i in widget.storeData.storeCategory)
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    size: 10,
+                                    color: ColorConstants.instance.primaryColor,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Text(
+                                      i,
+                                      style: TextStyle(
+                                          fontSize: 15.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorConstants
+                                              .instance.hintColor),
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ],
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          maxLength: 255,
-                          maxLines: 3,
-                          controller: address,
-                          readOnly: true,
-                          keyboardType: TextInputType.text,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          decoration: const InputDecoration(
-                              labelText: 'İşletme Adresi',
-                              icon: Icon(Icons.add_location_rounded),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          controller: phone,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          maxLength: 10,
-                          decoration: const InputDecoration(
-                              labelText: 'İşletme Telefon Numarası',
-                              prefix: Text('+90'),
-                              icon: Icon(Icons.phone),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          controller: pers1,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.text,
-                          maxLength: 50,
-                          decoration: const InputDecoration(
-                              labelText: 'İlgili kişi isim-soyisim (1)',
-                              icon: Icon(Icons.account_circle_outlined),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          controller: pers1Phone,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          maxLength: 10,
-                          decoration: const InputDecoration(
-                              labelText: 'İlgili kişi telefon (1)',
-                              prefix: Text('+90'),
-                              icon: Icon(Icons.phone),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          controller: pers2,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.text,
-                          maxLength: 50,
-                          decoration: const InputDecoration(
-                              labelText: 'İlgili kişi isim-soyisim (2)',
-                              icon: Icon(Icons.account_circle_outlined),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          controller: pers2Phone,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          maxLength: 10,
-                          decoration: const InputDecoration(
-                              labelText: 'İlgili kişi telefon (2)',
-                              prefix: Text('+90'),
-                              icon: Icon(Icons.phone),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0),
-                        child: TextFormField(
-                          readOnly: true,
-                          controller: pers3,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.text,
-                          maxLength: 50,
-                          decoration: const InputDecoration(
-                              labelText: 'İlgili kişi isim-soyisim (3)',
-                              icon: Icon(Icons.account_circle_outlined),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-                        child: TextFormField(
-                          controller: pers3,
-                          readOnly: true,
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            color: ColorConstants.instance.hintColor,
-                          ),
-                          keyboardType: TextInputType.phone,
-                          maxLength: 10,
-                          decoration: const InputDecoration(
-                              labelText: 'İlgili kişi telefon (3)',
-                              prefix: Text('+90'),
-                              icon: Icon(Icons.phone),
-                              border: OutlineInputBorder()),
-                        ),
-                      ),
+                      )
                     ],
                   ),
                 ),

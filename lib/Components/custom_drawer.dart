@@ -52,17 +52,23 @@ class CustomDrawer extends StatelessWidget {
                 : Text('Hoşgeldiniz',
                     style: TextStyle(color: ColorConstants.instance.textGold)),
             accountEmail: Text(firebaseUser.email),
-            currentAccountPicture: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: ColorConstants.instance.whiteContainer,
-              ),
-              child: Icon(
-                Icons.person,
-                size: 50.0,
-                color: ColorConstants.instance.primaryColor,
-              ),
-            ),
+            currentAccountPicture: (firebaseUser.photoURL == null)
+                ? Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: ColorConstants.instance.whiteContainer,
+                    ),
+                    child: Icon(
+                      Icons.person,
+                      size: 50.0,
+                      color: ColorConstants.instance.primaryColor,
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage: NetworkImage(firebaseUser.photoURL),
+                    backgroundColor: Colors.transparent,
+                  ),
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
               ColorConstants.instance.primaryColor,

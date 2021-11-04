@@ -14,6 +14,7 @@ class ColorConstants {
 
   final primaryColor = fromHex('#2E4D2E');
   final secondaryColor = fromHex('#5C995D');
+  final thirdColor = fromHex('#375c37');
   final facebookColor = fromHex('#1877F2');
   final twitterColor = fromHex('#1D9BF0');
   final textOnColor = fromHex('#ffffff');
@@ -23,7 +24,7 @@ class ColorConstants {
   final googleRedColor = fromHex('#C62828');
   final signBackButtonPrimary = fromHex('#B71C1C');
   final signBackButtonSecondary = fromHex('#6A1010');
-  final hintColor = fromHex('#555555');
+  final hintColor = fromHex('#3d3d3d');
   final activeColor = fromHex('#2C6D2F');
   final activeColorDark = fromHex('#255c27');
   final waitingColor = fromHex('#ED9F00');

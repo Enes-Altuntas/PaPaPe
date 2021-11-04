@@ -125,18 +125,24 @@ class AuthService {
 
   Future<void> saveUser() async {
     try {
-      await _db
+      UserModel user = await _db
           .collection('users')
           .doc(_firebaseAuth.currentUser.uid)
           .get()
           .then((value) {
         return UserModel.fromFirestore(value.data());
       });
+
+      await _db
+          .collection('users')
+          .doc(user.userId)
+          .update({"token": await FirebaseMessaging.instance.getToken()});
     } catch (e) {
       UserModel newUser = UserModel(
           token: await FirebaseMessaging.instance.getToken(),
           userId: _firebaseAuth.currentUser.uid,
-          favorites: []);
+          favorites: [],
+          campaignCodes: []);
 
       await _db
           .collection('users')

@@ -1,4 +1,3 @@
-import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/favorite_store.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/title.dart';
@@ -84,21 +83,7 @@ class MyFavorites extends StatelessWidget {
                                                       ));
                                                   break;
                                                 default:
-                                                  return NotFound(
-                                                    notFoundIcon:
-                                                        FontAwesomeIcons
-                                                            .exclamationCircle,
-                                                    notFoundIconColor:
-                                                        ColorConstants.instance
-                                                            .primaryColor,
-                                                    notFoundIconSize: 50,
-                                                    notFoundText:
-                                                        'İşletme bilgileri bulunamadı !',
-                                                    notFoundTextColor:
-                                                        ColorConstants
-                                                            .instance.hintColor,
-                                                    notFoundTextSize: 30.0,
-                                                  );
+                                                  return Container();
                                               }
                                               break;
                                             default:
@@ -119,12 +104,10 @@ class MyFavorites extends StatelessWidget {
                                       FontAwesomeIcons.exclamationTriangle,
                                   notFoundIconColor:
                                       ColorConstants.instance.primaryColor,
-                                  notFoundIconSize: 50,
                                   notFoundText:
                                       'Üzgünüz, favorilerinizde işletme bulunmamaktadır.',
                                   notFoundTextColor:
                                       ColorConstants.instance.hintColor,
-                                  notFoundTextSize: 30.0,
                                 );
                             }
                             break;

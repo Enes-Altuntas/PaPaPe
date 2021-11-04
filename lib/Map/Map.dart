@@ -5,7 +5,6 @@ import 'package:bulovva/Components/category_brand.dart';
 import 'package:bulovva/Components/custom_drawer.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/markers_model.dart';
 import 'package:bulovva/Models/store_category.dart';
@@ -293,13 +292,11 @@ class _Map extends State<Map> {
                                                     notFoundIconColor:
                                                         ColorConstants.instance
                                                             .primaryColor,
-                                                    notFoundIconSize: 50.0,
                                                     notFoundText:
                                                         "Aradığınız kategoride işletme bulunmuyor !",
                                                     notFoundTextColor:
                                                         ColorConstants
                                                             .instance.hintColor,
-                                                    notFoundTextSize: 30.0,
                                                   )
                                             : const ProgressWidget();
                                       })

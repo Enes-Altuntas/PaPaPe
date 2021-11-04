@@ -75,11 +75,9 @@ class _CampaignsState extends State<Campaigns> {
                           notFoundIcon: FontAwesomeIcons.exclamationTriangle,
                           notFoundIconColor:
                               ColorConstants.instance.primaryColor,
-                          notFoundIconSize: 50,
                           notFoundText:
                               'Üzgünüz, şu anda işletmenin yayınlamış olduğu bir kampanya bulunmamaktadır.',
                           notFoundTextColor: ColorConstants.instance.hintColor,
-                          notFoundTextSize: 30.0,
                         );
                     }
                     break;

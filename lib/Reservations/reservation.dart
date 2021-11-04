@@ -1,4 +1,3 @@
-import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';

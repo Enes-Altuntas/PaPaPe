@@ -52,10 +52,8 @@ class _MenuState extends State<Menu> {
                       return NotFound(
                         notFoundIcon: FontAwesomeIcons.exclamationTriangle,
                         notFoundIconColor: ColorConstants.instance.primaryColor,
-                        notFoundIconSize: 50,
                         notFoundText: 'Üzgünüz, menüde ürün bulunmamaktadır.',
                         notFoundTextColor: ColorConstants.instance.textOnColor,
-                        notFoundTextSize: 30.0,
                       );
                   }
                   break;

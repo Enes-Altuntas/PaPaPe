@@ -1,4 +1,3 @@
-import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/title.dart';
@@ -68,12 +67,10 @@ class MyWishes extends StatelessWidget {
                                       FontAwesomeIcons.exclamationTriangle,
                                   notFoundIconColor:
                                       ColorConstants.instance.primaryColor,
-                                  notFoundIconSize: 50,
                                   notFoundText:
                                       'Üzgünüz, belirtmiş olduğunuz bir dilek veya şikayet bulunmamaktadır.',
                                   notFoundTextColor:
                                       ColorConstants.instance.hintColor,
-                                  notFoundTextSize: 30.0,
                                 );
                             }
                             break;

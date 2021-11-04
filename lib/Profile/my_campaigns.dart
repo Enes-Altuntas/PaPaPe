@@ -1,4 +1,3 @@
-import 'package:bulovva/Components/campaign_card.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/qr_card.dart';
 import 'package:bulovva/Components/title.dart';
@@ -109,13 +108,11 @@ class MyCampaigns extends StatelessWidget {
                                                     notFoundIconColor:
                                                         ColorConstants.instance
                                                             .primaryColor,
-                                                    notFoundIconSize: 50,
                                                     notFoundText:
                                                         'Kampanya bilgileri bulunamadı !',
                                                     notFoundTextColor:
                                                         ColorConstants
                                                             .instance.hintColor,
-                                                    notFoundTextSize: 30.0,
                                                   );
                                               }
                                               break;
@@ -137,12 +134,10 @@ class MyCampaigns extends StatelessWidget {
                                       FontAwesomeIcons.exclamationTriangle,
                                   notFoundIconColor:
                                       ColorConstants.instance.primaryColor,
-                                  notFoundIconSize: 50,
                                   notFoundText:
                                       'Üzgünüz, almış olduğunuz hiçbir kampanya kodunuz bulunamamıştır !',
                                   notFoundTextColor:
                                       ColorConstants.instance.hintColor,
-                                  notFoundTextSize: 30.0,
                                 );
                             }
                             break;

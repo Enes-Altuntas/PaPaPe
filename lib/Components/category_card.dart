@@ -79,7 +79,7 @@ class _CategoryCardState extends State<CategoryCard> {
                         );
                         break;
                       default:
-                        return null;
+                        return Container();
                     }
                     break;
                   default:

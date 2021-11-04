@@ -1,4 +1,3 @@
-import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/reservation_card.dart';
@@ -95,12 +94,10 @@ class _MyReservationsState extends State<MyReservations> {
                                     FontAwesomeIcons.exclamationTriangle,
                                 notFoundIconColor:
                                     ColorConstants.instance.primaryColor,
-                                notFoundIconSize: 50,
                                 notFoundText:
                                     'Üzgünüz, yapmış olduğunuz bir rezrvasyon bulunmamaktadır.',
                                 notFoundTextColor:
                                     ColorConstants.instance.hintColor,
-                                notFoundTextSize: 30.0,
                               );
                           }
                           break;
