@@ -155,7 +155,7 @@ class _LoginState extends State<Login> {
                                 style: TextStyle(
                                     fontSize: 70.0,
                                     color: ColorConstants.instance.textOnColor,
-                                    fontFamily: 'Armatic',
+                                    fontFamily: 'Amatic',
                                     fontWeight: FontWeight.bold),
                                 children: [
                               TextSpan(

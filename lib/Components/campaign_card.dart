@@ -168,7 +168,10 @@ class _CampaignCardState extends State<CampaignCard> {
                               fontWeight: FontWeight.bold)),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
+                      padding: const EdgeInsets.only(
+                        top: 5.0,
+                        bottom: 15.0,
+                      ),
                       child: Text(
                           'Kampanya Bitiş : ${formatDate(widget.campaign.campaignFinish)}',
                           textAlign: TextAlign.center,
@@ -178,31 +181,35 @@ class _CampaignCardState extends State<CampaignCard> {
                               color: ColorConstants.instance.textOnColor,
                               fontWeight: FontWeight.bold)),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 25.0, bottom: 10.0),
-                        child: GradientButton(
-                          buttonText: 'Kampanya Kodu Al',
-                          finishColor: (widget.campaign.campaignStatus ==
-                                  'active')
-                              ? ColorConstants.instance.activeColor
-                              : (widget.campaign.campaignStatus == 'inactive')
-                                  ? ColorConstants.instance.inactiveColor
-                                  : ColorConstants.instance.waitingColor,
-                          startColor: (widget.campaign.campaignStatus ==
-                                  'active')
-                              ? ColorConstants.instance.activeColorDark
-                              : (widget.campaign.campaignStatus == 'inactive')
-                                  ? ColorConstants
-                                      .instance.signBackButtonSecondary
-                                  : ColorConstants.instance.waitingColorDark,
-                          fontFamily: 'Roboto',
-                          fontSize: 15,
-                          icon: FontAwesomeIcons.getPocket,
-                          onPressed: widget.onPressed,
-                          fontColor: ColorConstants.instance.textOnColor,
-                          iconColor: ColorConstants.instance.textOnColor,
-                          widthMultiplier: 0.7,
-                        )),
+                    Visibility(
+                      visible: widget.campaign.campaignStatus != 'inactive',
+                      child: Padding(
+                          padding:
+                              const EdgeInsets.only(top: 5.0, bottom: 10.0),
+                          child: GradientButton(
+                            buttonText: 'Kampanya Kodu Al',
+                            finishColor: (widget.campaign.campaignStatus ==
+                                    'active')
+                                ? ColorConstants.instance.activeColor
+                                : (widget.campaign.campaignStatus == 'inactive')
+                                    ? ColorConstants.instance.inactiveColor
+                                    : ColorConstants.instance.waitingColor,
+                            startColor: (widget.campaign.campaignStatus ==
+                                    'active')
+                                ? ColorConstants.instance.activeColorDark
+                                : (widget.campaign.campaignStatus == 'inactive')
+                                    ? ColorConstants
+                                        .instance.signBackButtonSecondary
+                                    : ColorConstants.instance.waitingColorDark,
+                            fontFamily: 'Roboto',
+                            fontSize: 15,
+                            icon: FontAwesomeIcons.getPocket,
+                            onPressed: widget.onPressed,
+                            fontColor: ColorConstants.instance.textOnColor,
+                            iconColor: ColorConstants.instance.textOnColor,
+                            widthMultiplier: 0.7,
+                          )),
+                    ),
                   ],
                 ),
               ),
