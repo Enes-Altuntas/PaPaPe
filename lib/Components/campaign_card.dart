@@ -66,7 +66,6 @@ class _CampaignCardState extends State<CampaignCard> {
                           child: Text('Kampanya Resmi Yok',
                               style: TextStyle(
                                   color: ColorConstants.instance.textOnColor,
-                                  fontFamily: 'Bebas',
                                   fontSize: 20.0)),
                         ),
                 ),
@@ -124,14 +123,12 @@ class _CampaignCardState extends State<CampaignCard> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 18.0,
-                      fontFamily: 'Roboto',
                       color: ColorConstants.instance.primaryColor,
                       fontWeight: FontWeight.bold)),
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(widget.campaign.campaignDesc,
-                  style: const TextStyle(fontFamily: 'Roboto'),
                   textAlign: TextAlign.center),
             ),
             Padding(
@@ -164,7 +161,6 @@ class _CampaignCardState extends State<CampaignCard> {
                           style: TextStyle(
                               fontSize: 14.0,
                               color: ColorConstants.instance.textOnColor,
-                              fontFamily: 'Roboto',
                               fontWeight: FontWeight.bold)),
                     ),
                     Padding(
@@ -177,7 +173,6 @@ class _CampaignCardState extends State<CampaignCard> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 14.0,
-                              fontFamily: 'Roboto',
                               color: ColorConstants.instance.textOnColor,
                               fontWeight: FontWeight.bold)),
                     ),
@@ -188,25 +183,20 @@ class _CampaignCardState extends State<CampaignCard> {
                               const EdgeInsets.only(top: 5.0, bottom: 10.0),
                           child: GradientButton(
                             buttonText: 'Kampanya Kodu Al',
-                            finishColor: (widget.campaign.campaignStatus ==
-                                    'active')
+                            end: (widget.campaign.campaignStatus == 'active')
                                 ? ColorConstants.instance.activeColor
                                 : (widget.campaign.campaignStatus == 'inactive')
                                     ? ColorConstants.instance.inactiveColor
                                     : ColorConstants.instance.waitingColor,
-                            startColor: (widget.campaign.campaignStatus ==
-                                    'active')
+                            start: (widget.campaign.campaignStatus == 'active')
                                 ? ColorConstants.instance.activeColorDark
                                 : (widget.campaign.campaignStatus == 'inactive')
                                     ? ColorConstants
                                         .instance.signBackButtonSecondary
                                     : ColorConstants.instance.waitingColorDark,
-                            fontFamily: 'Roboto',
                             fontSize: 15,
                             icon: FontAwesomeIcons.getPocket,
                             onPressed: widget.onPressed,
-                            fontColor: ColorConstants.instance.textOnColor,
-                            iconColor: ColorConstants.instance.textOnColor,
                             widthMultiplier: 0.7,
                           )),
                     ),

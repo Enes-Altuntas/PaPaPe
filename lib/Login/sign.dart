@@ -1,11 +1,13 @@
 import 'package:bulovva/Components/gradient_button.dart';
 import 'package:bulovva/Components/progress.dart';
+import 'package:bulovva/Components/wrapper.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Login/login.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:bulovva/services/toast_service.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pinput/pin_put/pin_put.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -17,13 +19,99 @@ class Sign extends StatefulWidget {
 }
 
 class _SignState extends State<Sign> {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordVerifyController =
       TextEditingController();
+  final TextEditingController codeController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   bool isLoading = false;
   bool isVisible = false;
+  bool loginWithPhone = false;
+  bool codeSent = false;
+  String verificationCode;
+
+  void verifyCode() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (codeController.text.isNotEmpty) {
+      if (verificationCode.isNotEmpty) {
+        context
+            .read<AuthService>()
+            .verifyCodeAndSaveUser(
+                name: nameController.text.trim(),
+                code: codeController.text.trim(),
+                verification: verificationCode)
+            .then((value) {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const AuthWrapper()));
+            })
+            .onError(
+                (error, stackTrace) => ToastService().showError(error, context))
+            .whenComplete(() => setState(() {
+                  isLoading = false;
+                }));
+      } else {
+        ToastService()
+            .showWarning('Telefonunuza tekrar kod istemelisiniz!', context);
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } else {
+      ToastService().showWarning('Doğrulama kodu boş olamaz!', context);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void verifyPhone() async {
+    setState(() {
+      isLoading = true;
+    });
+    if (formkey.currentState.validate()) {
+      FirebaseAuth firebaseAuth = context.read<AuthService>().getInstance();
+      await firebaseAuth
+          .verifyPhoneNumber(
+              phoneNumber: '+90${phoneController.text.trim()}',
+              verificationCompleted: (PhoneAuthCredential credential) async {
+                setState(() {
+                  isLoading = false;
+                });
+              },
+              verificationFailed: (FirebaseAuthException exception) {
+                setState(() {
+                  isLoading = false;
+                });
+                if (exception.code == 'too-many-requests') {
+                  ToastService().showError(
+                      'İşleminiz, çok fazla denemeniz doğrultusunda engellendi tekrar deneyebilmek için lütfen bekleyiniz yada diğer giriş yöntemlerini deneyebilirsiniz.',
+                      context);
+                } else {
+                  ToastService().showError(
+                      'SMS gönderilmesi sırasında bir hata oluştu! Girdiğiniz telefon numarasını kontrol edebilir yada diğer giriş yöntemlerini deneyebilirsiniz.',
+                      context);
+                }
+              },
+              codeSent: (String verificationId, [int forceResendingToken]) {
+                setState(() {
+                  isLoading = false;
+                  verificationCode = verificationId;
+                  codeSent = true;
+                });
+              },
+              codeAutoRetrievalTimeout: (String verificationId) {})
+          .timeout(const Duration(seconds: 60));
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   void signUp() {
     if (passwordController.text != passwordVerifyController.text) {
@@ -85,79 +173,129 @@ class _SignState extends State<Sign> {
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  String validatePassAgain(value) {
+    if (value.isEmpty) {
+      return "* Şifre(Tekrar) zorunludur !";
+    } else {
+      return null;
+    }
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  String validateName(value) {
+    if (value.isEmpty) {
+      return "* İsim-Soyisim zorunludur !";
+    } else {
+      return null;
+    }
+  }
+
+  String validatePhone(value) {
+    if (value.isEmpty) {
+      return "* Telefon Numarası zorunludur !";
+    } else {
+      return null;
+    }
+  }
+
+  BoxDecoration get _pinPutDecoration {
+    return BoxDecoration(
+      border: Border.all(color: ColorConstants.instance.primaryColor),
+      borderRadius: BorderRadius.circular(15.0),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return (isLoading != true)
-        ? Scaffold(
-            body: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: ColorConstants.instance.primaryColor,
-              ),
-              child: Form(
-                key: formkey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: RichText(
-                            text: TextSpan(
-                                style: TextStyle(
-                                    fontSize: 70.0,
-                                    color: ColorConstants.instance.textOnColor,
-                                    fontFamily: 'Amatic',
-                                    fontWeight: FontWeight.bold),
-                                children: [
-                              TextSpan(
-                                  text: 'My',
-                                  style: TextStyle(
-                                    color: ColorConstants.instance.textOnColor,
-                                  )),
-                              TextSpan(
-                                  text: 'Rest',
-                                  style: TextStyle(
-                                    color: ColorConstants.instance.textOnColor,
-                                  )),
-                              TextSpan(
-                                  text: 'App',
-                                  style: TextStyle(
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: ColorConstants.instance.whiteContainer,
+          iconTheme: IconThemeData(color: ColorConstants.instance.primaryColor),
+          elevation: 0,
+        ),
+        body: (isLoading == false)
+            ? SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  decoration: BoxDecoration(
+                    color: ColorConstants.instance.whiteContainer,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        right: 30.0, left: 30.0, bottom: 20.0),
+                    child: Form(
+                      key: formkey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/login_logo.png',
+                              height: MediaQuery.of(context).size.height / 5),
+                          Visibility(
+                            visible: !codeSent,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 40.0),
+                              child: TextFormField(
+                                  controller: nameController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: const InputDecoration(
+                                      icon: Icon(Icons.account_circle_outlined),
+                                      labelText: 'İsim-Soyisim'),
+                                  validator: validateName),
+                            ),
+                          ),
+                          Visibility(
+                            visible: loginWithPhone && !codeSent,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                  controller: phoneController,
+                                  keyboardType: TextInputType.phone,
+                                  maxLength: 10,
+                                  decoration: const InputDecoration(
+                                      prefix: Text('+90'),
+                                      icon: Icon(Icons.phone),
+                                      labelText: 'Telefon Numarası'),
+                                  validator: validatePhone),
+                            ),
+                          ),
+                          Visibility(
+                            visible: codeSent,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 40.0),
+                              child: PinPut(
+                                fieldsCount: 6,
+                                controller: codeController,
+                                submittedFieldDecoration:
+                                    _pinPutDecoration.copyWith(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                selectedFieldDecoration: _pinPutDecoration,
+                                followingFieldDecoration:
+                                    _pinPutDecoration.copyWith(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  border: Border.all(
                                     color: ColorConstants.instance.textGold,
-                                  ))
-                            ]))),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.7,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(50.0),
-                            topRight: Radius.circular(50.0)),
-                        color: ColorConstants.instance.whiteContainer,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 30.0, left: 30.0, bottom: 20.0, top: 30.0),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                                controller: emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: const InputDecoration(
-                                    icon: Icon(Icons.account_circle_outlined),
-                                    labelText: 'E-Posta'),
-                                validator: validateMail),
-                            Padding(
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Visibility(
+                            visible: !loginWithPhone,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                  controller: emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: const InputDecoration(
+                                      icon: Icon(Icons.mail),
+                                      labelText: 'E-Posta'),
+                                  validator: validateMail),
+                            ),
+                          ),
+                          Visibility(
+                            visible: !loginWithPhone,
+                            child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
                                 obscureText:
@@ -168,16 +306,8 @@ class _SignState extends State<Sign> {
                                     labelText: 'Yeni Parola',
                                     suffixIcon: IconButton(
                                       icon: (isVisible == false)
-                                          ? Icon(
-                                              Icons.visibility_off,
-                                              color: ColorConstants
-                                                  .instance.primaryColor,
-                                            )
-                                          : Icon(
-                                              Icons.visibility,
-                                              color: ColorConstants
-                                                  .instance.primaryColor,
-                                            ),
+                                          ? const Icon(Icons.visibility_off)
+                                          : const Icon(Icons.visibility),
                                       onPressed: () {
                                         if (isVisible == true) {
                                           setState(() {
@@ -193,7 +323,10 @@ class _SignState extends State<Sign> {
                                 validator: validatePass,
                               ),
                             ),
-                            Padding(
+                          ),
+                          Visibility(
+                            visible: !loginWithPhone,
+                            child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
                                 obscureText:
@@ -204,16 +337,8 @@ class _SignState extends State<Sign> {
                                     labelText: 'Yeni Parola (Tekrar)',
                                     suffixIcon: IconButton(
                                       icon: (isVisible == false)
-                                          ? Icon(
-                                              Icons.visibility_off,
-                                              color: ColorConstants
-                                                  .instance.primaryColor,
-                                            )
-                                          : Icon(
-                                              Icons.visibility,
-                                              color: ColorConstants
-                                                  .instance.primaryColor,
-                                            ),
+                                          ? const Icon(Icons.visibility_off)
+                                          : const Icon(Icons.visibility),
                                       onPressed: () {
                                         if (isVisible == true) {
                                           setState(() {
@@ -226,59 +351,62 @@ class _SignState extends State<Sign> {
                                         }
                                       },
                                     )),
-                                validator: validatePass,
+                                validator: validatePassAgain,
                               ),
                             ),
-                            Padding(
-                                padding: const EdgeInsets.only(top: 40.0),
-                                child: GradientButton(
-                                  buttonText: 'Kayıt Ol',
-                                  fontFamily: 'Roboto',
-                                  fontSize: 15,
-                                  startColor:
-                                      ColorConstants.instance.primaryColor,
-                                  finishColor:
-                                      ColorConstants.instance.secondaryColor,
-                                  fontColor:
-                                      ColorConstants.instance.textOnColor,
-                                  iconColor:
-                                      ColorConstants.instance.iconOnColor,
-                                  onPressed: signUp,
-                                  icon: FontAwesomeIcons.save,
-                                  widthMultiplier: 0.9,
-                                )),
-                            Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: GradientButton(
-                                  buttonText: 'Geri',
-                                  fontFamily: 'Roboto',
-                                  fontSize: 15,
-                                  startColor: ColorConstants
-                                      .instance.signBackButtonSecondary,
-                                  finishColor: ColorConstants
-                                      .instance.signBackButtonPrimary,
-                                  fontColor:
-                                      ColorConstants.instance.textOnColor,
-                                  iconColor:
-                                      ColorConstants.instance.iconOnColor,
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Login()));
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      loginWithPhone = !loginWithPhone;
+                                      codeSent = false;
+                                      verificationCode = "";
+                                    });
                                   },
-                                  icon: FontAwesomeIcons.arrowLeft,
-                                  widthMultiplier: 0.9,
-                                ))
-                          ],
-                        ),
+                                  child: Text(
+                                    (!loginWithPhone)
+                                        ? 'Telefon ile Kayıt Ol'
+                                        : 'E-Mail ile Kayıt Ol',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color:
+                                          ColorConstants.instance.primaryColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(top: 30.0),
+                              child: GradientButton(
+                                start: ColorConstants.instance.primaryColor,
+                                end: ColorConstants.instance.secondaryColor,
+                                buttonText: (loginWithPhone)
+                                    ? (codeSent)
+                                        ? 'Kodu Doğrula'
+                                        : 'Doğrulama Kodu Al'
+                                    : 'Kayıt Ol',
+                                fontSize: 15,
+                                onPressed: (loginWithPhone)
+                                    ? (codeSent)
+                                        ? verifyCode
+                                        : verifyPhone
+                                    : signUp,
+                                icon: FontAwesomeIcons.signInAlt,
+                                widthMultiplier: 0.9,
+                              )),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          ))
-        : const ProgressWidget();
+              )
+            : const ProgressWidget());
   }
 }

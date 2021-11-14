@@ -1,7 +1,6 @@
 import 'package:bulovva/Components/campaign_card.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/services/firestore_service.dart';
@@ -71,13 +70,10 @@ class _CampaignsState extends State<Campaigns> {
                         );
                         break;
                       default:
-                        return NotFound(
+                        return const NotFound(
                           notFoundIcon: FontAwesomeIcons.exclamationTriangle,
-                          notFoundIconColor:
-                              ColorConstants.instance.primaryColor,
                           notFoundText:
                               'Üzgünüz, şu anda işletmenin yayınlamış olduğu bir kampanya bulunmamaktadır.',
-                          notFoundTextColor: ColorConstants.instance.hintColor,
                         );
                     }
                     break;

@@ -1,4 +1,3 @@
-import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 
 class TitleWidget extends StatelessWidget {
@@ -6,28 +5,6 @@ class TitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RichText(
-        text: TextSpan(
-            style: const TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold),
-            children: [
-          TextSpan(
-              text: 'My',
-              style: TextStyle(
-                fontFamily: 'Amatic',
-                color: ColorConstants.instance.whiteContainer,
-              )),
-          TextSpan(
-              text: 'Rest',
-              style: TextStyle(
-                fontFamily: 'Amatic',
-                color: ColorConstants.instance.whiteContainer,
-              )),
-          TextSpan(
-              text: 'App',
-              style: TextStyle(
-                fontFamily: 'Amatic',
-                color: ColorConstants.instance.textGold,
-              )),
-        ]));
+    return Image.asset('assets/images/app_title.png', height: 50.0);
   }
 }

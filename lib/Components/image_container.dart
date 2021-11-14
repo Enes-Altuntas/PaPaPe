@@ -78,7 +78,6 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                                 widget.addText,
                                 style: TextStyle(
                                     color: ColorConstants.instance.textOnColor,
-                                    fontFamily: 'Bebas',
                                     fontSize: 20.0),
                               ),
                             ],
@@ -98,7 +97,6 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                                 'Resim Yok',
                                 style: TextStyle(
                                     color: ColorConstants.instance.textOnColor,
-                                    fontFamily: 'Bebas',
                                     fontSize: 20.0),
                               ),
                             ],

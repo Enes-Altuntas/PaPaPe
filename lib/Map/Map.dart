@@ -167,6 +167,7 @@ class _Map extends State<Map> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
+          toolbarHeight: 70.0,
           title: const AppTitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
@@ -285,25 +286,18 @@ class _Map extends State<Map> {
                                                     markers: Set.from(markers),
                                                     circles: Set.from(circles),
                                                   )
-                                                : NotFound(
+                                                : const NotFound(
                                                     notFoundIcon:
                                                         FontAwesomeIcons
                                                             .exclamationTriangle,
-                                                    notFoundIconColor:
-                                                        ColorConstants.instance
-                                                            .primaryColor,
                                                     notFoundText:
                                                         "Aradığınız kategoride işletme bulunmuyor !",
-                                                    notFoundTextColor:
-                                                        ColorConstants
-                                                            .instance.hintColor,
                                                   )
                                             : const ProgressWidget();
                                       })
                                   : Center(
                                       child: Text('Konumunuz bulunamadı !',
                                           style: TextStyle(
-                                              fontFamily: 'Bebas',
                                               color: ColorConstants
                                                   .instance.primaryColor,
                                               fontSize: 30.0)),

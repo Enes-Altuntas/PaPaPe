@@ -1,3 +1,4 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -5,25 +6,21 @@ class GradientButton extends StatelessWidget {
   final Function onPressed;
   final IconData icon;
   final String buttonText;
-  final Color startColor;
-  final Color finishColor;
-  final Color fontColor;
-  final Color iconColor;
   final String fontFamily;
   final double fontSize;
   final double widthMultiplier;
+  final Color start;
+  final Color end;
 
   const GradientButton(
       {Key key,
       this.onPressed,
       this.icon,
-      this.startColor,
-      this.finishColor,
       this.buttonText,
       this.fontFamily,
-      this.fontColor,
+      this.start,
+      this.end,
       this.fontSize,
-      this.iconColor,
       this.widthMultiplier})
       : super(key: key);
 
@@ -33,10 +30,10 @@ class GradientButton extends StatelessWidget {
       width: MediaQuery.of(context).size.width * widthMultiplier,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
-          gradient: LinearGradient(colors: [
-            startColor,
-            finishColor,
-          ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
+          gradient: LinearGradient(
+              colors: [start, end],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter)),
       child: TextButton(
         onPressed: onPressed,
         child: Row(
@@ -44,15 +41,18 @@ class GradientButton extends StatelessWidget {
           children: [
             FaIcon(
               icon,
-              color: iconColor,
+              color: ColorConstants.instance.iconOnColor,
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Text(buttonText,
-                  style: TextStyle(
-                      fontFamily: fontFamily,
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Text(buttonText,
+                    style: TextStyle(
                       fontSize: fontSize,
-                      color: fontColor)),
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.instance.textOnColor,
+                    )),
+              ),
             ),
           ],
         ),

@@ -37,6 +37,7 @@ class _MyReservationsState extends State<MyReservations> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70.0,
           iconTheme: IconThemeData(
             color: ColorConstants.instance.iconOnColor,
           ),
@@ -89,15 +90,11 @@ class _MyReservationsState extends State<MyReservations> {
                               );
                               break;
                             default:
-                              return NotFound(
+                              return const NotFound(
                                 notFoundIcon:
                                     FontAwesomeIcons.exclamationTriangle,
-                                notFoundIconColor:
-                                    ColorConstants.instance.primaryColor,
                                 notFoundText:
                                     'Üzgünüz, yapmış olduğunuz bir rezrvasyon bulunmamaktadır.',
-                                notFoundTextColor:
-                                    ColorConstants.instance.hintColor,
                               );
                           }
                           break;

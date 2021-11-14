@@ -33,7 +33,6 @@ class _CommentCardState extends State<CommentCard> {
             style: TextStyle(
                 color: ColorConstants.instance.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'Roboto',
                 fontSize: 17.0),
             textAlign: TextAlign.center,
           ),
@@ -45,7 +44,6 @@ class _CommentCardState extends State<CommentCard> {
               Text('İşletme İsmi: ${widget.wish.wishStoreName}',
                   style: TextStyle(
                       color: ColorConstants.instance.primaryColor,
-                      fontFamily: 'Roboto',
                       fontWeight: FontWeight.bold,
                       fontSize: 15.0)),
               Padding(
@@ -54,7 +52,6 @@ class _CommentCardState extends State<CommentCard> {
                   widget.wish.wishDesc,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: 'Roboto',
                     color: ColorConstants.instance.hintColor,
                   ),
                 ),
@@ -65,7 +62,6 @@ class _CommentCardState extends State<CommentCard> {
                     'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
                     style: TextStyle(
                         color: ColorConstants.instance.hintColor,
-                        fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
                         fontSize: 15.0)),
               ),
@@ -78,7 +74,6 @@ class _CommentCardState extends State<CommentCard> {
                           : 'İletişim No: ${widget.wish.wishUserPhone}',
                       style: TextStyle(
                           color: ColorConstants.instance.hintColor,
-                          fontFamily: 'Roboto',
                           fontWeight: FontWeight.bold,
                           fontSize: 15.0))),
             ],

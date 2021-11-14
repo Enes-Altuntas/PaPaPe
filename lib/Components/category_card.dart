@@ -40,7 +40,6 @@ class _CategoryCardState extends State<CategoryCard> {
                   widget.category.categoryName,
                   style: TextStyle(
                     fontSize: 25.0,
-                    fontFamily: 'Bebas',
                     color: ColorConstants.instance.primaryColor,
                   ),
                 ),

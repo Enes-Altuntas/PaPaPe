@@ -16,6 +16,7 @@ class MyCampaigns extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70.0,
           flexibleSpace: Container(
             color: ColorConstants.instance.primaryColor,
           ),
@@ -101,18 +102,12 @@ class MyCampaigns extends StatelessWidget {
                                                       ));
                                                   break;
                                                 default:
-                                                  return NotFound(
+                                                  return const NotFound(
                                                     notFoundIcon:
                                                         FontAwesomeIcons
                                                             .exclamationCircle,
-                                                    notFoundIconColor:
-                                                        ColorConstants.instance
-                                                            .primaryColor,
                                                     notFoundText:
                                                         'Kampanya bilgileri bulunamadı !',
-                                                    notFoundTextColor:
-                                                        ColorConstants
-                                                            .instance.hintColor,
                                                   );
                                               }
                                               break;
@@ -129,15 +124,11 @@ class MyCampaigns extends StatelessWidget {
                                 );
                                 break;
                               default:
-                                return NotFound(
+                                return const NotFound(
                                   notFoundIcon:
                                       FontAwesomeIcons.exclamationTriangle,
-                                  notFoundIconColor:
-                                      ColorConstants.instance.primaryColor,
                                   notFoundText:
                                       'Üzgünüz, almış olduğunuz hiçbir kampanya kodunuz bulunamamıştır !',
-                                  notFoundTextColor:
-                                      ColorConstants.instance.hintColor,
                                 );
                             }
                             break;

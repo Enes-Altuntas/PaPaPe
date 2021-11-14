@@ -64,6 +64,7 @@ class _FilterState extends State<Filter> {
             color: ColorConstants.instance.iconOnColor,
           ),
           elevation: 0,
+          toolbarHeight: 70.0,
           title: const TitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
@@ -102,7 +103,6 @@ class _FilterState extends State<Filter> {
                                   child: Text(
                                     'Arama Seçenekleri',
                                     style: TextStyle(
-                                        fontFamily: 'Bebas',
                                         color: ColorConstants
                                             .instance.primaryColor,
                                         fontSize: 25.0),
@@ -178,7 +178,7 @@ class _FilterState extends State<Filter> {
                                           value: _filterProvider.getDist,
                                           min: 1,
                                           max: 16,
-                                          divisions: 5,
+                                          divisions: 15,
                                           activeColor: ColorConstants
                                               .instance.primaryColor,
                                           inactiveColor: ColorConstants
@@ -200,7 +200,6 @@ class _FilterState extends State<Filter> {
                                   child: Text(
                                     'Görüntü Seçenekleri',
                                     style: TextStyle(
-                                        fontFamily: 'Bebas',
                                         color: ColorConstants
                                             .instance.primaryColor,
                                         fontSize: 25.0),

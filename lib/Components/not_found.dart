@@ -1,19 +1,16 @@
+import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NotFound extends StatelessWidget {
   final IconData notFoundIcon;
-  final Color notFoundIconColor;
   final String notFoundText;
-  final Color notFoundTextColor;
 
-  const NotFound(
-      {Key key,
-      this.notFoundIcon,
-      this.notFoundIconColor,
-      this.notFoundText,
-      this.notFoundTextColor})
-      : super(key: key);
+  const NotFound({
+    Key key,
+    this.notFoundIcon,
+    this.notFoundText,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +20,18 @@ class NotFound extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FaIcon(notFoundIcon, size: 60, color: notFoundIconColor),
+            FaIcon(notFoundIcon,
+                size: 60.0, color: ColorConstants.instance.primaryColor),
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
+              padding: const EdgeInsets.all(30.0),
               child: Text(
                 notFoundText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontFamily: 'Bebas',
-                    fontSize: 25,
-                    color: notFoundTextColor),
+                    fontSize: 18.0,
+                    color: ColorConstants.instance.hintColor,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ],

@@ -19,6 +19,10 @@ class AuthService {
     return _firebaseAuth.currentUser.uid;
   }
 
+  getInstance() {
+    return _firebaseAuth;
+  }
+
   // *************************************************************************** Giriş İşlemleri
   // *************************************************************************** Giriş İşlemleri
   // *************************************************************************** Giriş İşlemleri
@@ -43,22 +47,22 @@ class AuthService {
   }
 
   Future googleLogin() async {
-    try {
-      GoogleSignInAccount user = await _googleSignIn.signIn();
-      if (user == null) {
-        return;
-      } else {
-        final googleAuth = await user.authentication;
+    GoogleSignInAccount user = await _googleSignIn.signIn();
+    if (user == null) {
+      return;
+    } else {
+      final googleAuth = await user.authentication;
 
-        final credential = GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+      final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-        await _firebaseAuth.signInWithCredential(credential);
+      await _firebaseAuth.signInWithCredential(credential);
 
-        await saveUser();
-      }
-    } catch (e) {
-      throw 'Sistemde bir hata meydana geldi !';
+      String role = "basic";
+      await saveUser(_firebaseAuth.currentUser.displayName, role)
+          .onError((error, stackTrace) {
+        throw error;
+      });
     }
   }
 
@@ -66,14 +70,15 @@ class AuthService {
   // *************************************************************************** Kayıt İşlemleri
   // *************************************************************************** Kayıt İşlemleri
 
-  Future<String> signUp({String email, String password}) async {
+  Future<String> signUp({String name, String email, String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
 
-      await saveUser();
-
       await _firebaseAuth.currentUser.sendEmailVerification();
+
+      String role = "basic";
+      await saveUser(name, role);
 
       await _firebaseAuth.signOut();
 
@@ -89,6 +94,47 @@ class AuthService {
         throw 'Sistemde bir hata meydana geldi !';
       }
     }
+  }
+
+  Future verifyCodeAndUser({String code, String verification}) async {
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+        verificationId: verification, smsCode: code);
+
+    await _firebaseAuth
+        .signInWithCredential(phoneAuthCredential)
+        .onError((error, stackTrace) {
+      throw "Kullanıcı giriş işlemi sırasında bir hata meydana geldi!";
+    });
+
+    await _db
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get()
+        .then((value) {
+      return UserModel.fromFirestore(value.data());
+    }).onError((error, stackTrace) async {
+      await _firebaseAuth.signOut();
+      throw "Henüz bu telefon ile yapılmış olan bir kayıt bulunamamaktadır. Eğer kayıt olmadıysanız ilk önce kayıt olmanız gerekmektedir!";
+    }).then((value) {
+      if (!value.roles.contains("basic")) {
+        throw "Henüz bu telefon ile yapılmış olan bir kayıt bulunamamaktadır. Eğer kayıt olmadıysanız ilk önce kayıt olmanız gerekmektedir!";
+      }
+    });
+  }
+
+  Future verifyCodeAndSaveUser(
+      {String name, String code, String verification}) async {
+    PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+        verificationId: verification, smsCode: code);
+
+    await _firebaseAuth
+        .signInWithCredential(phoneAuthCredential)
+        .onError((error, stackTrace) {
+      throw "Telefon ile giriş işlemi sırasında bir hata meydana geldi!";
+    });
+
+    String role = "basic";
+    await saveUser(name, role);
   }
 
   // *************************************************************************** Parola İşlemleri
@@ -123,31 +169,43 @@ class AuthService {
   // *************************************************************************** Kullanıcı İşlemleri
   // *************************************************************************** Kullanıcı İşlemleri
 
-  Future<void> saveUser() async {
-    try {
-      UserModel user = await _db
-          .collection('users')
-          .doc(_firebaseAuth.currentUser.uid)
-          .get()
-          .then((value) {
-        return UserModel.fromFirestore(value.data());
-      });
+  Future<void> saveUser(String name, String role) async {
+    UserModel user = await _db
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get()
+        .then((value) {
+      return UserModel.fromFirestore(value.data());
+    }).onError((error, stackTrace) => null);
 
-      await _db
-          .collection('users')
-          .doc(user.userId)
-          .update({"token": await FirebaseMessaging.instance.getToken()});
-    } catch (e) {
+    if (user == null) {
       UserModel newUser = UserModel(
+          name: name,
           token: await FirebaseMessaging.instance.getToken(),
+          iToken: null,
           userId: _firebaseAuth.currentUser.uid,
           favorites: [],
-          campaignCodes: []);
+          storeId: null,
+          campaignCodes: [],
+          roles: []);
+
+      newUser.roles.add(role);
 
       await _db
           .collection('users')
           .doc(_firebaseAuth.currentUser.uid)
           .set(newUser.toMap());
+    } else {
+      if (!user.roles.contains("basic")) {
+        user.roles.add("basic");
+
+        String token = await FirebaseMessaging.instance.getToken();
+
+        await _db
+            .collection('users')
+            .doc(_firebaseAuth.currentUser.uid)
+            .update({'roles': user.roles, 'token': token});
+      }
     }
   }
 }

@@ -49,11 +49,9 @@ class _MenuState extends State<Menu> {
                       );
                       break;
                     default:
-                      return NotFound(
+                      return const NotFound(
                         notFoundIcon: FontAwesomeIcons.exclamationTriangle,
-                        notFoundIconColor: ColorConstants.instance.primaryColor,
                         notFoundText: 'Üzgünüz, menüde ürün bulunmamaktadır.',
-                        notFoundTextColor: ColorConstants.instance.textOnColor,
                       );
                   }
                   break;

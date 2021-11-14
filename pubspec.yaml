@@ -33,6 +33,8 @@ dependencies:
   flutter_speed_dial: ^4.4.0+2
   curved_navigation_bar: ^1.0.1
   qr_flutter: ^4.0.0
+  pinput: ^1.2.0
+  introduction_screen: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -54,21 +56,18 @@ flutter:
 
   assets:
     - assets/
-    - assets/night.json
-    - assets/standart.json
-    - assets/images/logo.png
     - assets/images/splash_logo.png
+    - assets/images/logo.png
+    - assets/images/title.png
+    - assets/images/app_title.png
+    - assets/images/login_logo.png
 
   fonts:
-    - family: Bebas
-      fonts:
-        - asset: assets/fonts/BebasNeue-Regular.ttf
-          weight: 400
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/RobotoCondensed-Regular.ttf
-          weight: 400
-    - family: Amatic
-      fonts:
-        - asset: assets/fonts/AmaticSC-Regular.ttf
-          weight: 400
+  - family: Poppins
+    fonts:
+      - asset: assets/fonts/Poppins-Regular.ttf
+        weight: 400
+  - family: Montserrat
+    fonts:
+      - asset: assets/fonts/Montserrat-Regular.ttf
+        weight: 400

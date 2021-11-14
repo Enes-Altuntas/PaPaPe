@@ -187,6 +187,7 @@ class _ReservationState extends State<Reservation> {
         ? Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
+                toolbarHeight: 70.0,
                 flexibleSpace: Container(
                   color: ColorConstants.instance.primaryColor,
                 ),
@@ -229,7 +230,6 @@ class _ReservationState extends State<Reservation> {
                                       style: TextStyle(
                                           color:
                                               ColorConstants.instance.hintColor,
-                                          fontFamily: 'Roboto',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16.0),
                                     ),
@@ -255,7 +255,6 @@ class _ReservationState extends State<Reservation> {
                                       style: TextStyle(
                                           color:
                                               ColorConstants.instance.hintColor,
-                                          fontFamily: 'Roboto',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16.0),
                                     ),
@@ -280,7 +279,6 @@ class _ReservationState extends State<Reservation> {
                                       style: TextStyle(
                                           color:
                                               ColorConstants.instance.hintColor,
-                                          fontFamily: 'Roboto',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16.0),
                                     ),
@@ -305,7 +303,6 @@ class _ReservationState extends State<Reservation> {
                                       style: TextStyle(
                                           color:
                                               ColorConstants.instance.hintColor,
-                                          fontFamily: 'Roboto',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16.0),
                                     ),
@@ -331,7 +328,6 @@ class _ReservationState extends State<Reservation> {
                                       style: TextStyle(
                                           color:
                                               ColorConstants.instance.hintColor,
-                                          fontFamily: 'Roboto',
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16.0),
                                     ),
@@ -392,10 +388,10 @@ class _ReservationState extends State<Reservation> {
                                               ),
                                               Text("Rezervasyon yaptır",
                                                   style: TextStyle(
-                                                      fontSize: 17,
-                                                      color: ColorConstants
-                                                          .instance.textOnColor,
-                                                      fontFamily: 'Bebas')),
+                                                    fontSize: 17,
+                                                    color: ColorConstants
+                                                        .instance.textOnColor,
+                                                  )),
                                             ],
                                           ),
                                           onPressed: () {

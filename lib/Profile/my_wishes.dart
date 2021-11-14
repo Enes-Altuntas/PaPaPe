@@ -15,6 +15,7 @@ class MyWishes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70.0,
           iconTheme: IconThemeData(
             color: ColorConstants.instance.iconOnColor, //change your color here
           ),
@@ -62,15 +63,11 @@ class MyWishes extends StatelessWidget {
                                 );
                                 break;
                               default:
-                                return NotFound(
+                                return const NotFound(
                                   notFoundIcon:
                                       FontAwesomeIcons.exclamationTriangle,
-                                  notFoundIconColor:
-                                      ColorConstants.instance.primaryColor,
                                   notFoundText:
                                       'Üzgünüz, belirtmiş olduğunuz bir dilek veya şikayet bulunmamaktadır.',
-                                  notFoundTextColor:
-                                      ColorConstants.instance.hintColor,
                                 );
                             }
                             break;

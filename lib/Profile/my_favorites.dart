@@ -23,6 +23,7 @@ class MyFavorites extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 70.0,
           flexibleSpace: Container(
             color: ColorConstants.instance.primaryColor,
           ),
@@ -99,15 +100,11 @@ class MyFavorites extends StatelessWidget {
                                 );
                                 break;
                               default:
-                                return NotFound(
+                                return const NotFound(
                                   notFoundIcon:
                                       FontAwesomeIcons.exclamationTriangle,
-                                  notFoundIconColor:
-                                      ColorConstants.instance.primaryColor,
                                   notFoundText:
                                       'Üzgünüz, favorilerinizde işletme bulunmamaktadır.',
-                                  notFoundTextColor:
-                                      ColorConstants.instance.hintColor,
                                 );
                             }
                             break;

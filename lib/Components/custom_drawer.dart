@@ -46,14 +46,36 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: (firebaseUser.displayName != null)
+            accountName: (firebaseUser != null &&
+                    firebaseUser.displayName != null)
                 ? Text('Hoşgeldiniz ${firebaseUser.displayName}',
                     style: TextStyle(color: ColorConstants.instance.textGold))
                 : Text('Hoşgeldiniz',
                     style: TextStyle(color: ColorConstants.instance.textGold)),
-            accountEmail: Text(firebaseUser.email),
-            currentAccountPicture: (firebaseUser.photoURL == null)
-                ? Container(
+            accountEmail: (firebaseUser != null)
+                ? (firebaseUser.email != null)
+                    ? Text(firebaseUser.email)
+                    : Text(firebaseUser.phoneNumber)
+                : null,
+            currentAccountPicture: (firebaseUser != null)
+                ? (firebaseUser.photoURL != null)
+                    ? CircleAvatar(
+                        radius: 50.0,
+                        backgroundImage: NetworkImage(firebaseUser.photoURL),
+                        backgroundColor: Colors.transparent,
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: ColorConstants.instance.whiteContainer,
+                        ),
+                        child: Icon(
+                          Icons.person,
+                          size: 50.0,
+                          color: ColorConstants.instance.primaryColor,
+                        ),
+                      )
+                : Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: ColorConstants.instance.whiteContainer,
@@ -63,11 +85,6 @@ class CustomDrawer extends StatelessWidget {
                       size: 50.0,
                       color: ColorConstants.instance.primaryColor,
                     ),
-                  )
-                : CircleAvatar(
-                    radius: 50.0,
-                    backgroundImage: NetworkImage(firebaseUser.photoURL),
-                    backgroundColor: Colors.transparent,
                   ),
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [

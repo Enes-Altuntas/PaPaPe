@@ -1,6 +1,5 @@
+import 'package:bulovva/Components/wrapper.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Login/login.dart';
-import 'package:bulovva/Map/map.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,13 +42,14 @@ class MyApp extends StatelessWidget {
               create: (context) => context.read<AuthService>().authStateChanges)
         ],
         child: MaterialApp(
-            title: 'MyRestApp',
+            title: 'MyRest',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate
             ],
             supportedLocales: const [Locale('en', 'EN'), Locale('tr', 'TR')],
             theme: ThemeData(
+              fontFamily: 'Poppins',
               scaffoldBackgroundColor: ColorConstants.instance.whiteContainer,
               cardTheme: CardTheme(
                 clipBehavior: Clip.antiAlias,
@@ -65,21 +65,5 @@ class MyApp extends StatelessWidget {
               ),
             ),
             home: const AuthWrapper()));
-  }
-}
-
-class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final User firebaseUser = context.watch<User>();
-    switch (firebaseUser != null && firebaseUser.emailVerified) {
-      case true:
-        return const Map();
-        break;
-      default:
-        return const Login();
-    }
   }
 }
