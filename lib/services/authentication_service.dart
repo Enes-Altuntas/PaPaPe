@@ -23,6 +23,16 @@ class AuthService {
     return _firebaseAuth;
   }
 
+  Future<UserModel> get userInformation async {
+    return await _db
+        .collection('users')
+        .doc(_firebaseAuth.currentUser.uid)
+        .get()
+        .then((value) {
+      return UserModel.fromFirestore(value.data());
+    }).onError((error, stackTrace) => null);
+  }
+
   // *************************************************************************** Giriş İşlemleri
   // *************************************************************************** Giriş İşlemleri
   // *************************************************************************** Giriş İşlemleri
@@ -196,7 +206,9 @@ class AuthService {
           .doc(_firebaseAuth.currentUser.uid)
           .set(newUser.toMap());
     } else {
-      if (!user.roles.contains("basic")) {
+      if (user.roles.contains("basic")) {
+        return;
+      } else {
         user.roles.add("basic");
 
         String token = await FirebaseMessaging.instance.getToken();

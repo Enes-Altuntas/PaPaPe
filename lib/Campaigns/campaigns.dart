@@ -3,12 +3,14 @@ import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/store_model.dart';
+import 'package:bulovva/Providers/user_provider.dart';
 import 'package:bulovva/services/firestore_service.dart';
 import 'package:bulovva/services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Campaigns extends StatefulWidget {
   final StoreModel storeData;
@@ -23,6 +25,7 @@ class _CampaignsState extends State<Campaigns> {
   final firestoreService = FirestoreService();
   final DateFormat dateFormat = DateFormat("dd/MM/yyyy HH:mm:ss");
   bool isLoading = false;
+  UserProvider _userProvider;
 
   String formatDate(Timestamp date) {
     var _date = DateTime.fromMillisecondsSinceEpoch(date.millisecondsSinceEpoch)
@@ -32,10 +35,17 @@ class _CampaignsState extends State<Campaigns> {
 
   getCampaignKey(CampaignModel campaign) async {
     await firestoreService
-        .getCampaign(widget.storeData.storeId, campaign.campaignId)
+        .getCampaign(
+            widget.storeData.storeId, campaign.campaignId, _userProvider.name)
         .then((value) => ToastService().showSuccess(value, context))
         .onError(
             (error, stackTrace) => ToastService().showError(error, context));
+  }
+
+  @override
+  void didChangeDependencies() {
+    _userProvider = Provider.of<UserProvider>(context);
+    super.didChangeDependencies();
   }
 
   @override

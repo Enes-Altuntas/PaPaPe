@@ -1,4 +1,5 @@
 import 'package:bulovva/Models/campaign_model.dart';
+import 'package:bulovva/Models/campaign_users_model.dart';
 import 'package:bulovva/Models/product_category_model.dart';
 import 'package:bulovva/Models/product_model.dart';
 import 'package:bulovva/Models/reservations_model.dart';
@@ -251,7 +252,8 @@ class FirestoreService {
             .toList());
   }
 
-  Future<String> getCampaign(String storeId, String campaignId) async {
+  Future<String> getCampaign(
+      String storeId, String campaignId, String userName) async {
     UserModel user;
     String userId = AuthService(FirebaseAuth.instance).getUserId();
     String campaignCodeString = storeId + '*' + campaignId + '*' + userId;
@@ -275,10 +277,33 @@ class FirestoreService {
           .collection('users')
           .doc(userId)
           .update({'campaignCodes': user.campaignCodes});
+    } catch (e) {
+      throw 'Kampanyalarınız güncellenirken bir hata meydana geldi !';
+    }
+
+    try {
+      CampaignUserModel campaignUserModel = CampaignUserModel(
+          campaignId: campaignId,
+          storeId: storeId,
+          scanned: false,
+          userId: userId,
+          scannedAt: null,
+          scannedById: null,
+          scannedByName: null,
+          userName: userName);
+
+      await _db
+          .collection("stores")
+          .doc(storeId)
+          .collection('campaigns')
+          .doc(campaignId)
+          .collection('campaignUsers')
+          .doc(userId)
+          .set(campaignUserModel.toMap());
 
       return 'Seçtiğiniz kampanya, başarıyla kampanyalarınıza eklenmiştir !';
     } catch (e) {
-      throw 'Kampanyalarınız güncellenirken bir hata meydana geldi !';
+      throw 'Kampanya eklenirken bir hata meydana geldi !';
     }
   }
 

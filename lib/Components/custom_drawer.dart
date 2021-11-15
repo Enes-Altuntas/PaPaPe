@@ -5,14 +5,28 @@ import 'package:bulovva/Profile/my_campaigns.dart';
 import 'package:bulovva/Profile/my_favorites.dart';
 import 'package:bulovva/Profile/my_reservations.dart';
 import 'package:bulovva/Profile/my_wishes.dart';
+import 'package:bulovva/Providers/user_provider.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key key}) : super(key: key);
+
+  @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  UserProvider _userProvider;
+
+  @override
+  void didChangeDependencies() {
+    _userProvider = Provider.of<UserProvider>(context);
+    super.didChangeDependencies();
+  }
 
   exitYesNo(BuildContext context) {
     CoolAlert.show(
@@ -46,25 +60,22 @@ class CustomDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: (firebaseUser != null &&
-                    firebaseUser.displayName != null)
-                ? Text('Hoşgeldiniz ${firebaseUser.displayName}',
-                    style: TextStyle(color: ColorConstants.instance.textGold))
-                : Text('Hoşgeldiniz',
-                    style: TextStyle(color: ColorConstants.instance.textGold)),
+            accountName: (_userProvider != null && _userProvider.name != null)
+                ? Text(
+                    'Hoşgeldiniz ${_userProvider.name},',
+                    style: TextStyle(
+                        color: ColorConstants.instance.textGold,
+                        fontWeight: FontWeight.bold),
+                  )
+                : null,
             accountEmail: (firebaseUser != null)
-                ? (firebaseUser.email != null)
+                ? (firebaseUser.email != null && firebaseUser.email.isNotEmpty)
                     ? Text(firebaseUser.email)
                     : Text(firebaseUser.phoneNumber)
                 : null,
-            currentAccountPicture: (firebaseUser != null)
-                ? (firebaseUser.photoURL != null)
-                    ? CircleAvatar(
-                        radius: 50.0,
-                        backgroundImage: NetworkImage(firebaseUser.photoURL),
-                        backgroundColor: Colors.transparent,
-                      )
-                    : Container(
+            currentAccountPicture:
+                (firebaseUser == null || firebaseUser.photoURL == null)
+                    ? Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: ColorConstants.instance.whiteContainer,
@@ -75,17 +86,11 @@ class CustomDrawer extends StatelessWidget {
                           color: ColorConstants.instance.primaryColor,
                         ),
                       )
-                : Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: ColorConstants.instance.whiteContainer,
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      size: 50.0,
-                      color: ColorConstants.instance.primaryColor,
-                    ),
-                  ),
+                    : CircleAvatar(
+                        radius: 50.0,
+                        backgroundImage: NetworkImage(firebaseUser.photoURL),
+                        backgroundColor: Colors.transparent,
+                      ),
             decoration: BoxDecoration(
                 gradient: LinearGradient(colors: [
               ColorConstants.instance.primaryColor,

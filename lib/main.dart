@@ -1,6 +1,7 @@
 import 'package:bulovva/Components/wrapper.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
+import 'package:bulovva/Providers/user_provider.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (context) => FilterProvider()),
+          ChangeNotifierProvider(create: (context) => UserProvider()),
           Provider<AuthService>(
               create: (context) => AuthService(FirebaseAuth.instance)),
           StreamProvider(
