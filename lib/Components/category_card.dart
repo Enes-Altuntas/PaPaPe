@@ -39,7 +39,9 @@ class _CategoryCardState extends State<CategoryCard> {
                 Text(
                   widget.category.categoryName,
                   style: TextStyle(
-                    fontSize: 25.0,
+                    fontSize: 23.0,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.bold,
                     color: ColorConstants.instance.primaryColor,
                   ),
                 ),

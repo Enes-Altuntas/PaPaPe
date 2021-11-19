@@ -51,6 +51,7 @@ class _BrandWidgetState extends State<BrandWidget> {
                 widget.storeCategory.storeShort,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  fontFamily: "Montserrat",
                   fontWeight: FontWeight.bold,
                   color: ColorConstants.instance.primaryColor,
                 ),

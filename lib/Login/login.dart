@@ -397,6 +397,22 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Visibility(
+                            visible: codeSent,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: GestureDetector(
+                                onTap: verifyCode,
+                                child: Text(
+                                  'Tekrar SMS kodu al!',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorConstants.instance.waitingColor,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Visibility(
                             visible: !loginWithPhone,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),

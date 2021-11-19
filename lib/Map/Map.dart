@@ -229,6 +229,8 @@ class _Map extends State<Map> {
                                                 draggable: false,
                                                 infoWindow: InfoWindow(
                                                     title: element.storeName,
+                                                    snippet:
+                                                        'kampanyaları gör...',
                                                     onTap: () {
                                                       showStorePage(
                                                           element.storeId);
@@ -306,7 +308,89 @@ class _Map extends State<Map> {
                         },
                       ),
                       Positioned(
-                          bottom: MediaQuery.of(context).size.height / 15,
+                          bottom: MediaQuery.of(context).size.height / 60,
+                          left: MediaQuery.of(context).size.width / 30,
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
+                            decoration: BoxDecoration(
+                              color: ColorConstants.instance.whiteContainer,
+                              border: Border.all(
+                                  width: 2.0,
+                                  color: ColorConstants.instance.primaryColor),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 3.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 10,
+                                        color:
+                                            ColorConstants.instance.activeColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Aktif',
+                                      style: TextStyle(
+                                        color: ColorConstants
+                                            .instance.primaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 5.0, right: 3.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 10,
+                                        color: ColorConstants
+                                            .instance.buttonDarkGold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Beklemede',
+                                      style: TextStyle(
+                                        color: ColorConstants
+                                            .instance.buttonDarkGold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 5.0, right: 3.0),
+                                      child: Icon(
+                                        Icons.circle,
+                                        size: 10,
+                                        color:
+                                            ColorConstants.instance.hintColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      'İnaktif',
+                                      style: TextStyle(
+                                        color:
+                                            ColorConstants.instance.hintColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )),
+                      Positioned(
+                          top: MediaQuery.of(context).size.height / 60,
                           left: MediaQuery.of(context).size.width / 30,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,16 +398,21 @@ class _Map extends State<Map> {
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
                                 decoration: BoxDecoration(
-                                    color: ColorConstants.instance.primaryColor,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20))),
+                                  color: ColorConstants.instance.whiteContainer,
+                                  border: Border.all(
+                                      width: 2.0,
+                                      color:
+                                          ColorConstants.instance.primaryColor),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(20)),
+                                ),
                                 child: Row(
                                   children: [
                                     Text(
                                       'Aktif Kampanyalar',
                                       style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.textOnColor,
+                                        color: ColorConstants
+                                            .instance.primaryColor,
                                       ),
                                     ),
                                     Switch(

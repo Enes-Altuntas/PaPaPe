@@ -32,17 +32,6 @@ class _ReservationState extends State<Reservation> {
   Timestamp resTime;
   bool _isLoading = false;
 
-  String _resDescCh(String value) {
-    if (value.isEmpty) {
-      return '* Rezervasyon açıklaması boş olmamalıdır !';
-    }
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ]')) != true) {
-      return '* Harf içermelidir !';
-    }
-
-    return null;
-  }
-
   String _resPersCount(String value) {
     if (value.isEmpty) {
       return '* Rezervasyon kişi sayısı boş olmamalıdır !';
@@ -240,7 +229,6 @@ class _ReservationState extends State<Reservation> {
                                       controller: _resDesc,
                                       maxLength: 255,
                                       maxLines: 3,
-                                      validator: _resDescCh,
                                       keyboardType: TextInputType.text,
                                       decoration: const InputDecoration(
                                           labelText: 'Rezervasyon Açıklaması',

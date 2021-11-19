@@ -62,6 +62,7 @@ class _StoreInfoState extends State<StoreInfo> {
                           style: TextStyle(
                               color: ColorConstants.instance.primaryColor,
                               fontWeight: FontWeight.bold,
+                              fontFamily: "Montserrat",
                               fontSize: 30.0),
                         ),
                       ),
@@ -72,7 +73,6 @@ class _StoreInfoState extends State<StoreInfo> {
                           textAlign: TextAlign.start,
                           style: TextStyle(
                               color: ColorConstants.instance.hintColor,
-                              fontWeight: FontWeight.bold,
                               fontSize: 16.0),
                         ),
                       ),

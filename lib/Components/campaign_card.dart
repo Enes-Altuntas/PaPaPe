@@ -65,6 +65,8 @@ class _CampaignCardState extends State<CampaignCard> {
                       : Center(
                           child: Text('Kampanya Resmi Yok',
                               style: TextStyle(
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.bold,
                                   color: ColorConstants.instance.textOnColor,
                                   fontSize: 20.0)),
                         ),
@@ -123,6 +125,7 @@ class _CampaignCardState extends State<CampaignCard> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 18.0,
+                      fontFamily: "Montserrat",
                       color: ColorConstants.instance.primaryColor,
                       fontWeight: FontWeight.bold)),
             ),
@@ -159,7 +162,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           'Kampanya Başlangıç : ${formatDate(widget.campaign.campaignStart)}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 14.0,
+                              fontSize: 12.0,
                               color: ColorConstants.instance.textOnColor,
                               fontWeight: FontWeight.bold)),
                     ),
@@ -172,7 +175,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           'Kampanya Bitiş : ${formatDate(widget.campaign.campaignFinish)}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 14.0,
+                              fontSize: 12.0,
                               color: ColorConstants.instance.textOnColor,
                               fontWeight: FontWeight.bold)),
                     ),

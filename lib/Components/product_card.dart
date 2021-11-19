@@ -78,6 +78,7 @@ class _ProductCardState extends State<ProductCard> {
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.textOnColor,
+                                    fontFamily: "Montserrat",
                                     fontWeight: FontWeight.bold,
                                     shadows: const <Shadow>[
                                       Shadow(

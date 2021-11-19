@@ -103,6 +103,8 @@ class _FilterState extends State<Filter> {
                                   child: Text(
                                     'Arama Seçenekleri',
                                     style: TextStyle(
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.bold,
                                         color: ColorConstants
                                             .instance.primaryColor,
                                         fontSize: 25.0),
@@ -200,6 +202,8 @@ class _FilterState extends State<Filter> {
                                   child: Text(
                                     'Görüntü Seçenekleri',
                                     style: TextStyle(
+                                        fontFamily: "Montserrat",
+                                        fontWeight: FontWeight.bold,
                                         color: ColorConstants
                                             .instance.primaryColor,
                                         fontSize: 25.0),
