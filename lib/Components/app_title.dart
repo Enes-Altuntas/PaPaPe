@@ -7,7 +7,7 @@ class AppTitleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       'assets/images/title.png',
-      height: 50.0,
+      height: 40.0,
     );
   }
 }

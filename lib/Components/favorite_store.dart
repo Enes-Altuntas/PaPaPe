@@ -48,7 +48,7 @@ class _StoreCardsState extends State<StoreCards> {
                   width: 300,
                   decoration: BoxDecoration(
                       color: ColorConstants.instance.primaryColor,
-                      borderRadius: BorderRadius.circular(20.0)),
+                      borderRadius: BorderRadius.circular(5.0)),
                   child: (isBack == false)
                       ? SizedBox(
                           width: MediaQuery.of(context).size.width,

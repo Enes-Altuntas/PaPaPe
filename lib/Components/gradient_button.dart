@@ -29,7 +29,7 @@ class GradientButton extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width * widthMultiplier,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(5.0),
           gradient: LinearGradient(
               colors: [start, end],
               begin: Alignment.bottomCenter,

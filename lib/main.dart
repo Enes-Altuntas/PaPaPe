@@ -51,13 +51,16 @@ class MyApp extends StatelessWidget {
             ],
             supportedLocales: const [Locale('en', 'EN'), Locale('tr', 'TR')],
             theme: ThemeData(
+              colorScheme: ThemeData()
+                  .colorScheme
+                  .copyWith(primary: ColorConstants.instance.primaryColor),
               fontFamily: 'Poppins',
               scaffoldBackgroundColor: ColorConstants.instance.whiteContainer,
               cardTheme: CardTheme(
                 clipBehavior: Clip.antiAlias,
                 elevation: 10,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(5.0),
                   side: BorderSide(
                     color: ColorConstants.instance.primaryColor,
                     width: 2.0,

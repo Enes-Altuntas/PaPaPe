@@ -25,7 +25,7 @@ class _BrandWidgetState extends State<BrandWidget> {
     _filterProvider = Provider.of<FilterProvider>(context);
 
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(5.0),
       child: InkWell(
         onTap: () {
           changeCat(widget.storeCategory.storeCatName);
@@ -33,8 +33,8 @@ class _BrandWidgetState extends State<BrandWidget> {
         child: Column(
           children: [
             SizedBox(
-              height: 60.0,
-              width: 60.0,
+              height: 50.0,
+              width: 50.0,
               child: CircleAvatar(
                 backgroundImage:
                     NetworkImage(widget.storeCategory.storeCatPicRef),
@@ -52,6 +52,7 @@ class _BrandWidgetState extends State<BrandWidget> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "Montserrat",
+                  fontSize: 12.0,
                   fontWeight: FontWeight.bold,
                   color: ColorConstants.instance.primaryColor,
                 ),

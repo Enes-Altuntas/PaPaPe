@@ -29,6 +29,7 @@ class Map extends StatefulWidget {
 }
 
 class _Map extends State<Map> {
+  final TextEditingController searchController = TextEditingController();
   final firestoreService = FirestoreService();
   final List<Marker> markers = [];
   final List<Circle> circles = [];
@@ -39,6 +40,7 @@ class _Map extends State<Map> {
   FilterProvider _filterProvider;
   bool firstTime = true;
   bool isLoading = false;
+  String search;
 
   @override
   void initState() {
@@ -167,7 +169,7 @@ class _Map extends State<Map> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          toolbarHeight: 70.0,
+          toolbarHeight: 50.0,
           title: const AppTitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
@@ -184,7 +186,7 @@ class _Map extends State<Map> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    height: 110.0,
+                    height: 80.0,
                     decoration: BoxDecoration(
                         color: ColorConstants.instance.whiteContainer),
                     child: FutureBuilder<List<StoreCategory>>(
@@ -200,6 +202,30 @@ class _Map extends State<Map> {
                                     storeCategory: snapshot.data[index]);
                               });
                         })),
+                Container(
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                        color: ColorConstants.instance.whiteContainer),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15.0, bottom: 10.0, top: 15.0),
+                      child: TextField(
+                        controller: searchController,
+                        keyboardType: TextInputType.name,
+                        style: const TextStyle(fontSize: 12.0),
+                        decoration: InputDecoration(
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  search = searchController.text.trim();
+                                });
+                              },
+                              child: const Icon(Icons.search),
+                            ),
+                            hintText: "İşletme İsmi",
+                            hintStyle: const TextStyle(fontSize: 12.0)),
+                      ),
+                    )),
                 Expanded(
                   child: Stack(
                     children: [
@@ -223,6 +249,12 @@ class _Map extends State<Map> {
                                             snapshot.hasData == true &&
                                             snapshot.data.isNotEmpty) {
                                           for (var element in snapshot.data) {
+                                            if (search != null &&
+                                                !element.storeName
+                                                    .toLowerCase()
+                                                    .contains(search)) {
+                                              continue;
+                                            }
                                             markers.add(Marker(
                                                 markerId:
                                                     MarkerId(element.storeId),
@@ -260,9 +292,7 @@ class _Map extends State<Map> {
                                         getSearchCircle(snapshotPosition.data);
                                         return (snapshot.connectionState ==
                                                 ConnectionState.active)
-                                            ? (snapshot.hasData &&
-                                                    snapshot.data != null &&
-                                                    snapshot.data.isNotEmpty)
+                                            ? (markers.isNotEmpty)
                                                 ? GoogleMap(
                                                     onMapCreated:
                                                         (GoogleMapController
@@ -308,7 +338,7 @@ class _Map extends State<Map> {
                         },
                       ),
                       Positioned(
-                          bottom: MediaQuery.of(context).size.height / 60,
+                          bottom: MediaQuery.of(context).size.height / 40,
                           left: MediaQuery.of(context).size.width / 30,
                           child: Container(
                             padding: const EdgeInsets.only(
@@ -321,25 +351,23 @@ class _Map extends State<Map> {
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(20)),
                             ),
-                            child: Column(
+                            child: Row(
                               children: [
                                 Row(
-                                  children: [
+                                  children: const [
                                     Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 3.0),
+                                      padding: EdgeInsets.only(right: 3.0),
                                       child: Icon(
                                         Icons.circle,
                                         size: 10,
-                                        color:
-                                            ColorConstants.instance.activeColor,
+                                        color: Colors.green,
                                       ),
                                     ),
                                     Text(
                                       'Aktif',
                                       style: TextStyle(
-                                        color: ColorConstants
-                                            .instance.primaryColor,
+                                        fontSize: 12.0,
+                                        color: Colors.green,
                                       ),
                                     ),
                                   ],
@@ -359,9 +387,9 @@ class _Map extends State<Map> {
                                     Text(
                                       'Beklemede',
                                       style: TextStyle(
-                                        color: ColorConstants
-                                            .instance.buttonDarkGold,
-                                      ),
+                                          color: ColorConstants
+                                              .instance.buttonDarkGold,
+                                          fontSize: 12.0),
                                     ),
                                   ],
                                 ),
@@ -373,63 +401,22 @@ class _Map extends State<Map> {
                                       child: Icon(
                                         Icons.circle,
                                         size: 10,
-                                        color:
-                                            ColorConstants.instance.hintColor,
+                                        color: ColorConstants
+                                            .instance.inactiveGray,
                                       ),
                                     ),
                                     Text(
                                       'İnaktif',
                                       style: TextStyle(
-                                        color:
-                                            ColorConstants.instance.hintColor,
-                                      ),
+                                          color: ColorConstants
+                                              .instance.inactiveGray,
+                                          fontSize: 12.0),
                                     ),
                                   ],
                                 ),
                               ],
                             ),
                           )),
-                      Positioned(
-                          top: MediaQuery.of(context).size.height / 60,
-                          left: MediaQuery.of(context).size.width / 30,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.only(left: 12),
-                                decoration: BoxDecoration(
-                                  color: ColorConstants.instance.whiteContainer,
-                                  border: Border.all(
-                                      width: 2.0,
-                                      color:
-                                          ColorConstants.instance.primaryColor),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      'Aktif Kampanyalar',
-                                      style: TextStyle(
-                                        color: ColorConstants
-                                            .instance.primaryColor,
-                                      ),
-                                    ),
-                                    Switch(
-                                      value: _filterProvider.getLive,
-                                      activeColor:
-                                          ColorConstants.instance.textGold,
-                                      inactiveThumbColor:
-                                          ColorConstants.instance.primaryColor,
-                                      onChanged: (bool value) {
-                                        changeLive(value);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ))
                     ],
                   ),
                 ),

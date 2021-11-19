@@ -33,4 +33,5 @@ class ColorConstants {
   final campaignCardInsideColor = fromHex('#FFE082');
   final buttonDarkGold = fromHex('#dd9911');
   final buttonLightColor = fromHex('#f7bb42');
+  final inactiveGray = fromHex('#8a8a8a');
 }

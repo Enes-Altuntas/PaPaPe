@@ -30,9 +30,13 @@ class _CampaignCardState extends State<CampaignCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
-      ),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(5.0),
+        bottomRight: Radius.circular(5.0),
+        topLeft: Radius.circular(5.0),
+        topRight: Radius.circular(5.0),
+      )),
       clipBehavior: Clip.antiAlias,
       color: ColorConstants.instance.whiteContainer,
       shadowColor: ColorConstants.instance.hintColor,
@@ -72,12 +76,12 @@ class _CampaignCardState extends State<CampaignCard> {
                         ),
                 ),
                 Positioned(
-                    top: 20.0,
-                    left: 20.0,
+                    top: 10.0,
+                    left: 10.0,
                     child: (widget.campaign.campaignStatus == 'active')
                         ? Container(
-                            height: 40.0,
-                            width: 40.0,
+                            height: 30.0,
+                            width: 30.0,
                             decoration: BoxDecoration(
                                 color: ColorConstants.instance.activeColor,
                                 borderRadius: BorderRadius.circular(30.0)),
@@ -90,8 +94,8 @@ class _CampaignCardState extends State<CampaignCard> {
                           )
                         : (widget.campaign.campaignStatus == 'inactive')
                             ? Container(
-                                height: 40.0,
-                                width: 40.0,
+                                height: 30.0,
+                                width: 30.0,
                                 decoration: BoxDecoration(
                                     color:
                                         ColorConstants.instance.inactiveColor,
@@ -104,8 +108,8 @@ class _CampaignCardState extends State<CampaignCard> {
                                 ),
                               )
                             : Container(
-                                height: 40.0,
-                                width: 40.0,
+                                height: 30.0,
+                                width: 30.0,
                                 decoration: BoxDecoration(
                                     color: ColorConstants.instance.waitingColor,
                                     borderRadius: BorderRadius.circular(30.0)),
@@ -119,8 +123,8 @@ class _CampaignCardState extends State<CampaignCard> {
               ],
             ),
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
+              padding: const EdgeInsets.only(
+                  left: 20.0, right: 20.0, top: 20.0, bottom: 10.0),
               child: Text(widget.campaign.campaignTitle.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -128,6 +132,12 @@ class _CampaignCardState extends State<CampaignCard> {
                       fontFamily: "Montserrat",
                       color: ColorConstants.instance.primaryColor,
                       fontWeight: FontWeight.bold)),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 40.0, right: 40.0),
+              child: Divider(
+                thickness: 2.0,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
@@ -140,11 +150,7 @@ class _CampaignCardState extends State<CampaignCard> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50.0),
-                  color: (widget.campaign.campaignStatus == 'active')
-                      ? ColorConstants.instance.activeColor
-                      : (widget.campaign.campaignStatus == 'inactive')
-                          ? ColorConstants.instance.inactiveColor
-                          : ColorConstants.instance.waitingColor,
+                  color: ColorConstants.instance.whiteContainer,
                   boxShadow: [
                     BoxShadow(
                       color: ColorConstants.instance.whiteContainer,
@@ -163,7 +169,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: ColorConstants.instance.textOnColor,
+                              color: ColorConstants.instance.hintColor,
                               fontWeight: FontWeight.bold)),
                     ),
                     Padding(
@@ -176,7 +182,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 12.0,
-                              color: ColorConstants.instance.textOnColor,
+                              color: ColorConstants.instance.hintColor,
                               fontWeight: FontWeight.bold)),
                     ),
                     Visibility(
