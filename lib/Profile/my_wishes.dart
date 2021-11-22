@@ -1,7 +1,6 @@
 import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Components/wish_card.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/wishes_model.dart';

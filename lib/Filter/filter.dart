@@ -1,6 +1,5 @@
 import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Providers/filter_provider.dart';

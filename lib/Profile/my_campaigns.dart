@@ -1,7 +1,6 @@
 import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/not_found.dart';
 import 'package:bulovva/Components/qr_card.dart';
-import 'package:bulovva/Components/title.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/user_model.dart';
