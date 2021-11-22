@@ -103,11 +103,9 @@ class _Map extends State<Map> {
         circleId: const CircleId('search'),
         center: LatLng(position.latitude, position.longitude),
         radius: _filterProvider.getDist * 1000,
-        strokeWidth: 3,
-        fillColor: (_filterProvider.getMode == true)
-            ? ColorConstants.instance.waitingColor.withOpacity(0.1)
-            : ColorConstants.instance.secondaryColor.withOpacity(0.2),
-        strokeColor: ColorConstants.instance.secondaryColor.withOpacity(0.8));
+        strokeWidth: 2,
+        fillColor: Colors.transparent,
+        strokeColor: ColorConstants.instance.secondaryColor.withOpacity(0.6));
     circles.add(circle);
   }
 
@@ -139,18 +137,36 @@ class _Map extends State<Map> {
   double getZoomLevel() {
     if (_filterProvider.getDist == 1) {
       return 14;
+    } else if (_filterProvider.getDist == 2) {
+      return 13.2;
+    } else if (_filterProvider.getDist == 3) {
+      return 12.8;
     } else if (_filterProvider.getDist == 4) {
       return 12.2;
+    } else if (_filterProvider.getDist == 5) {
+      return 12;
+    } else if (_filterProvider.getDist == 6) {
+      return 11.8;
     } else if (_filterProvider.getDist == 7) {
-      return 11.5;
+      return 11.6;
+    } else if (_filterProvider.getDist == 8) {
+      return 11.4;
+    } else if (_filterProvider.getDist == 9) {
+      return 11.2;
     } else if (_filterProvider.getDist == 10) {
-      return 11.0;
-    } else if (_filterProvider.getDist == 13) {
+      return 11;
+    } else if (_filterProvider.getDist == 11) {
+      return 10.8;
+    } else if (_filterProvider.getDist == 12) {
       return 10.6;
-    } else if (_filterProvider.getDist == 16) {
+    } else if (_filterProvider.getDist == 13) {
+      return 10.5;
+    } else if (_filterProvider.getDist == 14) {
+      return 10.4;
+    } else if (_filterProvider.getDist == 15) {
       return 10.3;
     } else {
-      return 12.0;
+      return 10;
     }
   }
 
@@ -212,6 +228,12 @@ class _Map extends State<Map> {
                       child: TextField(
                         controller: searchController,
                         keyboardType: TextInputType.name,
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: (value) {
+                          setState(() {
+                            search = searchController.text.trim();
+                          });
+                        },
                         style: const TextStyle(fontSize: 12.0),
                         decoration: InputDecoration(
                             suffixIcon: GestureDetector(
@@ -252,7 +274,8 @@ class _Map extends State<Map> {
                                             if (search != null &&
                                                 !element.storeName
                                                     .toLowerCase()
-                                                    .contains(search)) {
+                                                    .contains(
+                                                        search.toLowerCase())) {
                                               continue;
                                             }
                                             markers.add(Marker(

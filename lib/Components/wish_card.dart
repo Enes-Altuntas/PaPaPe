@@ -25,15 +25,25 @@ class _CommentCardState extends State<CommentCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+        side: BorderSide(
+          color: ColorConstants.instance.primaryColor,
+          width: 1.0,
+        ),
+      ),
+      color: ColorConstants.instance.whiteContainer,
       child: ListTile(
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
             widget.wish.wishTitle,
             style: TextStyle(
-                color: ColorConstants.instance.primaryColor,
+                color: ColorConstants.instance.textGold,
                 fontWeight: FontWeight.bold,
-                fontSize: 17.0),
+                fontSize: 18.0),
             textAlign: TextAlign.center,
           ),
         ),

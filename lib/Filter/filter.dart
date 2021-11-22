@@ -64,7 +64,7 @@ class _FilterState extends State<Filter> {
             color: ColorConstants.instance.primaryColor,
           ),
           elevation: 0,
-          toolbarHeight: 70.0,
+          toolbarHeight: 50.0,
           title: const AppTitleWidget(),
           centerTitle: true,
           flexibleSpace: Container(
@@ -163,8 +163,8 @@ class _FilterState extends State<Filter> {
                                   Slider(
                                       value: _filterProvider.getDist,
                                       min: 1,
-                                      max: 16,
-                                      divisions: 15,
+                                      max: 15,
+                                      divisions: 14,
                                       activeColor:
                                           ColorConstants.instance.primaryColor,
                                       inactiveColor:

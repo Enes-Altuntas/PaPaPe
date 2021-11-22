@@ -37,7 +37,7 @@ class _MyReservationsState extends State<MyReservations> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 70.0,
+          toolbarHeight: 50.0,
           iconTheme: IconThemeData(
             color: ColorConstants.instance.primaryColor,
           ),

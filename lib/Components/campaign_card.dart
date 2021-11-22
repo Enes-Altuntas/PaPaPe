@@ -130,7 +130,7 @@ class _CampaignCardState extends State<CampaignCard> {
                   style: TextStyle(
                       fontSize: 18.0,
                       fontFamily: "Montserrat",
-                      color: ColorConstants.instance.primaryColor,
+                      color: ColorConstants.instance.textGold,
                       fontWeight: FontWeight.bold)),
             ),
             const Padding(
@@ -146,29 +146,17 @@ class _CampaignCardState extends State<CampaignCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50.0),
-                  color: ColorConstants.instance.whiteContainer,
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorConstants.instance.whiteContainer,
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 15.0, bottom: 5.0),
+                      padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                       child: Text(
                           'Kampanya Başlangıç : ${formatDate(widget.campaign.campaignStart)}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 13.0,
                               color: ColorConstants.instance.hintColor,
                               fontWeight: FontWeight.bold)),
                     ),
@@ -181,7 +169,7 @@ class _CampaignCardState extends State<CampaignCard> {
                           'Kampanya Bitiş : ${formatDate(widget.campaign.campaignFinish)}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 12.0,
+                              fontSize: 13.0,
                               color: ColorConstants.instance.hintColor,
                               fontWeight: FontWeight.bold)),
                     ),

@@ -56,18 +56,6 @@ class MyApp extends StatelessWidget {
                   .copyWith(primary: ColorConstants.instance.primaryColor),
               fontFamily: 'Poppins',
               scaffoldBackgroundColor: ColorConstants.instance.whiteContainer,
-              cardTheme: CardTheme(
-                clipBehavior: Clip.antiAlias,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(
-                    color: ColorConstants.instance.primaryColor,
-                    width: 2.0,
-                  ),
-                ),
-                color: ColorConstants.instance.whiteContainer,
-              ),
             ),
             home: const AuthWrapper()));
   }

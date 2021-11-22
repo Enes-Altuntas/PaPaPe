@@ -1,4 +1,5 @@
 import 'package:bulovva/Components/app_title.dart';
+import 'package:bulovva/Components/gradient_button.dart';
 import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
@@ -96,171 +97,120 @@ class _CommentState extends State<Wish> {
         ? Scaffold(
             resizeToAvoidBottomInset: true,
             appBar: AppBar(
-                toolbarHeight: 70.0,
+                toolbarHeight: 50.0,
                 flexibleSpace: Container(
+                  color: ColorConstants.instance.whiteContainer,
+                ),
+                iconTheme: IconThemeData(
                   color: ColorConstants.instance.primaryColor,
                 ),
                 elevation: 0,
                 centerTitle: true,
                 title: const AppTitleWidget()),
             body: Container(
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                ColorConstants.instance.primaryColor,
-                ColorConstants.instance.primaryColor,
-              ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: ColorConstants.instance.whiteContainer,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(50.0),
-                          topRight: Radius.circular(50.0))),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 30.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Form(
-                            key: formKeyComment,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.9,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: Text(
-                                      " * Dilek & Şikayet başlığı kısaca konunun ne olduğunu anlatmanız içindir.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color:
-                                              ColorConstants.instance.hintColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: TextFormField(
-                                      controller: _reportTitle,
-                                      maxLength: 50,
-                                      validator: _validateComTitle,
-                                      keyboardType: TextInputType.text,
-                                      decoration: const InputDecoration(
-                                          labelText: 'Dilek & Şikayet Başlığı',
-                                          border: OutlineInputBorder()),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 40.0),
-                                    child: Text(
-                                      " * Dilek & Şikayet açıklamasını elinizden geldiği kadar açık ve net yazmanız işletme için çok önemlidir.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color:
-                                              ColorConstants.instance.hintColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: TextFormField(
-                                      validator: _validateComDesc,
-                                      controller: _reportDesc,
-                                      keyboardType: TextInputType.text,
-                                      maxLength: 255,
-                                      maxLines: 3,
-                                      decoration: const InputDecoration(
-                                          labelText:
-                                              'Dilek & Şikayet Açıklaması',
-                                          border: OutlineInputBorder()),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 40.0),
-                                    child: Text(
-                                      " * İletişim numarası doldurması zorunlu bir alan değildir. İşletmenin sizinle iletişime geçmesini istiyorsanız doldurabilirsiniz.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color:
-                                              ColorConstants.instance.hintColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16.0),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: TextFormField(
-                                      validator: _validatePhone,
-                                      controller: _reportPhone,
-                                      keyboardType: TextInputType.phone,
-                                      maxLength: 10,
-                                      decoration: const InputDecoration(
-                                          prefix: Text('+90'),
-                                          labelText: 'İletişin Numarası',
-                                          border: OutlineInputBorder()),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 20.0, bottom: 60.0),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.7,
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50.0),
-                                          gradient: LinearGradient(
-                                              colors: [
-                                                ColorConstants
-                                                    .instance.primaryColor,
-                                                ColorConstants
-                                                    .instance.secondaryColor,
-                                              ],
-                                              begin: Alignment.bottomCenter,
-                                              end: Alignment.topCenter)),
-                                      child: TextButton(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 10.0),
-                                                child: Icon(
-                                                  Icons.save,
-                                                  color: ColorConstants
-                                                      .instance.iconOnColor,
-                                                ),
-                                              ),
-                                              Text(
-                                                  "Dilek & Şikayet Oluştur"
-                                                      .toUpperCase(),
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: ColorConstants
-                                                        .instance.textOnColor,
-                                                  )),
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            saveComment();
-                                          }),
-                                    ),
-                                  ),
-                                ],
+                color: ColorConstants.instance.whiteContainer,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Form(
+                      key: formKeyComment,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Text(
+                                " * Dilek & Şikayet başlığı kısaca konunun ne olduğunu anlatmanız içindir.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorConstants.instance.hintColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0),
                               ),
                             ),
-                          )
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                controller: _reportTitle,
+                                maxLength: 50,
+                                validator: _validateComTitle,
+                                keyboardType: TextInputType.text,
+                                decoration: const InputDecoration(
+                                    labelText: 'Dilek & Şikayet Başlığı',
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 40.0),
+                              child: Text(
+                                " * Dilek & Şikayet açıklamasını elinizden geldiği kadar açık ve net yazmanız işletme için çok önemlidir.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorConstants.instance.hintColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                validator: _validateComDesc,
+                                controller: _reportDesc,
+                                keyboardType: TextInputType.text,
+                                maxLength: 255,
+                                maxLines: 3,
+                                decoration: const InputDecoration(
+                                    labelText: 'Dilek & Şikayet Açıklaması',
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 40.0),
+                              child: Text(
+                                " * İletişim numarası doldurması zorunlu bir alan değildir. İşletmenin sizinle iletişime geçmesini istiyorsanız doldurabilirsiniz.",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: ColorConstants.instance.hintColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: TextFormField(
+                                validator: _validatePhone,
+                                controller: _reportPhone,
+                                keyboardType: TextInputType.phone,
+                                maxLength: 10,
+                                decoration: const InputDecoration(
+                                    prefix: Text('+90'),
+                                    labelText: 'İletişin Numarası',
+                                    border: OutlineInputBorder()),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20.0, bottom: 60.0),
+                              child: GradientButton(
+                                buttonText: 'Dilek & Şikayet Oluştur',
+                                start: ColorConstants.instance.buttonDarkGold,
+                                end: ColorConstants.instance.buttonLightColor,
+                                icon: Icons.save,
+                                onPressed: saveComment,
+                                fontSize: 15,
+                                widthMultiplier: 0.9,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ),
+                    )
+                  ],
                 ),
               ),
             ))

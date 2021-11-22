@@ -67,7 +67,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
     return Scaffold(
         extendBody: true,
         appBar: AppBar(
-          toolbarHeight: 70.0,
+          toolbarHeight: 50.0,
           flexibleSpace: Container(
             decoration: BoxDecoration(
               color: ColorConstants.instance.whiteContainer,

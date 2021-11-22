@@ -23,7 +23,7 @@ class MyFavorites extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 70.0,
+          toolbarHeight: 50.0,
           flexibleSpace: Container(
             color: ColorConstants.instance.whiteContainer,
           ),

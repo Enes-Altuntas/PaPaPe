@@ -30,6 +30,16 @@ class _ReservationCardState extends State<ReservationCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.0),
+        side: BorderSide(
+          color: ColorConstants.instance.primaryColor,
+          width: 1.0,
+        ),
+      ),
+      color: ColorConstants.instance.whiteContainer,
       child: ListTile(
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
@@ -46,8 +56,29 @@ class _ReservationCardState extends State<ReservationCard> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  color: (widget.reservation.reservationStatus == 'waiting')
+                      ? ColorConstants.instance.waitingColor
+                      : (widget.reservation.reservationStatus == 'approved')
+                          ? ColorConstants.instance.activeColor
+                          : ColorConstants.instance.inactiveColor,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Text(
+                    'Başvuru Durumu: ${(widget.reservation.reservationStatus == 'waiting') ? 'Beklemede' : (widget.reservation.reservationStatus == 'approved') ? 'Onaylanmış' : (widget.reservation.reservationStatus == 'canceled') ? 'İptal edilmiş' : 'Reddedilmiş'}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: ColorConstants.instance.textOnColor,
+                    ),
+                  ),
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
                   'İşletme İsmi: ${widget.reservation.reservationStoreName}',
                   textAlign: TextAlign.center,
@@ -87,30 +118,6 @@ class _ReservationCardState extends State<ReservationCard> {
                     ),
                   )),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
-                    color: (widget.reservation.reservationStatus == 'waiting')
-                        ? ColorConstants.instance.waitingColor
-                        : (widget.reservation.reservationStatus == 'approved')
-                            ? ColorConstants.instance.activeColor
-                            : ColorConstants.instance.inactiveColor,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      'Başvuru Durumu: ${(widget.reservation.reservationStatus == 'waiting') ? 'Beklemede' : (widget.reservation.reservationStatus == 'approved') ? 'Onaylanmış' : (widget.reservation.reservationStatus == 'canceled') ? 'İptal edilmiş' : 'Reddedilmiş'}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: ColorConstants.instance.textOnColor,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
                     'Rezervasyon Tarihi: ${formatDate(widget.reservation.reservationTime)}',
@@ -118,7 +125,7 @@ class _ReservationCardState extends State<ReservationCard> {
                     style: TextStyle(
                         color: ColorConstants.instance.hintColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 15.0)),
+                        fontSize: 13.0)),
               ),
               Visibility(
                 visible: widget.reservation.reservationStatus == 'canceled'

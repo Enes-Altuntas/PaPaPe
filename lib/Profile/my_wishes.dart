@@ -15,7 +15,7 @@ class MyWishes extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          toolbarHeight: 70.0,
+          toolbarHeight: 50.0,
           iconTheme: IconThemeData(
             color:
                 ColorConstants.instance.primaryColor, //change your color here
