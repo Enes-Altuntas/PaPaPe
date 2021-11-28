@@ -17,6 +17,16 @@ class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Geoflutterfire geo = Geoflutterfire();
 
+  // *************************************************************************** User İşlemleri
+  // *************************************************************************** User İşlemleri
+  // *************************************************************************** User İşlemleri
+
+  Stream<UserModel> userInformation(User user) {
+    return _db.collection('users').doc(user.uid).snapshots().map((value) {
+      return UserModel.fromFirestore(value.data());
+    });
+  }
+
   // *************************************************************************** Harita İşlemleri
   // *************************************************************************** Harita İşlemleri
   // *************************************************************************** Harita İşlemleri

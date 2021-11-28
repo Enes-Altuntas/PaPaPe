@@ -23,55 +23,49 @@ class AuthService {
     return _firebaseAuth;
   }
 
-  Future<UserModel> get userInformation async {
-    return await _db
-        .collection('users')
-        .doc(_firebaseAuth.currentUser.uid)
-        .get()
-        .then((value) {
-      return UserModel.fromFirestore(value.data());
-    }).onError((error, stackTrace) => null);
-  }
-
   // *************************************************************************** Giriş İşlemleri
   // *************************************************************************** Giriş İşlemleri
   // *************************************************************************** Giriş İşlemleri
 
-  Future<String> signIn({String email, String password}) async {
-    try {
-      await _firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
-
-      if (_firebaseAuth.currentUser.emailVerified == false) {
-        await _firebaseAuth.signOut();
-        return 'Hesabınız henüz aktifleştirilmedi ! Mail kutunuzu kontrol ediniz !';
-      }
-      return 'Hoşgeldiniz !';
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'wrong-password' || e.code == 'user-not-found') {
+  Future login({String email, String password}) async {
+    await _firebaseAuth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .onError((FirebaseAuthException error, stackTrace) {
+      if (error.code == 'wrong-password' || error.code == 'user-not-found') {
         throw 'Geçersiz kullanıcı adı veya şifre !';
       } else {
         throw 'Sistemde bir hata meydana geldi !';
       }
+    });
+
+    if (_firebaseAuth.currentUser.emailVerified == false) {
+      await _firebaseAuth.currentUser.sendEmailVerification();
+      await _firebaseAuth.signOut();
+      return 'Hesabınız henüz aktifleştirilmedi ! Mail kutunuzu kontrol ediniz !';
+    } else {
+      return;
     }
   }
 
   Future googleLogin() async {
     GoogleSignInAccount user = await _googleSignIn.signIn();
+
     if (user == null) {
       return;
     } else {
       final googleAuth = await user.authentication;
-
       final credential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-      await _firebaseAuth.signInWithCredential(credential);
-
-      String role = "basic";
-      await saveUser(_firebaseAuth.currentUser.displayName, role)
+      await _firebaseAuth
+          .signInWithCredential(credential)
           .onError((error, stackTrace) {
-        throw error;
+        throw 'Google ile giriş yaparken bir hata ile karşılaşıldı!';
+      });
+
+      await saveUser(_firebaseAuth.currentUser.displayName, "basic")
+          .onError((error, stackTrace) {
+        throw 'Kullanıcı kaydı gerçekleştirilirken bir hata ile karşılaşıldı';
       });
     }
   }
@@ -80,33 +74,35 @@ class AuthService {
   // *************************************************************************** Kayıt İşlemleri
   // *************************************************************************** Kayıt İşlemleri
 
-  Future<String> signUp({String name, String email, String password}) async {
-    try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
-
-      await _firebaseAuth.currentUser.sendEmailVerification();
-
-      String role = "basic";
-      await saveUser(name, role);
-
-      await _firebaseAuth.signOut();
-
-      return "Kullancı kaydınız oluşturulmuştur. E-mail'inize girip hesabınızı aktifleştirebilirsiniz !";
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'ınvalıd-emaıl') {
+  Future<String> signin({String name, String email, String password}) async {
+    await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .onError((FirebaseAuthException error, stackTrace) {
+      if (error.code == 'ınvalıd-emaıl') {
         throw 'Kayıt olmak için geçersiz bir e-mail adresi girdiniz !';
-      } else if (e.code == 'emaıl-already-ın-use') {
+      } else if (error.code == 'emaıl-already-ın-use') {
         throw 'Sistemde kayıtlı olan bir e-mail adresi girdiniz, eğer size ait ise "Şifremi Unuttum" seçeneğini deneyebilirsiniz !';
-      } else if (e.code == 'weak-password') {
+      } else if (error.code == 'weak-password') {
         throw 'Daha güçlü bir şifre girmelisiniz ! ';
       } else {
         throw 'Sistemde bir hata meydana geldi !';
       }
-    }
+    });
+
+    await _firebaseAuth.signOut();
+
+    await saveUser(name, "basic").onError((error, stackTrace) {
+      throw 'Kullanıcı kaydı gerçekleştirilirken bir hata ile karşılaşıldı';
+    });
+
+    return "Kullancı kaydınız oluşturulmuştur. E-mail'inize girip hesabınızı aktifleştirebilirsiniz !";
   }
 
-  Future verifyCodeAndUser({String code, String verification}) async {
+  // *************************************************************************** Telefon İşlemleri
+  // *************************************************************************** Telefon İşlemleri
+  // *************************************************************************** Telefon İşlemleri
+
+  Future logInWithPhone({String code, String verification}) async {
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: verification, smsCode: code);
 
@@ -123,16 +119,17 @@ class AuthService {
         .then((value) {
       return UserModel.fromFirestore(value.data());
     }).onError((error, stackTrace) async {
-      await _firebaseAuth.signOut();
       throw "Henüz bu telefon ile yapılmış olan bir kayıt bulunamamaktadır. Eğer kayıt olmadıysanız ilk önce kayıt olmanız gerekmektedir!";
     }).then((value) {
       if (!value.roles.contains("basic")) {
         throw "Henüz bu telefon ile yapılmış olan bir kayıt bulunamamaktadır. Eğer kayıt olmadıysanız ilk önce kayıt olmanız gerekmektedir!";
+      } else {
+        return;
       }
     });
   }
 
-  Future verifyCodeAndSaveUser(
+  Future signInWithPhone(
       {String name, String code, String verification}) async {
     PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
         verificationId: verification, smsCode: code);
@@ -143,8 +140,9 @@ class AuthService {
       throw "Telefon ile giriş işlemi sırasında bir hata meydana geldi!";
     });
 
-    String role = "basic";
-    await saveUser(name, role);
+    await saveUser(name, "basic").onError((error, stackTrace) {
+      throw 'Kullanıcı kaydı gerçekleştirilirken bir hata ile karşılaşıldı';
+    });
   }
 
   // *************************************************************************** Parola İşlemleri

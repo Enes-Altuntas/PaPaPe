@@ -34,59 +34,46 @@ class _SignState extends State<Sign> {
   String verificationCode;
 
   void verifyCode() async {
-    setState(() {
-      isLoading = true;
-    });
     if (codeController.text.isNotEmpty) {
       if (verificationCode.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
         context
             .read<AuthService>()
-            .verifyCodeAndSaveUser(
+            .signInWithPhone(
                 name: nameController.text.trim(),
                 code: codeController.text.trim(),
                 verification: verificationCode)
             .then((value) {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const AuthWrapper()));
-            })
-            .onError(
-                (error, stackTrace) => ToastService().showError(error, context))
-            .whenComplete(() => setState(() {
-                  isLoading = false;
-                }));
-      } else {
-        ToastService()
-            .showWarning('Telefonunuza tekrar kod istemelisiniz!', context);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const AuthWrapper()));
+        }).onError((error, stackTrace) {
+          ToastService().showError(error, context);
+        });
         setState(() {
           isLoading = false;
         });
+      } else {
+        ToastService()
+            .showWarning('Telefonunuza tekrar kod istemelisiniz!', context);
       }
     } else {
       ToastService().showWarning('Doğrulama kodu boş olamaz!', context);
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
   void verifyPhone() async {
-    setState(() {
-      isLoading = true;
-    });
     if (formkey.currentState.validate()) {
+      setState(() {
+        isLoading = true;
+      });
       FirebaseAuth firebaseAuth = context.read<AuthService>().getInstance();
       await firebaseAuth
           .verifyPhoneNumber(
               phoneNumber: '+90${phoneController.text.trim()}',
-              verificationCompleted: (PhoneAuthCredential credential) async {
-                setState(() {
-                  isLoading = false;
-                });
-              },
+              verificationCompleted: (PhoneAuthCredential credential) async {},
               verificationFailed: (FirebaseAuthException exception) {
-                setState(() {
-                  isLoading = false;
-                });
                 if (exception.code == 'too-many-requests') {
                   ToastService().showError(
                       'İşleminiz, çok fazla denemeniz doğrultusunda engellendi tekrar deneyebilmek için lütfen bekleyiniz yada diğer giriş yöntemlerini deneyebilirsiniz.',
@@ -99,14 +86,12 @@ class _SignState extends State<Sign> {
               },
               codeSent: (String verificationId, [int forceResendingToken]) {
                 setState(() {
-                  isLoading = false;
                   verificationCode = verificationId;
                   codeSent = true;
                 });
               },
               codeAutoRetrievalTimeout: (String verificationId) {})
           .timeout(const Duration(seconds: 60));
-    } else {
       setState(() {
         isLoading = false;
       });
@@ -126,31 +111,27 @@ class _SignState extends State<Sign> {
       });
       context
           .read<AuthService>()
-          .signUp(
+          .signin(
+              name: nameController.text.trim(),
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((value) {
-            CoolAlert.show(
-                context: context,
-                type: CoolAlertType.warning,
-                title: '',
-                text: value,
-                showCancelBtn: false,
-                backgroundColor: ColorConstants.instance.primaryColor,
-                confirmBtnColor: ColorConstants.instance.primaryColor,
-                onConfirmBtnTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-                barrierDismissible: false,
-                confirmBtnText: 'Evet');
-          })
-          .onError(
-              (error, stackTrace) => ToastService().showError(error, context))
-          .whenComplete(() => setState(() {
-                isLoading = false;
-              }));
-    } else {
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.warning,
+            title: '',
+            text: value,
+            showCancelBtn: false,
+            backgroundColor: ColorConstants.instance.primaryColor,
+            confirmBtnColor: ColorConstants.instance.primaryColor,
+            onConfirmBtnTap: () {
+              Navigator.of(context).pop();
+            },
+            barrierDismissible: false,
+            confirmBtnText: 'Evet');
+      }).onError((error, stackTrace) {
+        ToastService().showError(error, context);
+      });
       setState(() {
         isLoading = false;
       });
@@ -212,7 +193,7 @@ class _SignState extends State<Sign> {
           iconTheme: IconThemeData(color: ColorConstants.instance.primaryColor),
           elevation: 0,
         ),
-        body: (isLoading == false)
+        body: (!isLoading)
             ? SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -236,7 +217,8 @@ class _SignState extends State<Sign> {
                               padding: const EdgeInsets.only(top: 40.0),
                               child: TextFormField(
                                   controller: nameController,
-                                  keyboardType: TextInputType.emailAddress,
+                                  keyboardType: TextInputType.text,
+                                  style: const TextStyle(fontSize: 12.0),
                                   decoration: const InputDecoration(
                                       icon: Icon(Icons.account_circle_outlined),
                                       labelText: 'İsim-Soyisim'),
@@ -251,6 +233,7 @@ class _SignState extends State<Sign> {
                                   controller: phoneController,
                                   keyboardType: TextInputType.phone,
                                   maxLength: 10,
+                                  style: const TextStyle(fontSize: 12.0),
                                   decoration: const InputDecoration(
                                       prefix: Text('+90'),
                                       icon: Icon(Icons.phone),
@@ -286,6 +269,7 @@ class _SignState extends State<Sign> {
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
                                   controller: emailController,
+                                  style: const TextStyle(fontSize: 12.0),
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: const InputDecoration(
                                       icon: Icon(Icons.mail),
@@ -301,6 +285,7 @@ class _SignState extends State<Sign> {
                                 obscureText:
                                     (isVisible == false) ? true : false,
                                 controller: passwordController,
+                                style: const TextStyle(fontSize: 12.0),
                                 decoration: InputDecoration(
                                     icon: const Icon(Icons.vpn_key_outlined),
                                     labelText: 'Yeni Parola',
@@ -332,6 +317,7 @@ class _SignState extends State<Sign> {
                                 obscureText:
                                     (isVisible == false) ? true : false,
                                 controller: passwordVerifyController,
+                                style: const TextStyle(fontSize: 12.0),
                                 decoration: InputDecoration(
                                     icon: const Icon(Icons.vpn_key_outlined),
                                     labelText: 'Yeni Parola (Tekrar)',
@@ -374,6 +360,7 @@ class _SignState extends State<Sign> {
                                         : 'E-Mail ile Kayıt Ol',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontSize: 12.0,
                                       color:
                                           ColorConstants.instance.primaryColor,
                                     ),
@@ -382,25 +369,47 @@ class _SignState extends State<Sign> {
                               ],
                             ),
                           ),
-                          Padding(
-                              padding: const EdgeInsets.only(top: 30.0),
-                              child: GradientButton(
-                                start: ColorConstants.instance.primaryColor,
-                                end: ColorConstants.instance.secondaryColor,
-                                buttonText: (loginWithPhone)
-                                    ? (codeSent)
-                                        ? 'Kodu Doğrula'
-                                        : 'Doğrulama Kodu Al'
-                                    : 'Kayıt Ol',
-                                fontSize: 15,
-                                onPressed: (loginWithPhone)
-                                    ? (codeSent)
-                                        ? verifyCode
-                                        : verifyPhone
-                                    : signUp,
-                                icon: FontAwesomeIcons.signInAlt,
-                                widthMultiplier: 0.9,
-                              )),
+                          Column(
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(top: 30.0),
+                                  child: GradientButton(
+                                    start: ColorConstants.instance.primaryColor,
+                                    end: ColorConstants.instance.secondaryColor,
+                                    buttonText: (loginWithPhone)
+                                        ? (codeSent)
+                                            ? 'Kodu Doğrula'
+                                            : 'Doğrulama Kodu Al'
+                                        : 'Kayıt Ol',
+                                    fontSize: 15,
+                                    onPressed: (loginWithPhone)
+                                        ? (codeSent)
+                                            ? verifyCode
+                                            : verifyPhone
+                                        : signUp,
+                                    icon: FontAwesomeIcons.signInAlt,
+                                    widthMultiplier: 0.9,
+                                  )),
+                              Visibility(
+                                visible: codeSent,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 20.0),
+                                  child: GestureDetector(
+                                    onTap: verifyCode,
+                                    child: Text(
+                                      'Tekrar SMS ile kod al!',
+                                      style: TextStyle(
+                                        fontSize: 13.0,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            ColorConstants.instance.hintColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),

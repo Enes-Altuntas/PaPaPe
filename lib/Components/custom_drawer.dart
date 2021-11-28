@@ -44,6 +44,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         onConfirmBtnTap: () {
           Navigator.of(context).pop();
           context.read<AuthService>().signOut().then((value) {
+            _userProvider.free();
             Navigator.of(context).pushReplacement(
                 MaterialPageRoute(builder: (context) => const Login()));
           });

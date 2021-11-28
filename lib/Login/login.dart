@@ -3,7 +3,6 @@ import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/wrapper.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Login/sign.dart';
-import 'package:bulovva/Map/map.dart';
 import 'package:bulovva/services/authentication_service.dart';
 import 'package:bulovva/services/toast_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,65 +24,52 @@ class _LoginState extends State<Login> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  bool isLoading = false;
   bool isVisible = false;
+  bool isLoading = false;
   bool loginWithPhone = false;
   bool codeSent = false;
   String verificationCode;
 
   void verifyCode() async {
-    setState(() {
-      isLoading = true;
-    });
     if (codeController.text.isNotEmpty) {
       if (verificationCode.isNotEmpty) {
+        setState(() {
+          isLoading = true;
+        });
         context
             .read<AuthService>()
-            .verifyCodeAndUser(
+            .logInWithPhone(
                 code: codeController.text.trim(),
                 verification: verificationCode)
             .then((value) {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const AuthWrapper()));
-            })
-            .onError(
-                (error, stackTrace) => ToastService().showError(error, context))
-            .whenComplete(() => setState(() {
-                  isLoading = false;
-                }));
-      } else {
-        ToastService()
-            .showWarning('Telefonunuza tekrar kod istemelisiniz!', context);
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const AuthWrapper()));
+        }).onError((error, stackTrace) {
+          ToastService().showError(error, context);
+        });
         setState(() {
           isLoading = false;
         });
+      } else {
+        ToastService()
+            .showWarning('Telefonunuza tekrar kod istemelisiniz!', context);
       }
     } else {
       ToastService().showWarning('Doğrulama kodu boş olamaz!', context);
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
   void verifyPhone() async {
-    setState(() {
-      isLoading = true;
-    });
     if (formkey.currentState.validate()) {
       FirebaseAuth firebaseAuth = context.read<AuthService>().getInstance();
+      setState(() {
+        isLoading = true;
+      });
       await firebaseAuth
           .verifyPhoneNumber(
               phoneNumber: '+90${phoneController.text.trim()}',
-              verificationCompleted: (PhoneAuthCredential credential) async {
-                setState(() {
-                  isLoading = false;
-                });
-              },
+              verificationCompleted: (PhoneAuthCredential credential) async {},
               verificationFailed: (FirebaseAuthException exception) {
-                setState(() {
-                  isLoading = false;
-                });
                 if (exception.code == 'too-many-requests') {
                   ToastService().showError(
                       'İşleminiz, çok fazla denemeniz doğrultusunda engellendi tekrar deneyebilmek için lütfen bekleyiniz yada diğer giriş yöntemlerini deneyebilirsiniz.',
@@ -100,14 +86,12 @@ class _LoginState extends State<Login> {
               },
               codeSent: (String verificationId, [int forceResendingToken]) {
                 setState(() {
-                  isLoading = false;
                   verificationCode = verificationId;
                   codeSent = true;
                 });
               },
               codeAutoRetrievalTimeout: (String verificationId) {})
           .timeout(const Duration(seconds: 60));
-    } else {
       setState(() {
         isLoading = false;
       });
@@ -115,30 +99,26 @@ class _LoginState extends State<Login> {
   }
 
   void signIn() {
-    setState(() {
-      isLoading = true;
-    });
     if (formkey.currentState.validate()) {
+      setState(() {
+        isLoading = true;
+      });
       context
           .read<AuthService>()
-          .signIn(
+          .login(
               email: emailController.text.trim(),
               password: passwordController.text.trim())
           .then((value) {
-            if (FirebaseAuth.instance.currentUser != null &&
-                FirebaseAuth.instance.currentUser.emailVerified) {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const Map()));
-            } else {
-              ToastService().showError(value, context);
-            }
-          })
-          .onError(
-              (error, stackTrace) => ToastService().showError(error, context))
-          .whenComplete(() => setState(() {
-                isLoading = false;
-              }));
-    } else {
+        if (FirebaseAuth.instance.currentUser != null &&
+            FirebaseAuth.instance.currentUser.emailVerified) {
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const AuthWrapper()));
+        } else {
+          ToastService().showError(value, context);
+        }
+      }).onError((error, stackTrace) {
+        ToastService().showError(error, context);
+      });
       setState(() {
         isLoading = false;
       });
@@ -146,24 +126,15 @@ class _LoginState extends State<Login> {
   }
 
   void rememberPass() {
-    setState(() {
-      isLoading = true;
-    });
     if (emailController.text.isEmpty != true) {
       context
           .read<AuthService>()
           .rememberPass(email: emailController.text.trim())
           .then((value) => ToastService().showSuccess(value, context))
           .onError(
-              (error, stackTrace) => ToastService().showError(error, context))
-          .whenComplete(() => setState(() {
-                isLoading = false;
-              }));
+              (error, stackTrace) => ToastService().showError(error, context));
     } else {
       ToastService().showWarning('Lütfen e-mail hesabınızı giriniz !', context);
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
@@ -176,18 +147,13 @@ class _LoginState extends State<Login> {
     setState(() {
       isLoading = true;
     });
-    context
-        .read<AuthService>()
-        .googleLogin()
-        .then((value) {
-          Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const Map()));
-        })
-        .onError(
-            (error, stackTrace) => ToastService().showError(error, context))
-        .whenComplete(() => setState(() {
-              isLoading = false;
-            }));
+    context.read<AuthService>().googleLogin().then((value) {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const AuthWrapper()));
+    }).onError((error, stackTrace) => ToastService().showError(error, context));
+    setState(() {
+      isLoading = false;
+    });
   }
 
   String validateMail(value) {
@@ -208,10 +174,16 @@ class _LoginState extends State<Login> {
 
   String validatePhone(value) {
     if (value.isEmpty) {
-      return "* Telefon Numarası zorunludur !";
-    } else {
-      return null;
+      return "* Telefon numarası zorunludur !";
     }
+    if (value.contains(RegExp(r'[^\d]')) == true) {
+      return "* Geçersiz telefon numarası !";
+    }
+    if (value.length != 10) {
+      return "* 10 karakter içermelidir !";
+    }
+
+    return null;
   }
 
   String validateCode(value) {
@@ -233,7 +205,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: (isLoading == false)
+        body: (!isLoading)
             ? SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -246,6 +218,7 @@ class _LoginState extends State<Login> {
                         right: 30.0, left: 30.0, top: 40.0),
                     child: Form(
                       key: formkey,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -259,11 +232,12 @@ class _LoginState extends State<Login> {
                               padding: const EdgeInsets.only(top: 40.0),
                               child: TextFormField(
                                   controller: phoneController,
+                                  style: const TextStyle(fontSize: 12.0),
                                   keyboardType: TextInputType.phone,
                                   maxLength: 10,
                                   decoration: const InputDecoration(
                                       prefix: Text("+90"),
-                                      icon: Icon(Icons.phone),
+                                      prefixIcon: Icon(Icons.phone),
                                       labelText: 'Telefon Numarası'),
                                   validator: validatePhone),
                             ),
@@ -296,10 +270,12 @@ class _LoginState extends State<Login> {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 40.0),
                               child: TextFormField(
+                                  style: const TextStyle(fontSize: 12.0),
                                   controller: emailController,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: const InputDecoration(
-                                      icon: Icon(Icons.account_circle_outlined),
+                                      prefixIcon:
+                                          Icon(Icons.account_circle_outlined),
                                       labelText: 'E-posta'),
                                   validator: validateMail),
                             ),
@@ -309,11 +285,13 @@ class _LoginState extends State<Login> {
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: TextFormField(
+                                style: const TextStyle(fontSize: 12.0),
                                 obscureText:
                                     (isVisible == false) ? true : false,
                                 controller: passwordController,
                                 decoration: InputDecoration(
-                                    icon: const Icon(Icons.vpn_key_outlined),
+                                    prefixIcon:
+                                        const Icon(Icons.vpn_key_outlined),
                                     labelText: 'Parola',
                                     suffixIcon: IconButton(
                                       icon: (isVisible == false)
@@ -354,6 +332,7 @@ class _LoginState extends State<Login> {
                                         : 'E-Mail ile Giriş Yap',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontSize: 12.0,
                                       color:
                                           ColorConstants.instance.primaryColor,
                                     ),
@@ -367,6 +346,7 @@ class _LoginState extends State<Login> {
                                       'Parolamı Unuttum !',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
+                                        fontSize: 12.0,
                                         color:
                                             ColorConstants.instance.hintColor,
                                       ),
@@ -397,22 +377,6 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Visibility(
-                            visible: codeSent,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: GestureDetector(
-                                onTap: verifyCode,
-                                child: Text(
-                                  'Tekrar SMS kodu al!',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorConstants.instance.waitingColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Visibility(
                             visible: !loginWithPhone,
                             child: Padding(
                               padding: const EdgeInsets.only(top: 10.0),
@@ -429,28 +393,53 @@ class _LoginState extends State<Login> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 30.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const Sign()));
-                              },
-                              child: RichText(
-                                text: TextSpan(
-                                    style: TextStyle(
-                                      color: ColorConstants.instance.hintColor,
-                                      fontWeight: FontWeight.bold,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 20.0),
+                                  child: Visibility(
+                                    visible: codeSent,
+                                    child: GestureDetector(
+                                      onTap: verifyCode,
+                                      child: Text(
+                                        'Tekrar SMS ile kod al!',
+                                        style: TextStyle(
+                                          fontSize: 13.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorConstants
+                                              .instance.primaryColor,
+                                        ),
+                                      ),
                                     ),
-                                    children: [
-                                      const TextSpan(
-                                          text: 'Hesabınız yok mu? '),
-                                      TextSpan(
-                                          text: 'Kayıt Olun!',
-                                          style: TextStyle(
-                                            color: ColorConstants
-                                                .instance.primaryColor,
-                                          ))
-                                    ]),
-                              ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Sign()));
+                                  },
+                                  child: RichText(
+                                    text: TextSpan(
+                                        style: TextStyle(
+                                          color:
+                                              ColorConstants.instance.hintColor,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        children: [
+                                          const TextSpan(
+                                              text: 'Hesabınız yok mu? '),
+                                          TextSpan(
+                                              text: 'Kayıt Olun!',
+                                              style: TextStyle(
+                                                color: ColorConstants
+                                                    .instance.primaryColor,
+                                              ))
+                                        ]),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

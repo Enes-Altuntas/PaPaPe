@@ -29,6 +29,9 @@ class Map extends StatefulWidget {
 }
 
 class _Map extends State<Map> {
+  BitmapDescriptor waitMarker;
+  BitmapDescriptor inactiveMarker;
+  BitmapDescriptor activeMarker;
   final TextEditingController searchController = TextEditingController();
   final firestoreService = FirestoreService();
   final List<Marker> markers = [];
@@ -54,24 +57,6 @@ class _Map extends State<Map> {
     });
   }
 
-  setLocalData() {
-    _filterProvider.changeLive(false);
-
-    if (preferences.getBool('dark') != null) {
-      _filterProvider.changeMode(preferences.getBool('dark'));
-    } else {
-      _filterProvider.changeMode(false);
-    }
-
-    _filterProvider.changeCat('Restoran');
-
-    if (preferences.getDouble('distance') != null) {
-      _filterProvider.changeDistance(preferences.getDouble('distance'));
-    } else {
-      _filterProvider.changeDistance(1.0);
-    }
-  }
-
   changeLive(bool value) {
     preferences.setBool('live', value);
     _filterProvider.changeLive(value);
@@ -93,25 +78,10 @@ class _Map extends State<Map> {
     return await rootBundle.loadString(path);
   }
 
-  void setMapStyle(String mapStyle) {
-    _controller.setMapStyle(mapStyle);
-  }
-
-  getSearchCircle(Position position) {
-    circles.clear();
-    Circle circle = Circle(
-        circleId: const CircleId('search'),
-        center: LatLng(position.latitude, position.longitude),
-        radius: _filterProvider.getDist * 1000,
-        strokeWidth: 2,
-        fillColor: Colors.transparent,
-        strokeColor: ColorConstants.instance.secondaryColor.withOpacity(0.6));
-    circles.add(circle);
-  }
-
   @override
   Future<void> didChangeDependencies() async {
     if (firstTime) {
+      setMarkerAssets();
       _filterProvider = Provider.of<FilterProvider>(context);
       getLocation = _getLocation();
       getStoreCategories = _getStoreCategories();
@@ -178,6 +148,79 @@ class _Map extends State<Map> {
         builder: (context) => Store(
               storeData: store,
             )));
+  }
+
+  setMarkerAssets() async {
+    waitMarker = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), "assets/images/wait_marker.png");
+    activeMarker = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), "assets/images/active_marker.png");
+    inactiveMarker = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(), "assets/images/inactive_marker.png");
+  }
+
+  setLocalData() {
+    _filterProvider.changeLive(false);
+
+    if (preferences.getBool('dark') != null) {
+      _filterProvider.changeMode(preferences.getBool('dark'));
+    } else {
+      _filterProvider.changeMode(false);
+    }
+
+    _filterProvider.changeCat('Restoran');
+
+    if (preferences.getDouble('distance') != null) {
+      _filterProvider.changeDistance(preferences.getDouble('distance'));
+    } else {
+      _filterProvider.changeDistance(1.0);
+    }
+  }
+
+  void setMapStyle(String mapStyle) {
+    _controller.setMapStyle(mapStyle);
+  }
+
+  setSearchCircle(Position position) {
+    circles.clear();
+    Circle circle = Circle(
+        circleId: const CircleId('search'),
+        center: LatLng(position.latitude, position.longitude),
+        radius: _filterProvider.getDist * 1000,
+        strokeWidth: 2,
+        fillColor: Colors.transparent,
+        strokeColor: ColorConstants.instance.secondaryColor.withOpacity(0.6));
+    circles.add(circle);
+  }
+
+  setMarkers(AsyncSnapshot<List<MarkerModel>> snapshot) {
+    markers.clear();
+    if (snapshot.connectionState == ConnectionState.active &&
+        snapshot.hasData == true &&
+        snapshot.data.isNotEmpty) {
+      for (var element in snapshot.data) {
+        if (search != null &&
+            !element.storeName.toLowerCase().contains(search.toLowerCase())) {
+          continue;
+        }
+        markers.add(Marker(
+            markerId: MarkerId(element.storeId),
+            draggable: false,
+            infoWindow: InfoWindow(
+                title: element.storeName,
+                snippet: 'kampanyaları gör...',
+                onTap: () {
+                  showStorePage(element.storeId);
+                }),
+            icon: (element.campaignStatus == 'active')
+                ? activeMarker
+                : (element.campaignStatus == 'wait')
+                    ? waitMarker
+                    : inactiveMarker,
+            position: LatLng(element.position.geopoint.latitude,
+                element.position.geopoint.longitude)));
+      }
+    }
   }
 
   @override
@@ -265,54 +308,8 @@ class _Map extends State<Map> {
                                           snapshotPosition.data.latitude,
                                           snapshotPosition.data.longitude),
                                       builder: (context, snapshot) {
-                                        markers.clear();
-                                        if (snapshot.connectionState ==
-                                                ConnectionState.active &&
-                                            snapshot.hasData == true &&
-                                            snapshot.data.isNotEmpty) {
-                                          for (var element in snapshot.data) {
-                                            if (search != null &&
-                                                !element.storeName
-                                                    .toLowerCase()
-                                                    .contains(
-                                                        search.toLowerCase())) {
-                                              continue;
-                                            }
-                                            markers.add(Marker(
-                                                markerId:
-                                                    MarkerId(element.storeId),
-                                                draggable: false,
-                                                infoWindow: InfoWindow(
-                                                    title: element.storeName,
-                                                    snippet:
-                                                        'kampanyaları gör...',
-                                                    onTap: () {
-                                                      showStorePage(
-                                                          element.storeId);
-                                                    }),
-                                                icon: (element.campaignStatus ==
-                                                        'active')
-                                                    ? BitmapDescriptor
-                                                        .defaultMarkerWithHue(
-                                                            BitmapDescriptor
-                                                                .hueGreen)
-                                                    : (element.campaignStatus ==
-                                                            'wait')
-                                                        ? BitmapDescriptor
-                                                            .defaultMarkerWithHue(
-                                                                BitmapDescriptor
-                                                                    .hueOrange)
-                                                        : BitmapDescriptor
-                                                            .defaultMarkerWithHue(
-                                                                BitmapDescriptor
-                                                                    .hueRed),
-                                                position: LatLng(
-                                                    element.position.geopoint
-                                                        .latitude,
-                                                    element.position.geopoint.longitude)));
-                                          }
-                                        }
-                                        getSearchCircle(snapshotPosition.data);
+                                        setMarkers(snapshot);
+                                        setSearchCircle(snapshotPosition.data);
                                         return (snapshot.connectionState ==
                                                 ConnectionState.active)
                                             ? (markers.isNotEmpty)
@@ -346,7 +343,7 @@ class _Map extends State<Map> {
                                                         FontAwesomeIcons
                                                             .exclamationTriangle,
                                                     notFoundText:
-                                                        "Aradığınız kategoride işletme bulunmuyor !",
+                                                        "Aradığınız kriterlerde işletme bulunmuyor !",
                                                   )
                                             : const ProgressWidget();
                                       })
