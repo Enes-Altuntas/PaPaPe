@@ -1,7 +1,7 @@
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Introduction/introduction_screen.dart';
-import 'package:bulovva/Services/firestore_service.dart';
-import 'package:bulovva/Services/validation_service.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Introduction/introduction_screen.dart';
+import 'package:myrest/Services/firestore_service.dart';
+import 'package:myrest/Services/validation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';

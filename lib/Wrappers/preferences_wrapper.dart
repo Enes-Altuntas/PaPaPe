@@ -1,6 +1,6 @@
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Welcome/welcome.dart';
-import 'package:bulovva/Wrappers/provider_wrapper.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Welcome/welcome.dart';
+import 'package:myrest/Wrappers/provider_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

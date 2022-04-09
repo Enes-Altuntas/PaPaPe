@@ -1,6 +1,6 @@
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Constants/localization_constants.dart';
-import 'package:bulovva/Wrappers/provider_wrapper.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Constants/localization_constants.dart';
+import 'package:myrest/Wrappers/provider_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:lottie/lottie.dart';

@@ -1,5 +1,5 @@
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/wishes_model.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/wishes_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

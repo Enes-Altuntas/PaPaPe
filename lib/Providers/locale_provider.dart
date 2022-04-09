@@ -1,4 +1,4 @@
-import 'package:bulovva/Constants/localization_constants.dart';
+import 'package:myrest/Constants/localization_constants.dart';
 import 'package:flutter/material.dart';
 
 class LocaleProvider extends ChangeNotifier {

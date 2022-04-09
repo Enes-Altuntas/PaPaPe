@@ -1,4 +1,4 @@
-import 'package:bulovva/Wrappers/preferences_wrapper.dart';
+import 'package:myrest/Wrappers/preferences_wrapper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';

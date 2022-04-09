@@ -1,4 +1,4 @@
-import 'package:bulovva/Constants/colors_constants.dart';
+import 'package:myrest/Constants/colors_constants.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

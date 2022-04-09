@@ -1,10 +1,10 @@
-import 'package:bulovva/Components/campaign_card.dart';
-import 'package:bulovva/Components/not_found.dart';
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Models/campaign_model.dart';
-import 'package:bulovva/Models/store_model.dart';
-import 'package:bulovva/Services/firestore_service.dart';
-import 'package:bulovva/Services/toast_service.dart';
+import 'package:myrest/Components/campaign_card.dart';
+import 'package:myrest/Components/not_found.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Models/campaign_model.dart';
+import 'package:myrest/Models/store_model.dart';
+import 'package:myrest/Services/firestore_service.dart';
+import 'package:myrest/Services/toast_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

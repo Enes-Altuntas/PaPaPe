@@ -1,9 +1,9 @@
-import 'package:bulovva/Wrappers/auth_wrapper.dart';
-import 'package:bulovva/Constants/localization_constants.dart';
-import 'package:bulovva/Constants/theme_data.dart';
-import 'package:bulovva/Providers/filter_provider.dart';
-import 'package:bulovva/Providers/locale_provider.dart';
-import 'package:bulovva/Providers/user_provider.dart';
+import 'package:myrest/Wrappers/auth_wrapper.dart';
+import 'package:myrest/Constants/localization_constants.dart';
+import 'package:myrest/Constants/theme_data.dart';
+import 'package:myrest/Providers/filter_provider.dart';
+import 'package:myrest/Providers/locale_provider.dart';
+import 'package:myrest/Providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';

@@ -1,9 +1,9 @@
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Constants/localization_constants.dart';
-import 'package:bulovva/Models/store_category.dart';
-import 'package:bulovva/Providers/locale_provider.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Constants/localization_constants.dart';
+import 'package:myrest/Models/store_category.dart';
+import 'package:myrest/Providers/locale_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:bulovva/Providers/filter_provider.dart';
+import 'package:myrest/Providers/filter_provider.dart';
 import 'package:provider/provider.dart';
 
 class BrandWidget extends StatefulWidget {

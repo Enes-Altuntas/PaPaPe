@@ -1,9 +1,9 @@
-import 'package:bulovva/Components/app_title.dart';
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/store_category.dart';
-import 'package:bulovva/Providers/filter_provider.dart';
-import 'package:bulovva/Services/firestore_service.dart';
+import 'package:myrest/Components/app_title.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/store_category.dart';
+import 'package:myrest/Providers/filter_provider.dart';
+import 'package:myrest/Services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

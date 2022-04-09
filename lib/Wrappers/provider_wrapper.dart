@@ -1,8 +1,8 @@
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Map/map_screen.dart';
-import 'package:bulovva/Models/user_model.dart';
-import 'package:bulovva/Providers/user_provider.dart';
-import 'package:bulovva/Services/firestore_service.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Map/map_screen.dart';
+import 'package:myrest/Models/user_model.dart';
+import 'package:myrest/Providers/user_provider.dart';
+import 'package:myrest/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

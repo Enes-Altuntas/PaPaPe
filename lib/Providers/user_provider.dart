@@ -1,4 +1,4 @@
-import 'package:bulovva/Models/user_model.dart';
+import 'package:myrest/Models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {

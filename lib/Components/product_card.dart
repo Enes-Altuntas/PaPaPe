@@ -1,5 +1,5 @@
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/product_model.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

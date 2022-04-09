@@ -1,6 +1,6 @@
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/store_model.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/store_model.dart';
 import 'package:flutter/material.dart';
 
 class StoreInfo extends StatefulWidget {

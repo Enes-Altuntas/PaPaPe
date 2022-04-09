@@ -1,7 +1,7 @@
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/user_model.dart';
-import 'package:bulovva/Services/firestore_service.dart';
-import 'package:bulovva/Services/toast_service.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/user_model.dart';
+import 'package:myrest/Services/firestore_service.dart';
+import 'package:myrest/Services/toast_service.dart';
 import 'package:flutter/material.dart';
 
 class FavoriteButton extends StatelessWidget {

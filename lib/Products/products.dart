@@ -1,10 +1,10 @@
-import 'package:bulovva/Components/category_card.dart';
-import 'package:bulovva/Components/not_found.dart';
-import 'package:bulovva/Components/progress.dart';
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/product_category_model.dart';
-import 'package:bulovva/Models/store_model.dart';
-import 'package:bulovva/Services/firestore_service.dart';
+import 'package:myrest/Components/category_card.dart';
+import 'package:myrest/Components/not_found.dart';
+import 'package:myrest/Components/progress.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/product_category_model.dart';
+import 'package:myrest/Models/store_model.dart';
+import 'package:myrest/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

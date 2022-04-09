@@ -1,10 +1,10 @@
-import 'package:bulovva/Components/app_title.dart';
-import 'package:bulovva/Components/not_found.dart';
-import 'package:bulovva/Components/qr_card.dart';
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/campaign_model.dart';
-import 'package:bulovva/Models/user_model.dart';
-import 'package:bulovva/Services/firestore_service.dart';
+import 'package:myrest/Components/app_title.dart';
+import 'package:myrest/Components/not_found.dart';
+import 'package:myrest/Components/qr_card.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/campaign_model.dart';
+import 'package:myrest/Models/user_model.dart';
+import 'package:myrest/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';

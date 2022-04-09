@@ -1,6 +1,6 @@
-import 'package:bulovva/Components/gradient_button.dart';
-import 'package:bulovva/Constants/colors_constants.dart';
-import 'package:bulovva/Models/campaign_model.dart';
+import 'package:myrest/Components/gradient_button.dart';
+import 'package:myrest/Constants/colors_constants.dart';
+import 'package:myrest/Models/campaign_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
