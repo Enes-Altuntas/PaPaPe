@@ -12,35 +12,35 @@ class StoreModel {
   final double storeLocLat;
   final double storeLocLong;
   final String pers1;
-  final String pers2;
-  final String pers3;
+  final String? pers2;
+  final String? pers3;
   final String pers1Phone;
-  final String pers2Phone;
-  final String pers3Phone;
-  File storeLocalImagePath;
+  final String? pers2Phone;
+  final String? pers3Phone;
+  File? storeLocalImagePath;
 
   StoreModel({
-    this.storeId,
-    this.storeName,
-    this.storePicRef,
-    this.storeAddress,
-    this.storeCategory,
-    this.storePhone,
-    this.storeTaxNo,
-    this.storeTaxLoc,
-    this.storeLocLat,
-    this.storeLocLong,
-    this.pers1,
+    required this.storeId,
+    required this.storeName,
+    required this.storePicRef,
+    required this.storeAddress,
+    required this.storeCategory,
+    required this.storePhone,
+    required this.storeTaxNo,
+    required this.storeTaxLoc,
+    required this.storeLocLat,
+    required this.storeLocLong,
+    required this.pers1,
     this.pers2,
     this.pers3,
-    this.pers1Phone,
+    required this.pers1Phone,
     this.pers2Phone,
     this.pers3Phone,
     this.storeLocalImagePath,
   });
 
-  StoreModel.fromFirestore(Map<String, dynamic> data)
-      : storeId = data['storeId'],
+  StoreModel.fromFirestore(Map<String, dynamic>? data)
+      : storeId = data!['storeId'],
         storeName = data['storeName'],
         storePicRef = data['storePicRef'],
         storeAddress = data['storeAddress'],

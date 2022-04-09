@@ -11,11 +11,12 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Store extends StatefulWidget {
   final StoreModel storeData;
 
-  const Store({Key key, this.storeData}) : super(key: key);
+  const Store({Key? key, required this.storeData}) : super(key: key);
 
   @override
   _StoreState createState() => _StoreState();
@@ -119,24 +120,17 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
           children: [
             SpeedDialChild(
                 child: Icon(
-                  Icons.call,
-                  color: ColorConstants.instance.primaryColor,
-                ),
-                backgroundColor: ColorConstants.instance.whiteContainer,
-                onTap: () {
-                  makePhoneCall();
-                },
-                label: 'İşletmeyi Ara'),
-            SpeedDialChild(
-                child: Icon(
-                  Icons.location_on,
+                  Icons.add,
                   color: ColorConstants.instance.whiteContainer,
                 ),
-                backgroundColor: ColorConstants.instance.primaryColor,
                 onTap: () {
-                  findPlace();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Wish(
+                            store: widget.storeData,
+                          )));
                 },
-                label: 'İşletmeyi Bul'),
+                backgroundColor: ColorConstants.instance.primaryColor,
+                label: AppLocalizations.of(context)!.sendWishes),
             SpeedDialChild(
                 child: Icon(
                   Icons.menu_book,
@@ -149,20 +143,27 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
                           )));
                 },
                 backgroundColor: ColorConstants.instance.whiteContainer,
-                label: 'Rezervasyon Yaptır'),
+                label: AppLocalizations.of(context)!.makeReservation),
             SpeedDialChild(
                 child: Icon(
-                  Icons.add,
+                  Icons.location_on,
                   color: ColorConstants.instance.whiteContainer,
                 ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Wish(
-                            store: widget.storeData,
-                          )));
-                },
                 backgroundColor: ColorConstants.instance.primaryColor,
-                label: 'Dilek & Şikayet Yaz'),
+                onTap: () {
+                  findPlace();
+                },
+                label: AppLocalizations.of(context)!.findBusiness),
+            SpeedDialChild(
+                child: Icon(
+                  Icons.call,
+                  color: ColorConstants.instance.primaryColor,
+                ),
+                backgroundColor: ColorConstants.instance.whiteContainer,
+                onTap: () {
+                  makePhoneCall();
+                },
+                label: AppLocalizations.of(context)!.callBusiness),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomImageContainer extends StatefulWidget {
-  final bool buttonVis;
-  final bool addable;
-  final File localImage;
-  final String urlImage;
-  final String addText;
-  final Function onPressedEdit;
-  final Function onPressedDelete;
-  final Function onPressedAdd;
+  final bool? buttonVis;
+  final bool? addable;
+  final File? localImage;
+  final String? urlImage;
+  final String? addText;
+  final VoidCallback? onPressedEdit;
+  final VoidCallback? onPressedDelete;
+  final VoidCallback? onPressedAdd;
 
   const CustomImageContainer({
-    Key key,
+    Key? key,
     this.buttonVis,
     this.addable,
     this.onPressedAdd,
@@ -47,10 +47,10 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                   ColorConstants.instance.secondaryColor,
                 ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
             child: (widget.localImage != null)
-                ? Image.file(widget.localImage, fit: BoxFit.fitWidth)
-                : (widget.urlImage != null && widget.urlImage.isNotEmpty)
+                ? Image.file(widget.localImage!, fit: BoxFit.fitWidth)
+                : (widget.urlImage != null)
                     ? Image.network(
-                        widget.urlImage,
+                        widget.urlImage!,
                         fit: BoxFit.fill,
                         loadingBuilder: (context, child, loadingProgress) {
                           return loadingProgress == null
@@ -62,7 +62,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                                 );
                         },
                       )
-                    : (widget.addable)
+                    : (widget.addable!)
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -75,7 +75,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                                 ),
                               ),
                               Text(
-                                widget.addText,
+                                widget.addText!,
                                 style: TextStyle(
                                     color: ColorConstants.instance.textOnColor,
                                     fontSize: 20.0),
@@ -106,7 +106,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Visibility(
-            visible: widget.buttonVis,
+            visible: widget.buttonVis!,
             child: TextButton(
                 onPressed: widget.onPressedEdit,
                 child: Container(
@@ -132,7 +132,7 @@ class _CustomImageContainerState extends State<CustomImageContainer> {
                     ))),
           ),
           Visibility(
-            visible: widget.buttonVis,
+            visible: widget.buttonVis!,
             child: TextButton(
                 onPressed: widget.onPressedDelete,
                 child: Container(

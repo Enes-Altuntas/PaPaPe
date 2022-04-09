@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:bulovva/Components/app_title.dart';
 import 'package:bulovva/Components/category_brand.dart';
 import 'package:bulovva/Components/custom_drawer.dart';
@@ -11,8 +9,7 @@ import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:bulovva/Store/store.dart';
-import 'package:bulovva/services/firestore_service.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bulovva/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -20,30 +17,31 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class Map extends StatefulWidget {
-  const Map({Key key}) : super(key: key);
+class MapScreen extends StatefulWidget {
+  const MapScreen({Key? key}) : super(key: key);
 
   @override
-  _Map createState() => _Map();
+  _MapScreen createState() => _MapScreen();
 }
 
-class _Map extends State<Map> {
-  BitmapDescriptor waitMarker;
-  BitmapDescriptor inactiveMarker;
-  BitmapDescriptor activeMarker;
+class _MapScreen extends State<MapScreen> {
+  late BitmapDescriptor waitMarker;
+  late BitmapDescriptor inactiveMarker;
+  late BitmapDescriptor activeMarker;
   final TextEditingController searchController = TextEditingController();
   final firestoreService = FirestoreService();
   final List<Marker> markers = [];
   final List<Circle> circles = [];
-  SharedPreferences preferences;
-  Future getLocation;
-  Future getStoreCategories;
-  GoogleMapController _controller;
-  FilterProvider _filterProvider;
+  SharedPreferences? preferences;
+  Future<Position>? getLocation;
+  Future? getStoreCategories;
+  late GoogleMapController _controller;
+  late FilterProvider _filterProvider;
   bool firstTime = true;
   bool isLoading = false;
-  String search;
+  String? search;
 
   @override
   void initState() {
@@ -58,7 +56,7 @@ class _Map extends State<Map> {
   }
 
   changeLive(bool value) {
-    preferences.setBool('live', value);
+    preferences!.setBool('live', value);
     _filterProvider.changeLive(value);
   }
 
@@ -142,7 +140,7 @@ class _Map extends State<Map> {
 
   showStorePage(String storeId) async {
     StoreModel store = await firestoreService.getStore(storeId).then((value) {
-      return StoreModel.fromFirestore(value.data());
+      return StoreModel.fromFirestore(value.data()!);
     });
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => Store(
@@ -162,16 +160,16 @@ class _Map extends State<Map> {
   setLocalData() {
     _filterProvider.changeLive(false);
 
-    if (preferences.getBool('dark') != null) {
-      _filterProvider.changeMode(preferences.getBool('dark'));
+    if (preferences!.getBool('dark') != null) {
+      _filterProvider.changeMode(preferences!.getBool('dark')!);
     } else {
       _filterProvider.changeMode(false);
     }
 
     _filterProvider.changeCat('Restoran');
 
-    if (preferences.getDouble('distance') != null) {
-      _filterProvider.changeDistance(preferences.getDouble('distance'));
+    if (preferences!.getDouble('distance') != null) {
+      _filterProvider.changeDistance(preferences!.getDouble('distance')!);
     } else {
       _filterProvider.changeDistance(1.0);
     }
@@ -186,7 +184,7 @@ class _Map extends State<Map> {
     Circle circle = Circle(
         circleId: const CircleId('search'),
         center: LatLng(position.latitude, position.longitude),
-        radius: _filterProvider.getDist * 1000,
+        radius: _filterProvider.getDist! * 1000,
         strokeWidth: 2,
         fillColor: Colors.transparent,
         strokeColor: ColorConstants.instance.secondaryColor.withOpacity(0.6));
@@ -197,10 +195,10 @@ class _Map extends State<Map> {
     markers.clear();
     if (snapshot.connectionState == ConnectionState.active &&
         snapshot.hasData == true &&
-        snapshot.data.isNotEmpty) {
-      for (var element in snapshot.data) {
+        snapshot.data!.isNotEmpty) {
+      for (var element in snapshot.data!) {
         if (search != null &&
-            !element.storeName.toLowerCase().contains(search.toLowerCase())) {
+            !element.storeName.toLowerCase().contains(search!.toLowerCase())) {
           continue;
         }
         markers.add(Marker(
@@ -208,7 +206,7 @@ class _Map extends State<Map> {
             draggable: false,
             infoWindow: InfoWindow(
                 title: element.storeName,
-                snippet: 'kampanyaları gör...',
+                snippet: AppLocalizations.of(context)!.showBusinessProfile,
                 onTap: () {
                   showStorePage(element.storeId);
                 }),
@@ -253,12 +251,12 @@ class _Map extends State<Map> {
                         builder: (context, snapshot) {
                           return ListView.builder(
                               itemCount: (snapshot.data != null)
-                                  ? snapshot.data.length
+                                  ? snapshot.data!.length
                                   : 0,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return BrandWidget(
-                                    storeCategory: snapshot.data[index]);
+                                    storeCategory: snapshot.data![index]);
                               });
                         })),
                 Container(
@@ -287,7 +285,8 @@ class _Map extends State<Map> {
                               },
                               child: const Icon(Icons.search),
                             ),
-                            hintText: "İşletme İsmi",
+                            hintText:
+                                AppLocalizations.of(context)!.businessName,
                             hintStyle: const TextStyle(fontSize: 12.0)),
                       ),
                     )),
@@ -296,20 +295,21 @@ class _Map extends State<Map> {
                     children: [
                       FutureBuilder(
                         future: getLocation,
-                        builder: (BuildContext context, snapshotPosition) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot<Position?> snapshotPosition) {
                           return (snapshotPosition.connectionState ==
                                   ConnectionState.done)
                               ? (snapshotPosition.hasData)
                                   ? StreamBuilder<List<MarkerModel>>(
                                       stream: firestoreService.getMapData(
                                           _filterProvider.getLive,
-                                          _filterProvider.getCat,
-                                          _filterProvider.getDist,
-                                          snapshotPosition.data.latitude,
-                                          snapshotPosition.data.longitude),
+                                          _filterProvider.getCat!,
+                                          _filterProvider.getDist!,
+                                          snapshotPosition.data!.latitude,
+                                          snapshotPosition.data!.longitude),
                                       builder: (context, snapshot) {
                                         setMarkers(snapshot);
-                                        setSearchCircle(snapshotPosition.data);
+                                        setSearchCircle(snapshotPosition.data!);
                                         return (snapshot.connectionState ==
                                                 ConnectionState.active)
                                             ? (markers.isNotEmpty)
@@ -324,10 +324,10 @@ class _Map extends State<Map> {
                                                         CameraPosition(
                                                             target: LatLng(
                                                                 snapshotPosition
-                                                                    .data
+                                                                    .data!
                                                                     .latitude,
                                                                 snapshotPosition
-                                                                    .data
+                                                                    .data!
                                                                     .longitude),
                                                             zoom:
                                                                 getZoomLevel()),
@@ -374,8 +374,8 @@ class _Map extends State<Map> {
                             child: Row(
                               children: [
                                 Row(
-                                  children: const [
-                                    Padding(
+                                  children: [
+                                    const Padding(
                                       padding: EdgeInsets.only(right: 3.0),
                                       child: Icon(
                                         Icons.circle,
@@ -384,8 +384,9 @@ class _Map extends State<Map> {
                                       ),
                                     ),
                                     Text(
-                                      'Aktif',
-                                      style: TextStyle(
+                                      AppLocalizations.of(context)!
+                                          .mapLegendActive,
+                                      style: const TextStyle(
                                         fontSize: 12.0,
                                         color: Colors.green,
                                       ),
@@ -405,7 +406,8 @@ class _Map extends State<Map> {
                                       ),
                                     ),
                                     Text(
-                                      'Beklemede',
+                                      AppLocalizations.of(context)!
+                                          .mapLegendWaiting,
                                       style: TextStyle(
                                           color: ColorConstants
                                               .instance.buttonDarkGold,
@@ -426,7 +428,8 @@ class _Map extends State<Map> {
                                       ),
                                     ),
                                     Text(
-                                      'İnaktif',
+                                      AppLocalizations.of(context)!
+                                          .mapLegendInactive,
                                       style: TextStyle(
                                           color: ColorConstants
                                               .instance.inactiveGray,

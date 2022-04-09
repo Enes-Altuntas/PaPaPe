@@ -4,18 +4,19 @@ import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Models/wishes_model.dart';
-import 'package:bulovva/services/authentication_service.dart';
-import 'package:bulovva/services/firestore_service.dart';
-import 'package:bulovva/services/toast_service.dart';
+import 'package:bulovva/Services/firestore_service.dart';
+import 'package:bulovva/Services/toast_service.dart';
+import 'package:bulovva/Services/validation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Wish extends StatefulWidget {
   final StoreModel store;
 
-  const Wish({Key key, this.store}) : super(key: key);
+  const Wish({Key? key, required this.store}) : super(key: key);
 
   @override
   _CommentState createState() => _CommentState();
@@ -26,41 +27,25 @@ class _CommentState extends State<Wish> {
   final TextEditingController _reportDesc = TextEditingController();
   final TextEditingController _reportPhone = TextEditingController();
   GlobalKey<FormState> formKeyComment = GlobalKey<FormState>();
+  ValidationService validationService = ValidationService();
   bool _isLoading = false;
 
-  String _validateComTitle(String value) {
-    if (value.isEmpty) {
-      return '* Dilek & Şikayet başlığı boş olmamalıdır !';
-    }
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ]')) != true) {
-      return '* Harf içermelidir !';
-    }
-
-    return null;
+  String? _validateComTitle(String? value) {
+    return validationService.notNull(value, context) ??
+        validationService.containLetter(value, context);
   }
 
-  String _validateComDesc(String value) {
-    if (value.isEmpty) {
-      return '* Dilek & Şikayet açıklaması boş olmamalıdır !';
-    }
-
-    if (value.contains(RegExp(r'[a-zA-ZğüşöçİĞÜŞÖÇ]')) != true) {
-      return '* Harf içermelidir !';
-    }
-
-    return null;
+  String? _validateComDesc(String? value) {
+    return validationService.notNull(value, context) ??
+        validationService.containLetter(value, context);
   }
 
-  String _validatePhone(String value) {
-    if (value.contains(RegExp(r'[^\d]')) == true) {
-      return '* Sadece rakam içermelidir !';
-    }
-
-    return null;
+  String? _validatePhone(String? value) {
+    return validationService.onlyNumbers(value, context);
   }
 
   saveComment() {
-    if (formKeyComment.currentState.validate()) {
+    if (formKeyComment.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -72,11 +57,11 @@ class _CommentState extends State<Wish> {
           wishStore: widget.store.storeId,
           wishStoreName: widget.store.storeName,
           wishUserPhone: _reportPhone.text,
-          wishUser: AuthService(FirebaseAuth.instance).getUserId(),
+          wishUser: FirebaseAuth.instance.currentUser!.uid,
           createdAt: Timestamp.now());
 
       FirestoreService()
-          .saveWish(newComment)
+          .saveWish(newComment, context)
           .then((value) => ToastService().showSuccess(value, context))
           .onError(
               (error, stackTrace) => ToastService().showError(error, context))
@@ -125,7 +110,7 @@ class _CommentState extends State<Wish> {
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Text(
-                                " * Dilek & Şikayet başlığı kısaca konunun ne olduğunu anlatmanız içindir.",
+                                AppLocalizations.of(context)!.wishTitle,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -140,15 +125,16 @@ class _CommentState extends State<Wish> {
                                 maxLength: 50,
                                 validator: _validateComTitle,
                                 keyboardType: TextInputType.text,
-                                decoration: const InputDecoration(
-                                    labelText: 'Dilek & Şikayet Başlığı',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.wishTitle,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 40.0),
                               child: Text(
-                                " * Dilek & Şikayet açıklamasını elinizden geldiği kadar açık ve net yazmanız işletme için çok önemlidir.",
+                                AppLocalizations.of(context)!.wishDescHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -164,15 +150,16 @@ class _CommentState extends State<Wish> {
                                 keyboardType: TextInputType.text,
                                 maxLength: 255,
                                 maxLines: 3,
-                                decoration: const InputDecoration(
-                                    labelText: 'Dilek & Şikayet Açıklaması',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.wishDesc,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 40.0),
                               child: Text(
-                                " * İletişim numarası doldurması zorunlu bir alan değildir. İşletmenin sizinle iletişime geçmesini istiyorsanız doldurabilirsiniz.",
+                                AppLocalizations.of(context)!.wishPhoneHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -187,17 +174,19 @@ class _CommentState extends State<Wish> {
                                 controller: _reportPhone,
                                 keyboardType: TextInputType.phone,
                                 maxLength: 10,
-                                decoration: const InputDecoration(
-                                    prefix: Text('+90'),
-                                    labelText: 'İletişin Numarası',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    prefix: const Text('+90'),
+                                    labelText: AppLocalizations.of(context)!
+                                        .conatactNum,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 20.0, bottom: 60.0),
                               child: GradientButton(
-                                buttonText: 'Dilek & Şikayet Oluştur',
+                                buttonText:
+                                    AppLocalizations.of(context)!.sendWishes,
                                 start: ColorConstants.instance.buttonDarkGold,
                                 end: ColorConstants.instance.buttonLightColor,
                                 icon: Icons.save,

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class FilterProvider with ChangeNotifier {
-  bool live;
-  bool mode;
-  String category;
-  double distance;
+  bool? live = false;
+  bool? mode = false;
+  String? category;
+  double? distance;
 
-  bool get getLive => live;
-  bool get getMode => mode;
-  String get getCat => category;
-  double get getDist => distance;
+  bool get getLive => live!;
+  bool get getMode => mode!;
+  String? get getCat => category;
+  double? get getDist => distance;
 
   changeLive(bool value) {
     live = value;

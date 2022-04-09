@@ -1,17 +1,17 @@
-import 'dart:ui';
-
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/reservations_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReservationCard extends StatefulWidget {
   final ReservationsModel reservation;
-  final Function onPressedCancel;
+  final VoidCallback onPressedCancel;
 
-  const ReservationCard({Key key, this.reservation, this.onPressedCancel})
+  const ReservationCard(
+      {Key? key, required this.reservation, required this.onPressedCancel})
       : super(key: key);
 
   @override
@@ -44,7 +44,8 @@ class _ReservationCardState extends State<ReservationCard> {
         title: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
-            'İsim-Soyisim: ${widget.reservation.reservationName}',
+            AppLocalizations.of(context)!.name +
+                ': ${widget.reservation.reservationName}',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: ColorConstants.instance.primaryColor,
@@ -68,7 +69,8 @@ class _ReservationCardState extends State<ReservationCard> {
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Text(
-                    'Başvuru Durumu: ${(widget.reservation.reservationStatus == 'waiting') ? 'Beklemede' : (widget.reservation.reservationStatus == 'approved') ? 'Onaylanmış' : (widget.reservation.reservationStatus == 'canceled') ? 'İptal edilmiş' : 'Reddedilmiş'}',
+                    AppLocalizations.of(context)!.resStatus +
+                        ': ${(widget.reservation.reservationStatus == 'waiting') ? AppLocalizations.of(context)!.waiting : (widget.reservation.reservationStatus == 'approved') ? AppLocalizations.of(context)!.approved : (widget.reservation.reservationStatus == 'canceled') ? AppLocalizations.of(context)!.canceled : AppLocalizations.of(context)!.rejected}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -80,7 +82,8 @@ class _ReservationCardState extends State<ReservationCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
-                  'İşletme İsmi: ${widget.reservation.reservationStoreName}',
+                  AppLocalizations.of(context)!.businessName +
+                      ': ${widget.reservation.reservationStoreName}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: ColorConstants.instance.primaryColor,
@@ -91,7 +94,8 @@ class _ReservationCardState extends State<ReservationCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
-                  'Rezerve kişi sayısı: ${widget.reservation.reservationCount.toString()}',
+                  AppLocalizations.of(context)!.resCount +
+                      ': ${widget.reservation.reservationCount.toString()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: ColorConstants.instance.primaryColor,
@@ -101,7 +105,8 @@ class _ReservationCardState extends State<ReservationCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
-                  'Rezervasyon Açıklaması: ${(widget.reservation.reservationDesc)}',
+                  AppLocalizations.of(context)!.resDesc +
+                      ': ${(widget.reservation.reservationDesc)}',
                   style: TextStyle(
                     color: ColorConstants.instance.hintColor,
                   ),
@@ -111,7 +116,8 @@ class _ReservationCardState extends State<ReservationCard> {
               Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
-                    'Rez. Telefon: +90${widget.reservation.reservationPhone}',
+                    AppLocalizations.of(context)!.resPhone +
+                        ': +90${widget.reservation.reservationPhone}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: ColorConstants.instance.hintColor,
@@ -120,7 +126,8 @@ class _ReservationCardState extends State<ReservationCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
-                    'Rezervasyon Tarihi: ${formatDate(widget.reservation.reservationTime)}',
+                    AppLocalizations.of(context)!.resDate +
+                        ': ${formatDate(widget.reservation.reservationTime)}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: ColorConstants.instance.hintColor,
@@ -157,7 +164,7 @@ class _ReservationCardState extends State<ReservationCard> {
                                     padding: const EdgeInsets.only(
                                         left: 10.0, right: 10.0),
                                     child: Text(
-                                      'Rezervasyonu İptal Et',
+                                      AppLocalizations.of(context)!.cancelRes,
                                       style: TextStyle(
                                         color:
                                             ColorConstants.instance.textOnColor,

@@ -1,26 +1,32 @@
 import 'dart:io';
 
 class ProductModel {
-  final String productDesc;
+  final String? productDesc;
+  final String? productDescEn;
   final String productName;
-  final int productPrice;
-  final String productId;
+  final String? productNameEn;
+  final String productPrice;
+  final String? productId;
   final String productCatId;
-  String productPicRef;
-  File productLocalImage;
+  String? productPicRef;
+  File? productLocalImage;
 
   ProductModel(
       {this.productDesc,
-      this.productName,
-      this.productPrice,
+      this.productDescEn,
+      required this.productName,
+      required this.productNameEn,
+      required this.productPrice,
       this.productId,
-      this.productCatId,
+      required this.productCatId,
       this.productPicRef,
       this.productLocalImage});
 
   ProductModel.fromFirestore(Map<String, dynamic> data)
       : productDesc = data['productDesc'],
+        productDescEn = data['productDescEn'],
         productName = data['productName'],
+        productNameEn = data['productNameEn'],
         productPrice = data['productPrice'],
         productId = data['productId'],
         productCatId = data['productCatId'],
@@ -29,7 +35,9 @@ class ProductModel {
   Map<String, dynamic> toMap() {
     return {
       'productDesc': productDesc,
+      'productDescEn': productDescEn,
       'productName': productName,
+      'productNameEn': productNameEn,
       'productPrice': productPrice,
       'productId': productId,
       'productCatId': productCatId,

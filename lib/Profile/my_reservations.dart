@@ -4,13 +4,14 @@ import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Components/reservation_card.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/reservations_model.dart';
-import 'package:bulovva/services/firestore_service.dart';
-import 'package:bulovva/services/toast_service.dart';
+import 'package:bulovva/Services/firestore_service.dart';
+import 'package:bulovva/Services/toast_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyReservations extends StatefulWidget {
-  const MyReservations({Key key}) : super(key: key);
+  const MyReservations({Key? key}) : super(key: key);
 
   @override
   _MyReservationsState createState() => _MyReservationsState();
@@ -24,7 +25,7 @@ class _MyReservationsState extends State<MyReservations> {
       isLoading = true;
     });
     FirestoreService()
-        .cancelReservation(resId)
+        .cancelReservation(resId, context)
         .then((value) => ToastService().showSuccess(value, context))
         .onError(
             (error, stackTrace) => ToastService().showError(error, context))
@@ -59,31 +60,29 @@ class _MyReservationsState extends State<MyReservations> {
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.active:
-                      switch (snapshot.hasData && snapshot.data.isNotEmpty) {
+                      switch (snapshot.hasData && snapshot.data!.isNotEmpty) {
                         case true:
                           return ListView.builder(
-                            itemCount: snapshot.data.length,
+                            itemCount: snapshot.data!.length,
                             itemBuilder: (context, index) {
                               return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ReservationCard(
-                                    reservation: snapshot.data[index],
+                                    reservation: snapshot.data![index],
                                     onPressedCancel: () {
                                       cancelReservation(
-                                          snapshot.data[index].reservationId);
+                                          snapshot.data![index].reservationId);
                                     },
                                   ));
                             },
                           );
-                          break;
                         default:
-                          return const NotFound(
+                          return NotFound(
                             notFoundIcon: FontAwesomeIcons.exclamationTriangle,
-                            notFoundText:
-                                'Üzgünüz, yapmış olduğunuz bir rezrvasyon bulunmamaktadır.',
+                            notFoundText: AppLocalizations.of(context)!
+                                .reservationNotFound,
                           );
                       }
-                      break;
                     default:
                       return const ProgressWidget();
                   }

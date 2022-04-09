@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 
 class StoreCards extends StatefulWidget {
   final StoreModel store;
-  final Function onTap;
+  final VoidCallback onTap;
 
-  const StoreCards({Key key, this.store, this.onTap}) : super(key: key);
+  const StoreCards({Key? key, required this.store, required this.onTap})
+      : super(key: key);
 
   @override
   State<StoreCards> createState() => _StoreCardsState();
@@ -57,24 +58,15 @@ class _StoreCardsState extends State<StoreCards> {
                             fit: StackFit.expand,
                             alignment: Alignment.center,
                             children: [
-                              (widget.store != null &&
-                                      widget.store.storePicRef != null)
-                                  ? ColorFiltered(
-                                      colorFilter: ColorFilter.mode(
-                                          Colors.black.withOpacity(0.4),
-                                          BlendMode.multiply),
-                                      child: Image.network(
-                                        widget.store.storePicRef,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : Container(
-                                      color:
-                                          ColorConstants.instance.primaryColor,
-                                      width: MediaQuery.of(context).size.width,
-                                      height:
-                                          MediaQuery.of(context).size.height,
-                                    ),
+                              ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                    Colors.black.withOpacity(0.4),
+                                    BlendMode.multiply),
+                                child: Image.network(
+                                  widget.store.storePicRef,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
                               Center(
                                   child: Text(
                                 widget.store.storeName,

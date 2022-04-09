@@ -5,8 +5,8 @@ class PositionModel {
   final GeoPoint geopoint;
 
   PositionModel({
-    this.geohash,
-    this.geopoint,
+    required this.geohash,
+    required this.geopoint,
   });
 
   Map<String, dynamic> toMap() {

@@ -3,11 +3,12 @@ import 'package:bulovva/Models/wishes_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CommentCard extends StatefulWidget {
   final WishesModel wish;
 
-  const CommentCard({Key key, this.wish}) : super(key: key);
+  const CommentCard({Key? key, required this.wish}) : super(key: key);
 
   @override
   _CommentCardState createState() => _CommentCardState();
@@ -51,7 +52,10 @@ class _CommentCardState extends State<CommentCard> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              Text('İşletme İsmi: ${widget.wish.wishStoreName}',
+              Text(
+                  AppLocalizations.of(context)!.businessName +
+                      ': ${widget.wish.wishStoreName}',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       color: ColorConstants.instance.primaryColor,
                       fontWeight: FontWeight.bold,
@@ -69,23 +73,29 @@ class _CommentCardState extends State<CommentCard> {
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
-                    'Oluşturulma Saati: ${formatDate(widget.wish.createdAt)}',
+                    AppLocalizations.of(context)!.createDate +
+                        ': ${formatDate(widget.wish.createdAt)}',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: ColorConstants.instance.hintColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: 15.0)),
+                        fontSize: 13.0)),
               ),
               Padding(
                   padding: const EdgeInsets.only(top: 15.0),
                   child: Text(
-                      (widget.wish.wishUserPhone == null ||
-                              widget.wish.wishUserPhone.isEmpty)
-                          ? 'İletişim No: Belirtilmemiş'
-                          : 'İletişim No: ${widget.wish.wishUserPhone}',
+                      (widget.wish.wishUserPhone != null &&
+                              widget.wish.wishUserPhone!.isNotEmpty)
+                          ? AppLocalizations.of(context)!.conatactNum +
+                              ': ${widget.wish.wishUserPhone}'
+                          : AppLocalizations.of(context)!.conatactNum +
+                              ': ' +
+                              AppLocalizations.of(context)!.unknown,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: ColorConstants.instance.hintColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 15.0))),
+                          fontSize: 14.0))),
             ],
           ),
         ),

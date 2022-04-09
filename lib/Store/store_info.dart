@@ -6,22 +6,13 @@ import 'package:flutter/material.dart';
 class StoreInfo extends StatefulWidget {
   final StoreModel storeData;
 
-  const StoreInfo({Key key, this.storeData}) : super(key: key);
+  const StoreInfo({Key? key, required this.storeData}) : super(key: key);
 
   @override
   _StoreInfoState createState() => _StoreInfoState();
 }
 
 class _StoreInfoState extends State<StoreInfo> {
-  final TextEditingController name = TextEditingController();
-  final TextEditingController address = TextEditingController();
-  final TextEditingController phone = TextEditingController();
-  final TextEditingController pers1 = TextEditingController();
-  final TextEditingController pers2 = TextEditingController();
-  final TextEditingController pers3 = TextEditingController();
-  final TextEditingController pers1Phone = TextEditingController();
-  final TextEditingController pers2Phone = TextEditingController();
-  final TextEditingController pers3Phone = TextEditingController();
   final bool _isLoading = false;
   bool isInit = true;
 
@@ -32,19 +23,17 @@ class _StoreInfoState extends State<StoreInfo> {
             child: Column(
               children: [
                 Container(
-                  child: (widget.storeData.storePicRef != null)
-                      ? Image.network(widget.storeData.storePicRef,
-                          fit: BoxFit.fitWidth,
-                          loadingBuilder: (context, child, loadingProgress) {
-                          return loadingProgress == null
-                              ? child
-                              : Center(
-                                  child: CircularProgressIndicator(
-                                    color: ColorConstants.instance.iconOnColor,
-                                  ),
-                                );
-                        })
-                      : null,
+                  child: Image.network(widget.storeData.storePicRef,
+                      fit: BoxFit.fitWidth,
+                      loadingBuilder: (context, child, loadingProgress) {
+                    return loadingProgress == null
+                        ? child
+                        : Center(
+                            child: CircularProgressIndicator(
+                              color: ColorConstants.instance.iconOnColor,
+                            ),
+                          );
+                  }),
                   color: ColorConstants.instance.primaryColor,
                   height: MediaQuery.of(context).size.height / 3.5,
                   width: MediaQuery.of(context).size.width,

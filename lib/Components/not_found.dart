@@ -7,9 +7,9 @@ class NotFound extends StatelessWidget {
   final String notFoundText;
 
   const NotFound({
-    Key key,
-    this.notFoundIcon,
-    this.notFoundText,
+    Key? key,
+    required this.notFoundIcon,
+    required this.notFoundText,
   }) : super(key: key);
 
   @override

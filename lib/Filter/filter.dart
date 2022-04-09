@@ -3,14 +3,17 @@ import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_category.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
-import 'package:bulovva/services/firestore_service.dart';
+import 'package:bulovva/Services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../Constants/localization_constants.dart';
+import '../Providers/locale_provider.dart';
 
 class Filter extends StatefulWidget {
-  const Filter({Key key}) : super(key: key);
+  const Filter({Key? key}) : super(key: key);
 
   @override
   _FilterState createState() => _FilterState();
@@ -18,10 +21,10 @@ class Filter extends StatefulWidget {
 
 class _FilterState extends State<Filter> {
   List<StoreCategory> storeCats = [];
-  FilterProvider _filterProvider;
-  SharedPreferences preferences;
+  FilterProvider? _filterProvider;
+  SharedPreferences? preferences;
   bool firstTime = true;
-  Future _getCategories;
+  Future? _getCategories;
 
   @override
   void initState() {
@@ -51,7 +54,8 @@ class _FilterState extends State<Filter> {
   Future getCategories() async {
     QuerySnapshot snapshots = await FirestoreService().getStoreCat();
     for (var element in snapshots.docs) {
-      StoreCategory catElement = StoreCategory.fromFirestore(element.data());
+      StoreCategory catElement =
+          StoreCategory.fromFirestore(element.data() as Map<String, dynamic>);
       storeCats.add(catElement);
     }
   }
@@ -88,7 +92,7 @@ class _FilterState extends State<Filter> {
                               padding:
                                   const EdgeInsets.only(top: 20.0, left: 10.0),
                               child: Text(
-                                'Arama Seçenekleri',
+                                AppLocalizations.of(context)!.filters,
                                 style: TextStyle(
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.bold,
@@ -101,18 +105,18 @@ class _FilterState extends State<Filter> {
                                   const EdgeInsets.only(top: 20.0, left: 10.0),
                               child: Row(
                                 children: [
-                                  const Text(
-                                    'Sadece Aktif Kampanyalar',
-                                    style: TextStyle(fontSize: 15.0),
+                                  Text(
+                                    AppLocalizations.of(context)!.onlyActive,
+                                    style: const TextStyle(fontSize: 15.0),
                                   ),
                                   Switch(
-                                      value: _filterProvider.getLive,
+                                      value: _filterProvider!.getLive,
                                       activeColor:
                                           ColorConstants.instance.textGold,
                                       inactiveThumbColor:
                                           ColorConstants.instance.primaryColor,
                                       onChanged: (value) {
-                                        _filterProvider.changeLive(value);
+                                        _filterProvider!.changeLive(value);
                                       })
                                 ],
                               ),
@@ -129,25 +133,29 @@ class _FilterState extends State<Filter> {
                                     ),
                                     borderRadius: BorderRadius.circular(5)),
                                 child: DropdownButton(
-                                    value: _filterProvider.getCat,
+                                    value: _filterProvider!.getCat,
                                     isExpanded: true,
                                     underline: const SizedBox(),
-                                    hint: const Text("Kategori"),
                                     items:
                                         storeCats.map((StoreCategory storeCat) {
                                       return DropdownMenuItem<String>(
                                         value: storeCat.storeCatName,
                                         onTap: () {
-                                          _filterProvider
+                                          _filterProvider!
                                               .changeCat(storeCat.storeCatName);
                                         },
                                         child: Text(
-                                          storeCat.storeCatName,
+                                          context
+                                                      .read<LocaleProvider>()
+                                                      .locale ==
+                                                  LocalizationConstant.trLocale
+                                              ? storeCat.storeCatName
+                                              : storeCat.storeCatNameEn,
                                         ),
                                       );
                                     }).toList(),
-                                    onChanged: (value) {
-                                      _filterProvider.changeCat(value);
+                                    onChanged: (String? value) {
+                                      _filterProvider!.changeCat(value!);
                                     }),
                               ),
                             ),
@@ -158,10 +166,11 @@ class _FilterState extends State<Filter> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Arama Uzaklığı : ${_filterProvider.getDist} km',
+                                    AppLocalizations.of(context)!.distance +
+                                        ': ${_filterProvider!.getDist} km',
                                   ),
                                   Slider(
-                                      value: _filterProvider.getDist,
+                                      value: _filterProvider!.getDist!,
                                       min: 1,
                                       max: 15,
                                       divisions: 14,
@@ -169,12 +178,12 @@ class _FilterState extends State<Filter> {
                                           ColorConstants.instance.primaryColor,
                                       inactiveColor:
                                           ColorConstants.instance.waitingColor,
-                                      label: '${_filterProvider.getDist} km',
+                                      label: '${_filterProvider!.getDist} km',
                                       onChanged: (localValue) {
-                                        _filterProvider
+                                        _filterProvider!
                                             .changeDistance(localValue);
-                                        preferences.setDouble(
-                                            'distance', localValue);
+                                        preferences!
+                                            .setDouble('distance', localValue);
                                       }),
                                 ],
                               ),
@@ -183,7 +192,7 @@ class _FilterState extends State<Filter> {
                               padding:
                                   const EdgeInsets.only(top: 20.0, left: 10.0),
                               child: Text(
-                                'Görüntü Seçenekleri',
+                                AppLocalizations.of(context)!.previewOptions,
                                 style: TextStyle(
                                     fontFamily: "Montserrat",
                                     fontWeight: FontWeight.bold,
@@ -196,19 +205,19 @@ class _FilterState extends State<Filter> {
                                   const EdgeInsets.only(top: 20.0, left: 10.0),
                               child: Row(
                                 children: [
-                                  const Text(
-                                    'Gece Modu',
-                                    style: TextStyle(fontSize: 15.0),
+                                  Text(
+                                    AppLocalizations.of(context)!.nightMode,
+                                    style: const TextStyle(fontSize: 15.0),
                                   ),
                                   Switch(
-                                      value: _filterProvider.getMode,
+                                      value: _filterProvider!.getMode,
                                       activeColor:
                                           ColorConstants.instance.textGold,
                                       inactiveThumbColor:
                                           ColorConstants.instance.primaryColor,
                                       onChanged: (value) {
-                                        _filterProvider.changeMode(value);
-                                        preferences.setBool('dark', value);
+                                        _filterProvider!.changeMode(value);
+                                        preferences!.setBool('dark', value);
                                       })
                                 ],
                               ),

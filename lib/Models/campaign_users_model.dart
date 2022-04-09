@@ -5,20 +5,20 @@ class CampaignUserModel {
   final String campaignId;
   final String storeId;
   final String userName;
-  final String scannedByName;
-  final String scannedById;
-  final Timestamp scannedAt;
+  final String? scannedByName;
+  final String? scannedById;
+  final Timestamp? scannedAt;
   final bool scanned;
 
   CampaignUserModel({
-    this.userId,
-    this.campaignId,
-    this.storeId,
-    this.userName,
+    required this.userId,
+    required this.campaignId,
+    required this.storeId,
+    required this.userName,
     this.scannedByName,
     this.scannedById,
     this.scannedAt,
-    this.scanned,
+    required this.scanned,
   });
 
   Map<String, dynamic> toMap() {

@@ -1,31 +1,41 @@
 import 'package:bulovva/Constants/colors_constants.dart';
+import 'package:bulovva/Constants/localization_constants.dart';
 import 'package:bulovva/Filter/filter.dart';
-import 'package:bulovva/Login/login.dart';
 import 'package:bulovva/Profile/my_campaigns.dart';
 import 'package:bulovva/Profile/my_favorites.dart';
 import 'package:bulovva/Profile/my_reservations.dart';
 import 'package:bulovva/Profile/my_wishes.dart';
+import 'package:bulovva/Providers/locale_provider.dart';
 import 'package:bulovva/Providers/user_provider.dart';
-import 'package:bulovva/services/authentication_service.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatefulWidget {
-  const CustomDrawer({Key key}) : super(key: key);
+  const CustomDrawer({Key? key}) : super(key: key);
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  UserProvider _userProvider;
+  String? selectedLanguageName;
 
   @override
-  void didChangeDependencies() {
-    _userProvider = Provider.of<UserProvider>(context);
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () {
+        setState(() {
+          selectedLanguageName = LocalizationConstant.locals
+              .firstWhere((element) =>
+                  element.locale == context.read<LocaleProvider>().locale)
+              .localeName;
+        });
+      },
+    );
   }
 
   exitYesNo(BuildContext context) {
@@ -33,49 +43,49 @@ class _CustomDrawerState extends State<CustomDrawer> {
         context: context,
         type: CoolAlertType.warning,
         title: '',
-        text: 'Çıkmak istediğinize emin misiniz ?',
+        text: AppLocalizations.of(context)!.wannaQuit,
         showCancelBtn: true,
         backgroundColor: ColorConstants.instance.primaryColor,
         confirmBtnColor: ColorConstants.instance.primaryColor,
-        cancelBtnText: 'Hayır',
+        cancelBtnText: AppLocalizations.of(context)!.no,
         onCancelBtnTap: () {
           Navigator.of(context).pop();
         },
         onConfirmBtnTap: () {
           Navigator.of(context).pop();
-          context.read<AuthService>().signOut().then((value) {
-            _userProvider.free();
-            Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const Login()));
-          });
+          context.read<UserProvider>().free();
+          FirebaseAuth.instance.signOut();
         },
         barrierDismissible: false,
-        confirmBtnText: 'Evet');
+        confirmBtnText: AppLocalizations.of(context)!.yes);
   }
 
   @override
   Widget build(BuildContext context) {
-    final User firebaseUser = context.watch<User>();
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: (_userProvider != null && _userProvider.name != null)
+            accountName: (context.read<UserProvider>().name != null)
                 ? Text(
-                    'Hoşgeldiniz ${_userProvider.name},',
+                    AppLocalizations.of(context)!.welcome +
+                        ' ' +
+                        context.read<UserProvider>().name!,
                     style: TextStyle(
                         color: ColorConstants.instance.textGold,
                         fontWeight: FontWeight.bold),
                   )
-                : null,
-            accountEmail: (firebaseUser != null)
-                ? (firebaseUser.email != null && firebaseUser.email.isNotEmpty)
-                    ? Text(firebaseUser.email)
-                    : Text(firebaseUser.phoneNumber)
-                : null,
+                : Text(
+                    AppLocalizations.of(context)!.welcome,
+                    style: TextStyle(
+                        color: ColorConstants.instance.textGold,
+                        fontWeight: FontWeight.bold),
+                  ),
+            accountEmail: Text(FirebaseAuth.instance.currentUser!.email ??
+                FirebaseAuth.instance.currentUser!.phoneNumber!),
             currentAccountPicture:
-                (firebaseUser == null || firebaseUser.photoURL == null)
+                (FirebaseAuth.instance.currentUser!.photoURL == null)
                     ? Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
@@ -89,7 +99,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       )
                     : CircleAvatar(
                         radius: 50.0,
-                        backgroundImage: NetworkImage(firebaseUser.photoURL),
+                        backgroundImage: NetworkImage(
+                            FirebaseAuth.instance.currentUser!.photoURL!),
                         backgroundColor: Colors.transparent,
                       ),
             decoration: BoxDecoration(
@@ -103,7 +114,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Icons.filter_alt_sharp,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('Arama Filtrelerim'),
+            title: Text(AppLocalizations.of(context)!.searchFilters),
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const Filter()));
@@ -117,7 +128,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Icons.star,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('Favori İşletmelerim'),
+            title: Text(AppLocalizations.of(context)!.favoriteBusinesses),
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MyFavorites()));
@@ -128,7 +139,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Icons.qr_code,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('QR Kodlarım'),
+            title: Text(AppLocalizations.of(context)!.myCampaignCodes),
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MyCampaigns()));
@@ -139,7 +150,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Icons.menu_book,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('Rezervasyonlarım'),
+            title: Text(AppLocalizations.of(context)!.myReservations),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const MyReservations()));
@@ -150,7 +161,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Icons.add,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('Dilek & Şikayetlerim'),
+            title: Text(AppLocalizations.of(context)!.myWishes),
             onTap: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MyWishes()));
@@ -164,17 +175,41 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Icons.assignment_late,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('KVKK ve Gizlilik'),
+            title: Text(AppLocalizations.of(context)!.kvkk),
           ),
           ListTile(
             leading: Icon(
               Icons.logout_outlined,
               color: ColorConstants.instance.primaryColor,
             ),
-            title: const Text('Çıkış Yap'),
+            title: Text(AppLocalizations.of(context)!.logout),
             onTap: () {
               exitYesNo(context);
             },
+          ),
+          ListTile(
+            title: DropdownButton(
+              onChanged: (String? value) {
+                setState(() {
+                  selectedLanguageName = value;
+                  context.read<LocaleProvider>().setLocale(LocalizationConstant
+                      .locals
+                      .firstWhere((element) => element.localeName == value)
+                      .locale);
+                });
+              },
+              value: selectedLanguageName,
+              isExpanded: true,
+              icon: const Icon(Icons.language),
+              items: const <DropdownMenuItem<String>>[
+                DropdownMenuItem(
+                    child: Text(LocalizationConstant.trName),
+                    value: LocalizationConstant.trName),
+                DropdownMenuItem(
+                    child: Text(LocalizationConstant.enName),
+                    value: LocalizationConstant.enName),
+              ],
+            ),
           ),
         ],
       ),

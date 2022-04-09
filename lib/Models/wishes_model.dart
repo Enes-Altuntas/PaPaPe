@@ -5,20 +5,20 @@ class WishesModel {
   final String wishTitle;
   final String wishId;
   final String wishUser;
-  final String wishUserPhone;
+  final String? wishUserPhone;
   final Timestamp createdAt;
   final String wishStore;
   final String wishStoreName;
 
   WishesModel(
-      {this.wishDesc,
-      this.wishTitle,
-      this.wishId,
-      this.wishUser,
+      {required this.wishDesc,
+      required this.wishTitle,
+      required this.wishId,
+      required this.wishUser,
       this.wishUserPhone,
-      this.createdAt,
-      this.wishStore,
-      this.wishStoreName});
+      required this.createdAt,
+      required this.wishStore,
+      required this.wishStoreName});
 
   WishesModel.fromFirestore(Map<String, dynamic> data)
       : wishDesc = data['wishDesc'],

@@ -4,32 +4,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class CampaignModel {
   // inactive , wait, active
   final String campaignStatus;
-  String campaignPicRef;
-  final bool automatedStart;
-  final bool automatedStop;
-  final bool delInd;
+  String? campaignPicRef;
+  final bool? automatedStart;
+  final bool? automatedStop;
+  final bool? delInd;
   final String campaignDesc;
+  final String? campaignDescEn;
   final String campaignId;
   final String campaignTitle;
-  final int campaignCounter;
+  final String? campaignTitleEn;
+  final int? campaignCounter;
   final Timestamp campaignStart;
   final Timestamp campaignFinish;
   final Timestamp createdAt;
-  File campaignLocalImage;
+  File? campaignLocalImage;
 
   CampaignModel(
-      {this.campaignStatus,
+      {required this.campaignStatus,
       this.campaignPicRef,
       this.automatedStart,
       this.automatedStop,
       this.delInd,
-      this.campaignDesc,
-      this.campaignId,
-      this.campaignTitle,
+      required this.campaignDesc,
+      this.campaignDescEn,
+      required this.campaignId,
+      required this.campaignTitle,
+      this.campaignTitleEn,
       this.campaignCounter,
-      this.campaignStart,
-      this.campaignFinish,
-      this.createdAt,
+      required this.campaignStart,
+      required this.campaignFinish,
+      required this.createdAt,
       this.campaignLocalImage});
 
   CampaignModel.fromFirestore(Map<String, dynamic> data)
@@ -39,7 +43,9 @@ class CampaignModel {
         delInd = data['delInd'],
         automatedStop = data['automatedStop'],
         campaignDesc = data['campaignDesc'],
+        campaignDescEn = data['campaignDescEn'],
         campaignTitle = data['campaignTitle'],
+        campaignTitleEn = data['campaignTitleEn'],
         campaignCounter = data['campaignCounter'],
         campaignId = data['campaignId'],
         campaignStart = data['campaignStart'],
@@ -54,7 +60,9 @@ class CampaignModel {
       'delInd': delInd,
       'automatedStop': automatedStop,
       'campaignDesc': campaignDesc,
+      'campaignDescEn': campaignDescEn,
       'campaignTitle': campaignTitle,
+      'campaignTitleEn': campaignTitleEn,
       'campaignStart': campaignStart,
       'campaignCounter': campaignCounter,
       'campaignFinish': campaignFinish,

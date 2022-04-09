@@ -5,12 +5,13 @@ import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/store_model.dart';
 import 'package:bulovva/Models/user_model.dart';
 import 'package:bulovva/Store/store.dart';
-import 'package:bulovva/services/firestore_service.dart';
+import 'package:bulovva/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyFavorites extends StatelessWidget {
-  const MyFavorites({Key key}) : super(key: key);
+  const MyFavorites({Key? key}) : super(key: key);
 
   openStore(StoreModel store, BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(
@@ -28,8 +29,7 @@ class MyFavorites extends StatelessWidget {
             color: ColorConstants.instance.whiteContainer,
           ),
           iconTheme: IconThemeData(
-            color:
-                ColorConstants.instance.primaryColor, //change your color here
+            color: ColorConstants.instance.primaryColor,
           ),
           elevation: 0,
           title: const AppTitleWidget(),
@@ -47,15 +47,15 @@ class MyFavorites extends StatelessWidget {
                     switch (snapshot.connectionState) {
                       case ConnectionState.active:
                         switch (snapshot.data != null &&
-                            snapshot.data.favorites != null &&
-                            snapshot.data.favorites.isNotEmpty) {
+                            snapshot.data!.favorites != null &&
+                            snapshot.data!.favorites!.isNotEmpty) {
                           case true:
                             return ListView.builder(
-                              itemCount: snapshot.data.favorites.length,
+                              itemCount: snapshot.data!.favorites!.length,
                               itemBuilder: (context, index) {
                                 return FutureBuilder<StoreModel>(
                                     future: FirestoreService().getStoreData(
-                                        snapshot.data.favorites[index]),
+                                        snapshot.data!.favorites![index]),
                                     builder: (context, snapshot) {
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.done:
@@ -65,17 +65,15 @@ class MyFavorites extends StatelessWidget {
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: StoreCards(
-                                                    store: snapshot.data,
+                                                    store: snapshot.data!,
                                                     onTap: () {
-                                                      openStore(snapshot.data,
+                                                      openStore(snapshot.data!,
                                                           context);
                                                     },
                                                   ));
-                                              break;
                                             default:
                                               return Container();
                                           }
-                                          break;
                                         default:
                                           return Center(
                                               child: CircularProgressIndicator(
@@ -86,16 +84,14 @@ class MyFavorites extends StatelessWidget {
                                     });
                               },
                             );
-                            break;
                           default:
-                            return const NotFound(
+                            return NotFound(
                               notFoundIcon:
                                   FontAwesomeIcons.exclamationTriangle,
-                              notFoundText:
-                                  'Üzgünüz, favorilerinizde işletme bulunmamaktadır.',
+                              notFoundText: AppLocalizations.of(context)!
+                                  .favoriteStoreNotFound,
                             );
                         }
-                        break;
                       default:
                         return Center(
                             child: CircularProgressIndicator(

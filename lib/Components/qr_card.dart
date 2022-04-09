@@ -1,14 +1,22 @@
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+import '../Constants/localization_constants.dart';
+import '../Providers/locale_provider.dart';
 
 class QrCard extends StatelessWidget {
   final CampaignModel campaignModel;
   final String qrData;
   final Function onPressed;
 
-  const QrCard({Key key, this.campaignModel, this.qrData, this.onPressed})
+  const QrCard(
+      {Key? key,
+      required this.campaignModel,
+      required this.qrData,
+      required this.onPressed})
       : super(key: key);
 
   @override
@@ -24,7 +32,12 @@ class QrCard extends StatelessWidget {
           title: Column(
             children: [
               Text(
-                campaignModel.campaignTitle,
+                (context.read<LocaleProvider>().locale ==
+                        LocalizationConstant.trLocale)
+                    ? campaignModel.campaignTitle
+                    : (campaignModel.campaignTitleEn != null)
+                        ? campaignModel.campaignTitleEn!
+                        : campaignModel.campaignTitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: ColorConstants.instance.textGold,
@@ -33,7 +46,12 @@ class QrCard extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
-                  campaignModel.campaignDesc,
+                  (context.read<LocaleProvider>().locale ==
+                          LocalizationConstant.trLocale)
+                      ? campaignModel.campaignDesc
+                      : (campaignModel.campaignDescEn != null)
+                          ? campaignModel.campaignDescEn!
+                          : campaignModel.campaignDesc,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       color: ColorConstants.instance.textOnColor,

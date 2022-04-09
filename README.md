@@ -1,2 +1,2 @@
-# Bulovva
+# MyRest
 Bu Lokasyonda Herşey Var

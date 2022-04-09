@@ -9,11 +9,11 @@ class MarkerModel {
   final String storeName;
 
   MarkerModel(
-      {this.storeCategory,
-      this.campaignStatus,
-      this.position,
-      this.storeId,
-      this.storeName});
+      {required this.storeCategory,
+      required this.campaignStatus,
+      required this.position,
+      required this.storeId,
+      required this.storeName});
 
   Map<String, dynamic> toMap() {
     return {

@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:bulovva/Components/gradient_button.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
@@ -6,12 +5,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../Constants/localization_constants.dart';
+import '../Providers/locale_provider.dart';
 
 class CampaignCard extends StatefulWidget {
   final CampaignModel campaign;
-  final Function onPressed;
+  final VoidCallback onPressed;
 
-  const CampaignCard({Key key, this.campaign, this.onPressed})
+  const CampaignCard(
+      {Key? key, required this.campaign, required this.onPressed})
       : super(key: key);
 
   @override
@@ -54,9 +59,8 @@ class _CampaignCardState extends State<CampaignCard> {
                     ColorConstants.instance.secondaryColor,
                     ColorConstants.instance.primaryColor,
                   ], begin: Alignment.bottomCenter, end: Alignment.topCenter)),
-                  child: (widget.campaign.campaignPicRef != null &&
-                          widget.campaign.campaignPicRef.isNotEmpty)
-                      ? Image.network(widget.campaign.campaignPicRef,
+                  child: (widget.campaign.campaignPicRef != null)
+                      ? Image.network(widget.campaign.campaignPicRef!,
                           loadingBuilder: (context, child, loadingProgress) {
                           return loadingProgress == null
                               ? child
@@ -67,7 +71,8 @@ class _CampaignCardState extends State<CampaignCard> {
                                 );
                         }, fit: BoxFit.fill)
                       : Center(
-                          child: Text('Kampanya Resmi Yok',
+                          child: Text(
+                              AppLocalizations.of(context)!.noCampaignPicture,
                               style: TextStyle(
                                   fontFamily: "Montserrat",
                                   fontWeight: FontWeight.bold,
@@ -80,8 +85,8 @@ class _CampaignCardState extends State<CampaignCard> {
                     left: 10.0,
                     child: (widget.campaign.campaignStatus == 'active')
                         ? Container(
-                            height: 30.0,
-                            width: 30.0,
+                            height: 40.0,
+                            width: 40.0,
                             decoration: BoxDecoration(
                                 color: ColorConstants.instance.activeColor,
                                 borderRadius: BorderRadius.circular(30.0)),
@@ -94,8 +99,8 @@ class _CampaignCardState extends State<CampaignCard> {
                           )
                         : (widget.campaign.campaignStatus == 'inactive')
                             ? Container(
-                                height: 30.0,
-                                width: 30.0,
+                                height: 40.0,
+                                width: 40.0,
                                 decoration: BoxDecoration(
                                     color:
                                         ColorConstants.instance.inactiveColor,
@@ -108,8 +113,8 @@ class _CampaignCardState extends State<CampaignCard> {
                                 ),
                               )
                             : Container(
-                                height: 30.0,
-                                width: 30.0,
+                                height: 40.0,
+                                width: 40.0,
                                 decoration: BoxDecoration(
                                     color: ColorConstants.instance.waitingColor,
                                     borderRadius: BorderRadius.circular(30.0)),
@@ -125,7 +130,13 @@ class _CampaignCardState extends State<CampaignCard> {
             Padding(
               padding: const EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 20.0, bottom: 10.0),
-              child: Text(widget.campaign.campaignTitle.toUpperCase(),
+              child: Text(
+                  (context.read<LocaleProvider>().locale ==
+                          LocalizationConstant.trLocale)
+                      ? widget.campaign.campaignTitle.toUpperCase()
+                      : (widget.campaign.campaignTitleEn != null)
+                          ? widget.campaign.campaignTitleEn!.toUpperCase()
+                          : widget.campaign.campaignTitle.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 18.0,
@@ -141,7 +152,13 @@ class _CampaignCardState extends State<CampaignCard> {
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Text(widget.campaign.campaignDesc,
+              child: Text(
+                  (context.read<LocaleProvider>().locale ==
+                          LocalizationConstant.trLocale)
+                      ? widget.campaign.campaignDesc
+                      : (widget.campaign.campaignDescEn != null)
+                          ? widget.campaign.campaignDescEn!
+                          : widget.campaign.campaignDesc,
                   textAlign: TextAlign.center),
             ),
             Padding(
@@ -153,7 +170,8 @@ class _CampaignCardState extends State<CampaignCard> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
                       child: Text(
-                          'Kampanya Başlangıç : ${formatDate(widget.campaign.campaignStart)}',
+                          AppLocalizations.of(context)!.campaignStart +
+                              ': ${formatDate(widget.campaign.campaignStart)}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 13.0,
@@ -166,7 +184,8 @@ class _CampaignCardState extends State<CampaignCard> {
                         bottom: 15.0,
                       ),
                       child: Text(
-                          'Kampanya Bitiş : ${formatDate(widget.campaign.campaignFinish)}',
+                          AppLocalizations.of(context)!.campaignFinish +
+                              ': ${formatDate(widget.campaign.campaignFinish)}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 13.0,
@@ -179,7 +198,8 @@ class _CampaignCardState extends State<CampaignCard> {
                           padding:
                               const EdgeInsets.only(top: 5.0, bottom: 10.0),
                           child: GradientButton(
-                            buttonText: 'Kampanya Kodu Al',
+                            buttonText:
+                                AppLocalizations.of(context)!.takeCampaignCode,
                             end: (widget.campaign.campaignStatus == 'active')
                                 ? ColorConstants.instance.activeColor
                                 : (widget.campaign.campaignStatus == 'inactive')
@@ -195,6 +215,7 @@ class _CampaignCardState extends State<CampaignCard> {
                             icon: FontAwesomeIcons.getPocket,
                             onPressed: widget.onPressed,
                             widthMultiplier: 0.7,
+                            fontFamily: '',
                           )),
                     ),
                   ],

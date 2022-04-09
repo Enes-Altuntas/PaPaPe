@@ -1,5 +1,7 @@
 import 'package:bulovva/Constants/colors_constants.dart';
+import 'package:bulovva/Constants/localization_constants.dart';
 import 'package:bulovva/Models/store_category.dart';
+import 'package:bulovva/Providers/locale_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:bulovva/Providers/filter_provider.dart';
 import 'package:provider/provider.dart';
@@ -7,17 +9,17 @@ import 'package:provider/provider.dart';
 class BrandWidget extends StatefulWidget {
   final StoreCategory storeCategory;
 
-  const BrandWidget({Key key, this.storeCategory}) : super(key: key);
+  const BrandWidget({Key? key, required this.storeCategory}) : super(key: key);
 
   @override
   _BrandWidgetState createState() => _BrandWidgetState();
 }
 
 class _BrandWidgetState extends State<BrandWidget> {
-  FilterProvider _filterProvider;
+  FilterProvider? _filterProvider;
 
   changeCat(String value) {
-    _filterProvider.changeCat(value);
+    _filterProvider!.changeCat(value);
   }
 
   @override
@@ -38,7 +40,7 @@ class _BrandWidgetState extends State<BrandWidget> {
               child: CircleAvatar(
                 backgroundImage:
                     NetworkImage(widget.storeCategory.storeCatPicRef),
-                backgroundColor: (_filterProvider.getCat ==
+                backgroundColor: (_filterProvider!.getCat ==
                         widget.storeCategory.storeCatName)
                     ? ColorConstants.instance.primaryColor
                     : ColorConstants.instance.whiteContainer,
@@ -48,7 +50,10 @@ class _BrandWidgetState extends State<BrandWidget> {
             Padding(
               padding: const EdgeInsets.only(top: 5.0),
               child: Text(
-                widget.storeCategory.storeShort,
+                context.read<LocaleProvider>().locale ==
+                        LocalizationConstant.trLocale
+                    ? widget.storeCategory.storeShort
+                    : widget.storeCategory.storeShortEn,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "Montserrat",

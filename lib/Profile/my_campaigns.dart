@@ -4,13 +4,14 @@ import 'package:bulovva/Components/qr_card.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/campaign_model.dart';
 import 'package:bulovva/Models/user_model.dart';
-import 'package:bulovva/services/firestore_service.dart';
+import 'package:bulovva/Services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyCampaigns extends StatelessWidget {
-  const MyCampaigns({Key key}) : super(key: key);
+  const MyCampaigns({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +41,16 @@ class MyCampaigns extends StatelessWidget {
                     switch (snapshotQr.connectionState) {
                       case ConnectionState.active:
                         switch (snapshotQr.data != null &&
-                            snapshotQr.data.campaignCodes != null &&
-                            snapshotQr.data.campaignCodes.isNotEmpty) {
+                            snapshotQr.data!.campaignCodes != null &&
+                            snapshotQr.data!.campaignCodes!.isNotEmpty) {
                           case true:
                             return ListView.builder(
-                              itemCount: snapshotQr.data.campaignCodes.length,
+                              itemCount: snapshotQr.data!.campaignCodes!.length,
                               itemBuilder: (context, indexQr) {
                                 return FutureBuilder<CampaignModel>(
                                     future: FirestoreService().getCampaignData(
-                                        snapshotQr.data.campaignCodes[indexQr]),
+                                        snapshotQr
+                                            .data!.campaignCodes![indexQr]),
                                     builder: (context, snapshot) {
                                       switch (snapshot.connectionState) {
                                         case ConnectionState.done:
@@ -59,9 +61,10 @@ class MyCampaigns extends StatelessWidget {
                                                       const EdgeInsets.all(8.0),
                                                   child: QrCard(
                                                     campaignModel:
-                                                        snapshot.data,
-                                                    qrData: snapshotQr.data
-                                                        .campaignCodes[indexQr],
+                                                        snapshot.data!,
+                                                    qrData: snapshotQr.data!
+                                                            .campaignCodes![
+                                                        indexQr],
                                                     onPressed: (String qrData) {
                                                       showDialog(
                                                           context: context,
@@ -74,8 +77,8 @@ class MyCampaigns extends StatelessWidget {
                                                                   child:
                                                                       QrImage(
                                                                     data: snapshotQr
-                                                                            .data
-                                                                            .campaignCodes[
+                                                                            .data!
+                                                                            .campaignCodes![
                                                                         indexQr],
                                                                   ),
                                                                 ),
@@ -84,16 +87,9 @@ class MyCampaigns extends StatelessWidget {
                                                           });
                                                     },
                                                   ));
-                                              break;
                                             default:
-                                              return const NotFound(
-                                                notFoundIcon: FontAwesomeIcons
-                                                    .exclamationCircle,
-                                                notFoundText:
-                                                    'Kampanya bilgileri bulunamadı !',
-                                              );
+                                              return const SizedBox();
                                           }
-                                          break;
                                         default:
                                           return Center(
                                               child: CircularProgressIndicator(
@@ -104,16 +100,14 @@ class MyCampaigns extends StatelessWidget {
                                     });
                               },
                             );
-                            break;
                           default:
-                            return const NotFound(
+                            return NotFound(
                               notFoundIcon:
                                   FontAwesomeIcons.exclamationTriangle,
-                              notFoundText:
-                                  'Üzgünüz, almış olduğunuz hiçbir kampanya kodunuz bulunamamıştır !',
+                              notFoundText: AppLocalizations.of(context)!
+                                  .campaignUsageNotFound,
                             );
                         }
-                        break;
                       default:
                         return Center(
                             child: CircularProgressIndicator(

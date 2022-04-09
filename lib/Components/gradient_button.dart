@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GradientButton extends StatelessWidget {
-  final Function onPressed;
+  final VoidCallback onPressed;
   final IconData icon;
   final String buttonText;
-  final String fontFamily;
+  final String? fontFamily;
   final double fontSize;
   final double widthMultiplier;
   final Color start;
   final Color end;
 
   const GradientButton(
-      {Key key,
-      this.onPressed,
-      this.icon,
-      this.buttonText,
+      {Key? key,
+      required this.onPressed,
+      required this.icon,
+      required this.buttonText,
       this.fontFamily,
-      this.start,
-      this.end,
-      this.fontSize,
-      this.widthMultiplier})
+      required this.start,
+      required this.end,
+      required this.fontSize,
+      required this.widthMultiplier})
       : super(key: key);
 
   @override

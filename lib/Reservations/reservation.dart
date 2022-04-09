@@ -4,19 +4,21 @@ import 'package:bulovva/Components/progress.dart';
 import 'package:bulovva/Constants/colors_constants.dart';
 import 'package:bulovva/Models/reservations_model.dart';
 import 'package:bulovva/Models/store_model.dart';
-import 'package:bulovva/services/authentication_service.dart';
-import 'package:bulovva/services/firestore_service.dart';
-import 'package:bulovva/services/toast_service.dart';
+import 'package:bulovva/Services/firestore_service.dart';
+import 'package:bulovva/Services/toast_service.dart';
+import 'package:bulovva/Services/validation_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Reservation extends StatefulWidget {
   final StoreModel store;
 
-  const Reservation({Key key, this.store}) : super(key: key);
+  const Reservation({Key? key, required this.store}) : super(key: key);
 
   @override
   _ReservationState createState() => _ReservationState();
@@ -30,54 +32,31 @@ class _ReservationState extends State<Reservation> {
   final TextEditingController _resCount = TextEditingController();
   final TextEditingController _resTime = TextEditingController();
   GlobalKey<FormState> formKeyRes = GlobalKey<FormState>();
-  Timestamp resTime;
+  ValidationService validationService = ValidationService();
+  Timestamp? resTime;
   bool _isLoading = false;
 
-  String _resPersCount(String value) {
-    if (value.isEmpty) {
-      return '* Rezervasyon kişi sayısı boş olmamalıdır !';
-    }
-
-    if (value.contains(RegExp(r'[^\d]')) == true) {
-      return '* Sadece rakam içermelidir !';
-    }
-
-    return null;
+  String? _resPersCount(String? value) {
+    return validationService.notNull(value, context) ??
+        validationService.onlyLetters(value, context);
   }
 
-  String _resFullName(String value) {
-    if (value.isEmpty) {
-      return '* Rezervasyon isim-soyisim boş olmamalıdır !';
-    }
-    if (value.contains(RegExp(r'[^a-zA-ZğüşöçİĞÜŞÖÇ ]')) == true) {
-      return '* Sadece harf içermelidir !';
-    }
-
-    return null;
+  String? _resFullName(String? value) {
+    return validationService.notNull(value, context) ??
+        validationService.onlyLetters(value, context);
   }
 
-  String _resDate(String value) {
-    if (value.isEmpty) {
-      return '* Rezervasyon tarihi boş olmamalıdır !';
-    }
-
-    return null;
+  String? _resDate(String? value) {
+    return validationService.notNull(value, context);
   }
 
-  String _resPhoneCh(String value) {
-    if (value.isEmpty) {
-      return '* Rezervasyon telefonu boş olmamalıdır !';
-    }
-
-    if (value.contains(RegExp(r'[^\d]')) == true) {
-      return '* Sadece rakam içermelidir !';
-    }
-
-    return null;
+  String? _resPhoneCh(String? value) {
+    return validationService.notNull(value, context) ??
+        validationService.onlyLetters(value, context);
   }
 
   saveReservation() {
-    if (formKeyRes.currentState.validate()) {
+    if (formKeyRes.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -88,13 +67,13 @@ class _ReservationState extends State<Reservation> {
           reservationName: _resName.text,
           reservationPhone: _resPhone.text,
           reservationStatus: 'waiting',
-          reservationUser: AuthService(FirebaseAuth.instance).getUserId(),
+          reservationUser: FirebaseAuth.instance.currentUser!.uid,
           reservationStore: widget.store.storeId,
           reservationStoreName: widget.store.storeName,
-          reservationTime: resTime);
+          reservationTime: resTime!);
 
       FirestoreService()
-          .saveReservation(newReservation)
+          .saveReservation(newReservation, context)
           .then((value) => ToastService().showSuccess(value, context))
           .onError(
               (error, stackTrace) => ToastService().showError(error, context))
@@ -118,59 +97,6 @@ class _ReservationState extends State<Reservation> {
     return dateFormat.format(_date);
   }
 
-  Future<DateTime> pickDate() async {
-    final initialDate = DateTime.now();
-    final newDate = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: initialDate,
-        currentDate: DateTime.now(),
-        locale: const Locale("tr", "TR"),
-        lastDate: DateTime(DateTime.now().year + 10));
-
-    if (newDate == null) return null;
-
-    return newDate;
-  }
-
-  Future<TimeOfDay> pickTime() async {
-    final newTime = await showTimePicker(
-      context: context,
-      initialTime: const TimeOfDay(hour: 7, minute: 0),
-      hourLabelText: 'Saat',
-      minuteLabelText: 'Dakika',
-      helpText: 'Saat/Dakika Giriniz',
-      cancelText: 'İptal Et',
-      confirmText: 'Tamam',
-      initialEntryMode: TimePickerEntryMode.input,
-      builder: (BuildContext context, Widget child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            alwaysUse24HourFormat: true,
-          ),
-          child: child,
-        );
-      },
-    );
-
-    if (newTime == null) return null;
-
-    return newTime;
-  }
-
-  Future<Timestamp> pickDateTime() async {
-    final date = await pickDate();
-    if (date == null) return null;
-
-    final time = await pickTime();
-    if (time == null) return null;
-
-    DateTime dateTime =
-        DateTime(date.year, date.month, date.day, time.hour, time.minute);
-
-    return Timestamp.fromDate(dateTime);
-  }
-
   @override
   Widget build(BuildContext context) {
     return (_isLoading != true)
@@ -182,8 +108,7 @@ class _ReservationState extends State<Reservation> {
                   color: ColorConstants.instance.whiteContainer,
                 ),
                 iconTheme: IconThemeData(
-                  color: ColorConstants
-                      .instance.primaryColor, //change your color here
+                  color: ColorConstants.instance.primaryColor,
                 ),
                 elevation: 0,
                 centerTitle: true,
@@ -206,7 +131,7 @@ class _ReservationState extends State<Reservation> {
                             Padding(
                               padding: const EdgeInsets.only(top: 10.0),
                               child: Text(
-                                " * Rezervasyonunuz ile ilgili işletmenin bilmesi gereken spesifik bilgileri bu alana girmelisiniz.",
+                                AppLocalizations.of(context)!.resDescHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -221,15 +146,16 @@ class _ReservationState extends State<Reservation> {
                                 maxLength: 255,
                                 maxLines: 3,
                                 keyboardType: TextInputType.text,
-                                decoration: const InputDecoration(
-                                    labelText: 'Rezervasyon Açıklaması',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.resDesc,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Text(
-                                " * Rezerve kişi sayısı, işletmenin, rezervasyonun kaç kişi adına yapılacağını bilmesine olanak sağlar.",
+                                AppLocalizations.of(context)!.resCountHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -244,15 +170,16 @@ class _ReservationState extends State<Reservation> {
                                 controller: _resCount,
                                 maxLength: 3,
                                 keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                    labelText: 'Rezerve Kişi Sayısı',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.resCount,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Text(
-                                " * Rezerve isim soyisim alanı, rezervasyonun hangi isim ve soyisim üzerine yapılacağını iletmek içindir.",
+                                AppLocalizations.of(context)!.resNameHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -267,15 +194,16 @@ class _ReservationState extends State<Reservation> {
                                 controller: _resName,
                                 maxLength: 50,
                                 keyboardType: TextInputType.text,
-                                decoration: const InputDecoration(
-                                    labelText: 'Rezerve İsim-Soyisim',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.name,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Text(
-                                " * Rezervasyon telefonu, işletmenin önemli bir durumda size hangi numaradan ulaşacağını bilmesini sağlamak içindir.",
+                                AppLocalizations.of(context)!.resTelHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -290,16 +218,17 @@ class _ReservationState extends State<Reservation> {
                                 controller: _resPhone,
                                 maxLength: 10,
                                 keyboardType: TextInputType.phone,
-                                decoration: const InputDecoration(
-                                    prefix: Text('+90'),
-                                    labelText: 'Rezervasyon Telefonu',
-                                    border: OutlineInputBorder()),
+                                decoration: InputDecoration(
+                                    prefix: const Text('+90'),
+                                    labelText: AppLocalizations.of(context)!
+                                        .resPhoneBook,
+                                    border: const OutlineInputBorder()),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 20.0),
                               child: Text(
-                                " * Rezervasyon tarihi, rezervasyonunuz hangi tarih ve saat için olduğunu anlatır",
+                                AppLocalizations.of(context)!.resDateHint,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: ColorConstants.instance.hintColor,
@@ -314,17 +243,25 @@ class _ReservationState extends State<Reservation> {
                                 controller: _resTime,
                                 validator: _resDate,
                                 readOnly: true,
-                                decoration: const InputDecoration(
-                                    labelText: 'Rezervasyon Tarihi',
-                                    border: OutlineInputBorder()),
-                                onTap: () async {
-                                  Timestamp resDate = await pickDateTime();
-                                  if (resDate != null) {
+                                decoration: InputDecoration(
+                                    labelText:
+                                        AppLocalizations.of(context)!.resDate,
+                                    border: const OutlineInputBorder()),
+                                onTap: () {
+                                  DatePicker.showDateTimePicker(context,
+                                      showTitleActions: true,
+                                      minTime: DateTime.now()
+                                          .add(const Duration(minutes: 60)),
+                                      maxTime: DateTime(2030, 1, 1),
+                                      onConfirm: (date) {
                                     setState(() {
-                                      resTime = resDate;
-                                      _resTime.text = formatDate(resTime);
+                                      resTime = Timestamp.fromDate(date);
+                                      _resTime.text = formatDate(resTime!);
                                     });
-                                  }
+                                  },
+                                      currentTime: DateTime.now()
+                                          .add(const Duration(minutes: 60)),
+                                      locale: LocaleType.tr);
                                 },
                               ),
                             ),
@@ -332,7 +269,8 @@ class _ReservationState extends State<Reservation> {
                               padding: const EdgeInsets.only(
                                   top: 20.0, bottom: 60.0),
                               child: GradientButton(
-                                buttonText: 'Rezervasyon Yap',
+                                buttonText: AppLocalizations.of(context)!
+                                    .makeReservation,
                                 start: ColorConstants.instance.buttonDarkGold,
                                 end: ColorConstants.instance.buttonLightColor,
                                 icon: Icons.save,

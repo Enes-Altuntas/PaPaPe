@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ReservationsModel {
-  final String reservationDesc;
+  final String? reservationDesc;
   final String reservationStatus;
   final String reservationId;
-  final String reservationName;
-  final String reservationPhone;
+  final String? reservationName;
+  final String? reservationPhone;
   final int reservationCount;
   final String reservationUser;
   final String reservationStore;
@@ -15,15 +15,15 @@ class ReservationsModel {
   ReservationsModel(
       {this.reservationDesc,
       // approved, rejected, canceled
-      this.reservationStatus,
-      this.reservationCount,
+      required this.reservationStatus,
+      required this.reservationCount,
       this.reservationName,
       this.reservationPhone,
-      this.reservationId,
-      this.reservationUser,
-      this.reservationTime,
-      this.reservationStoreName,
-      this.reservationStore});
+      required this.reservationId,
+      required this.reservationUser,
+      required this.reservationTime,
+      required this.reservationStoreName,
+      required this.reservationStore});
 
   ReservationsModel.fromFirestore(Map<String, dynamic> data)
       : reservationDesc = data['reservationDesc'],

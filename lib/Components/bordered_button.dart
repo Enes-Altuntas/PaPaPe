@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 
 class BorderedButton extends StatelessWidget {
   final String buttonText;
-  final Function onPressed;
+  final VoidCallback onPressed;
   final double widthMultiplier;
   final Color borderColor;
   final Color textColor;
 
   const BorderedButton(
-      {Key key,
-      this.buttonText,
-      this.onPressed,
-      this.widthMultiplier,
-      this.borderColor,
-      this.textColor})
+      {Key? key,
+      required this.buttonText,
+      required this.onPressed,
+      required this.widthMultiplier,
+      required this.borderColor,
+      required this.textColor})
       : super(key: key);
 
   @override
