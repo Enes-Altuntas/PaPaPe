@@ -57,9 +57,14 @@ class _IntroductionState extends State<Introduction> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0),
                 textAlign: TextAlign.center),
-            bodyWidget: Text(
-                AppLocalizations.of(context)!.introduction_description_1,
-                textAlign: TextAlign.center),
+            bodyWidget: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                  AppLocalizations.of(context)!.introduction_description_1,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14.0),
+                  textAlign: TextAlign.center),
+            ),
             image: Lottie.asset('assets/lottie/introduction6.json'),
           ),
           PageViewModel(
@@ -70,9 +75,14 @@ class _IntroductionState extends State<Introduction> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0),
                 textAlign: TextAlign.center),
-            bodyWidget: Text(
-                AppLocalizations.of(context)!.introduction_description_2,
-                textAlign: TextAlign.center),
+            bodyWidget: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                  AppLocalizations.of(context)!.introduction_description_2,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14.0),
+                  textAlign: TextAlign.center),
+            ),
             image: Lottie.asset('assets/lottie/introduction2.json'),
           ),
           PageViewModel(
@@ -83,9 +93,14 @@ class _IntroductionState extends State<Introduction> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0),
                 textAlign: TextAlign.center),
-            bodyWidget: Text(
-                AppLocalizations.of(context)!.introduction_description_3,
-                textAlign: TextAlign.center),
+            bodyWidget: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                  AppLocalizations.of(context)!.introduction_description_3,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14.0),
+                  textAlign: TextAlign.center),
+            ),
             image: Lottie.asset('assets/lottie/introduction3.json'),
           ),
           PageViewModel(
@@ -96,9 +111,14 @@ class _IntroductionState extends State<Introduction> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0),
                 textAlign: TextAlign.center),
-            bodyWidget: Text(
-                AppLocalizations.of(context)!.introduction_description_4,
-                textAlign: TextAlign.center),
+            bodyWidget: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                  AppLocalizations.of(context)!.introduction_description_4,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14.0),
+                  textAlign: TextAlign.center),
+            ),
             image: Lottie.asset('assets/lottie/introduction4.json'),
           ),
           PageViewModel(
@@ -109,9 +129,14 @@ class _IntroductionState extends State<Introduction> {
                     fontWeight: FontWeight.bold,
                     fontSize: 20.0),
                 textAlign: TextAlign.center),
-            bodyWidget: Text(
-                AppLocalizations.of(context)!.introduction_description_5,
-                textAlign: TextAlign.center),
+            bodyWidget: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                  AppLocalizations.of(context)!.introduction_description_5,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 14.0),
+                  textAlign: TextAlign.center),
+            ),
             image: Lottie.asset('assets/lottie/introduction5.json'),
           ),
         ],

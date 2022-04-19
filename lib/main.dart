@@ -1,4 +1,3 @@
-import 'package:myrest/Wrappers/auth_wrapper.dart';
 import 'package:myrest/Constants/localization_constants.dart';
 import 'package:myrest/Constants/theme_data.dart';
 import 'package:myrest/Providers/filter_provider.dart';
@@ -7,7 +6,7 @@ import 'package:myrest/Providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-
+import 'package:myrest/Wrappers/service_wrapper.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -49,7 +48,7 @@ class MyApp extends StatelessWidget {
               locale: provider.locale,
               supportedLocales: LocalizationConstant.supportedLocals,
               theme: myRestThemeData,
-              home: const AuthWrapper());
+              home: const ServiceWrapper());
         }));
   }
 }

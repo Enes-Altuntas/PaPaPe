@@ -338,17 +338,21 @@ class _MapScreen extends State<MapScreen> {
                                                     markers: Set.from(markers),
                                                     circles: Set.from(circles),
                                                   )
-                                                : const NotFound(
+                                                : NotFound(
                                                     notFoundIcon:
                                                         FontAwesomeIcons
                                                             .exclamationTriangle,
                                                     notFoundText:
-                                                        "Aradığınız kriterlerde işletme bulunmuyor !",
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .businessNotFound,
                                                   )
                                             : const ProgressWidget();
                                       })
                                   : Center(
-                                      child: Text('Konumunuz bulunamadı !',
+                                      child: Text(
+                                          AppLocalizations.of(context)!
+                                              .noLocationPermission,
                                           style: TextStyle(
                                               color: ColorConstants
                                                   .instance.primaryColor,

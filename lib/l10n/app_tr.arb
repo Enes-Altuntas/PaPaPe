@@ -95,5 +95,10 @@
     "wishesNotFound": "Üzgünüz fakat hiç dilek veya şikayetiniz bulunamamktadır!",
     "menuItemNotFound": "Üzgünüz fakat işletmenin menüsünde ürün bulunmamaktadır!",
     "campaignStoreNotFound": "Üzgünüz, şu anda işletmenin yayınlamış olduğu bir kampanya bulunmamaktadır!",
-    "errorOccured": "Sistemde bir hata meydana geldi!"
+    "errorOccured": "Sistemde bir hata meydana geldi!",
+    "noLocationService": "Konum servisiniz kapalı gözüküyor, bu şekilde uygulamayı kullanmanız ne yazık ki mümkün değil!",
+    "checkLocationService": "Konum Servisini Kontrol Et",
+    "noLocationPermission": "Sizlere en yakın işletmeleri bulabilmek için konumunuza ihtiyacımız var, uygulamanın konumunuzu öğrenmesine izin vermelisiniz!",
+    "checkLocationPermission": "Konum İzinlerini Kontrol Et",
+    "businessNotFound": "Aradığınız kriterlerde işletme bulunmuyor!"
 }

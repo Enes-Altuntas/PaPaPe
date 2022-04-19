@@ -94,10 +94,12 @@ class _WelcomeState extends State<Welcome> {
                         Lottie.asset('assets/lottie/introduction1.json',
                             width: MediaQuery.of(context).size.width / 1.4),
                         Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
+                          padding: const EdgeInsets.only(top: 40.0),
                           child: Text(
                             AppLocalizations.of(context)!.nameQuestion,
-                            style: const TextStyle(fontSize: 17.0),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 15.0, fontWeight: FontWeight.bold),
                           ),
                         ),
                         Padding(
@@ -118,8 +120,13 @@ class _WelcomeState extends State<Welcome> {
                             onPressed: () {
                               saveUser();
                             },
-                            child: Text(
-                                AppLocalizations.of(context)!.continueWord))
+                            style: ElevatedButton.styleFrom(
+                                shape: const StadiumBorder()),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text(
+                                  AppLocalizations.of(context)!.continueWord),
+                            ))
                       ],
                     ),
                   ),

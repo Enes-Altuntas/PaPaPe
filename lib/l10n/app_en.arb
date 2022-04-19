@@ -95,5 +95,10 @@
     "wishesNotFound": "Sorry but you haven't got any wish or suggestion!",
     "menuItemNotFound": "Sorry but there are no items on the business's menu!",
     "campaignStoreNotFound": "Sorry but the business currently has no campaigns running.",
-    "errorOccured": "An error has occurred in the system!"
+    "errorOccured": "An error has occurred in the system!",
+    "noLocationService": "Your location service seems to be turned off, unfortunately it is not possible to use the application in this way!",
+    "checkLocationService": "Check Location Service",
+    "noLocationPermission": "We need your location to find businesses closest to you, you must let the app reach your location data!",
+    "checkLocationPermission": "Check Location Permissions",
+    "businessNotFound": "There are no businesses that match your search criteria!"
 }
