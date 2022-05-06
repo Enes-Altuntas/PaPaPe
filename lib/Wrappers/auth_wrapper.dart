@@ -20,6 +20,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
             return SignInScreen(
                 providerConfigs: const [
                   EmailProviderConfiguration(),
+                  AppleProviderConfiguration(),
                   GoogleProviderConfiguration(
                       clientId:
                           "1:641494071867:android:c51372ac898bb8e3097a1e"),

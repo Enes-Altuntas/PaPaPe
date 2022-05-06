@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:myrest/Components/app_title.dart';
 import 'package:myrest/Components/category_brand.dart';
 import 'package:myrest/Components/custom_drawer.dart';
@@ -149,12 +151,22 @@ class _MapScreen extends State<MapScreen> {
   }
 
   setMarkerAssets() async {
-    waitMarker = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), "assets/images/wait_marker.png");
-    activeMarker = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), "assets/images/active_marker.png");
-    inactiveMarker = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(), "assets/images/inactive_marker.png");
+    bool isIOS = Platform.isIOS;
+    if (isIOS) {
+      waitMarker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/wait_marker_ios.png");
+      activeMarker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/active_marker_ios.png");
+      inactiveMarker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/inactive_marker_ios.png");
+    } else {
+      waitMarker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/wait_marker.png");
+      activeMarker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/active_marker.png");
+      inactiveMarker = await BitmapDescriptor.fromAssetImage(
+          const ImageConfiguration(), "assets/images/inactive_marker.png");
+    }
   }
 
   setLocalData() {

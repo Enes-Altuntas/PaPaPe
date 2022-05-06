@@ -15,10 +15,12 @@ class AskPermission extends StatefulWidget {
 checkPermission(BuildContext context) async {
   LocationPermission permission = await Geolocator.checkPermission();
 
-  if (permission != LocationPermission.always &&
-      permission != LocationPermission.whileInUse) {
+  if (permission == LocationPermission.denied) {
+    await Geolocator.requestPermission();
+  } else if (permission == LocationPermission.deniedForever) {
     await Geolocator.openAppSettings();
-  } else {
+  } else if (permission != LocationPermission.deniedForever &&
+      permission != LocationPermission.denied) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const AuthWrapper()));
   }
